@@ -9,6 +9,9 @@ import {
 } from "./utils/chartHelpers";
 import "./App.css";
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+
 const getEnvironmentTypeLabel = (environmentType) => {
   if (environmentType === 1) return "Design Day";
   if (environmentType === 3) return "Run Period";
@@ -37,7 +40,7 @@ function App() {
   });
 
   useEffect(() => {
-    fetch("http://localhost:8000/health")
+    fetch(`${API_BASE_URL}/health`)
       .then((res) => res.json())
       .then((data) => setBackendStatus(data.status))
       .catch(() => setBackendStatus("Backend unreachable"));
@@ -67,7 +70,7 @@ function App() {
     setSimulationResult(null);
 
     try {
-      const res = await fetch("http://localhost:8000/simulate", {
+      const res = await fetch(`${API_BASE_URL}/simulate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -94,15 +97,10 @@ function App() {
   const dailyElectricityFacility = results?.daily_timeseries?.electricity_facility_daily || [];
   const dailyZoneMeanAirTemperature = results?.daily_timeseries?.zone_mean_air_temperature_daily || [];
   const dailyZoneCo2 = results?.daily_timeseries?.zone_co2_daily || [];
-
   const dailyZoneOccupancy = results?.daily_timeseries?.zone_occupancy_daily || [];
-
   const dailyZoneRelativeHumidity = results?.daily_timeseries?.zone_relative_humidity_daily || [];
-
   const dailyZoneOperativeTemperature = results?.daily_timeseries?.zone_operative_temperature_daily || [];
-
   const dailyZoneHeatingSetpoint = results?.daily_timeseries?.zone_heating_setpoint_daily || [];
-
   const dailyZoneCoolingSetpoint = results?.daily_timeseries?.zone_cooling_setpoint_daily || [];
 
   const zoneTemperatureChartData = pivotByZone(dailyZoneMeanAirTemperature, "avg_mean_air_temperature_c");
@@ -263,11 +261,12 @@ function App() {
           <div className="card">
             <h2 style={{ marginTop: 0 }}>Simulation Period</h2>
             <div>
-  <div style={{ color: "#6b7280", fontSize: "0.9rem" }}>Date Range</div>
-  <div style={{ fontWeight: 700 }}>
-    {formatDateLabel(periodInfo.start_date)} – {formatDateLabel(periodInfo.end_date)}
-  </div>
-</div>
+              <div style={{ color: "#6b7280", fontSize: "0.9rem" }}>Date Range</div>
+              <div style={{ fontWeight: 700 }}>
+                {formatDateLabel(periodInfo?.start_date)} – {formatDateLabel(periodInfo?.end_date)}
+              </div>
+            </div>
+
             {periodInfo ? (
               <div
                 style={{
@@ -278,9 +277,10 @@ function App() {
               >
                 <div>
                   <div style={{ color: "#6b7280", fontSize: "0.9rem" }}>Environment Name</div>
-<div style={{ fontWeight: 700 }}>
-  {getEnvironmentNameLabel(periodInfo.environment_period_name)}
-</div>                </div>
+                  <div style={{ fontWeight: 700 }}>
+                    {getEnvironmentNameLabel(periodInfo.environment_period_name)}
+                  </div>
+                </div>
 
                 <div>
                   <div style={{ color: "#6b7280", fontSize: "0.9rem" }}>Environment Index</div>
@@ -290,8 +290,8 @@ function App() {
                 <div>
                   <div style={{ color: "#6b7280", fontSize: "0.9rem" }}>Environment Type</div>
                   <div style={{ fontWeight: 700 }}>
-  {getEnvironmentTypeLabel(periodInfo.environment_type)}
-</div>
+                    {getEnvironmentTypeLabel(periodInfo.environment_type)}
+                  </div>
                 </div>
 
                 <div>
@@ -368,17 +368,16 @@ function App() {
             </table>
           </div>
 
-<SingleLineChart title="Daily Heating Diesel" data={dailyHeatingDiesel} />
-<SingleLineChart title="Daily Facility Electricity" data={dailyElectricityFacility} />
+          <SingleLineChart title="Daily Heating Diesel" data={dailyHeatingDiesel} />
+          <SingleLineChart title="Daily Facility Electricity" data={dailyElectricityFacility} />
 
-<ZoneLineChart title="Daily Zone Mean Air Temperature" data={zoneTemperatureChartData} unit="°C" />
-<ZoneLineChart title="Daily Zone CO₂ Concentration" data={zoneCo2ChartData} unit="ppm" decimals={0} />
-<ZoneLineChart title="Daily Zone Occupancy" data={zoneOccupancyChartData} unit="people" />
-<ZoneLineChart title="Daily Zone Relative Humidity" data={zoneRelativeHumidityChartData} unit="%" decimals={1} />
-<ZoneLineChart title="Daily Zone Operative Temperature" data={zoneOperativeTemperatureChartData} unit="°C" />
-<ZoneLineChart title="Daily Zone Heating Setpoint" data={zoneHeatingSetpointChartData} unit="°C" />
-<ZoneLineChart title="Daily Zone Cooling Setpoint" data={zoneCoolingSetpointChartData} unit="°C" />
-
+          <ZoneLineChart title="Daily Zone Mean Air Temperature" data={zoneTemperatureChartData} unit="°C" />
+          <ZoneLineChart title="Daily Zone CO₂ Concentration" data={zoneCo2ChartData} unit="ppm" decimals={0} />
+          <ZoneLineChart title="Daily Zone Occupancy" data={zoneOccupancyChartData} unit="people" />
+          <ZoneLineChart title="Daily Zone Relative Humidity" data={zoneRelativeHumidityChartData} unit="%" decimals={1} />
+          <ZoneLineChart title="Daily Zone Operative Temperature" data={zoneOperativeTemperatureChartData} unit="°C" />
+          <ZoneLineChart title="Daily Zone Heating Setpoint" data={zoneHeatingSetpointChartData} unit="°C" />
+          <ZoneLineChart title="Daily Zone Cooling Setpoint" data={zoneCoolingSetpointChartData} unit="°C" />
         </div>
       )}
     </div>
