@@ -16,7 +16,7 @@ function InputNumber({
   ...props
 }) {
   return (
-    <NumberField className={cn("w-full space-y-1.5", className)} {...props}>
+    <NumberField className={cn("w-full space-y-2.5", className)} {...props}>
       <Label className="flex items-center gap-2 text-sm leading-none font-medium select-none">
         {label}
       </Label>

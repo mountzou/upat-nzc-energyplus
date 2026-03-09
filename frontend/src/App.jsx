@@ -5,6 +5,8 @@ import SingleLineChart from "./components/SingleLineChart";
 import { Button } from "@/components/ui/button";
 import { InputNumber } from "@/components/ui/input-number";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Spinner } from "@/components/ui/spinner";
 import {
   getZoneLabel,
   formatDateLabel,
@@ -122,16 +124,17 @@ function App() {
 
   return (
     <div className="mx-auto min-h-screen p-8">
-      <div style={{ marginBottom: "1.5rem" }}>
-        <h1 style={{ marginBottom: "0.35rem" }}>upat-nzc-energyplus</h1>
-        <p style={{ margin: 0, color: "#4b5563" }}>
+      <div className="mb-4">
+        <h1 className="mb-1">upat-nzc-energyplus</h1>
+        <p className="text-muted-foreground">
           Backend status: <strong>{backendStatus}</strong>
         </p>
       </div>
+      <Separator className="mb-6" />
 
-      <Card className="mb-6">
+      <Card className="mb-6 bg-gray-100 ring-0 [&_input]:bg-white">
         <CardHeader>
-          <CardTitle>Simulation Inputs</CardTitle>
+          <CardTitle className="text-xl font-semibold">Simulation Inputs</CardTitle>
         </CardHeader>
         <CardContent>
 
@@ -152,7 +155,7 @@ function App() {
           />
         </div>
 
-        <h3 style={{ marginBottom: "0.75rem" }}>Zone Occupancy</h3>
+        <h3 className="text-xl font-semibold mb-3">Zone Occupancy</h3>
 
         <div className="grid grid-cols-4 gap-4 mb-4">
           <InputNumber
@@ -194,7 +197,7 @@ function App() {
           disabled={loading}
           size="lg"
         >
-          {loading ? "Running..." : "Run simulation"}
+          {loading ? <><Spinner className="mr-2" /> Running...</> : "Run simulation"}
         </Button>
 
         </CardContent>
@@ -373,11 +376,11 @@ function App() {
 
           <ZoneLineChart title="Daily Zone Mean Air Temperature" data={zoneTemperatureChartData} unit="°C" />
           <ZoneLineChart title="Daily Zone CO₂ Concentration" data={zoneCo2ChartData} unit="ppm" decimals={0} />
-          <ZoneLineChart title="Daily Zone Occupancy" data={zoneOccupancyChartData} unit="people" />
+          {/* <ZoneLineChart title="Daily Zone Occupancy" data={zoneOccupancyChartData} unit="people" /> */}
           <ZoneLineChart title="Daily Zone Relative Humidity" data={zoneRelativeHumidityChartData} unit="%" decimals={1} />
           <ZoneLineChart title="Daily Zone Operative Temperature" data={zoneOperativeTemperatureChartData} unit="°C" />
-          <ZoneLineChart title="Daily Zone Heating Setpoint" data={zoneHeatingSetpointChartData} unit="°C" />
-          <ZoneLineChart title="Daily Zone Cooling Setpoint" data={zoneCoolingSetpointChartData} unit="°C" />
+          {/* <ZoneLineChart title="Daily Zone Heating Setpoint" data={zoneHeatingSetpointChartData} unit="°C" /> */}
+          {/* <ZoneLineChart title="Daily Zone Cooling Setpoint" data={zoneCoolingSetpointChartData} unit="°C" /> */}
         </div>
       )}
     </div>
