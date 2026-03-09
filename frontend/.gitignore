@@ -7,10 +7,29 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Frontend / Node
 node_modules
 dist
 dist-ssr
 *.local
+frontend/node_modules
+frontend/dist
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+backend/__pycache__/
+backend/**/*.pyc
+
+# Simulation outputs
+backend/simulation_runs/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
 
 # Editor directories and files
 .vscode/*
