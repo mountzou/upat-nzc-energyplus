@@ -1,0 +1,8 @@
+services:
+  backend:
+    build: ./backend
+    container_name: upat-nzc-energyplus-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/simulation_runs:/app/simulation_runs

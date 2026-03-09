@@ -1,0 +1,28 @@
+{
+  "message": "Setpoint schedule preprocessing completed",
+  "source_model": "model.idf",
+  "prepared_model": "in.idf",
+  "applied_inputs": {
+    "heating_setpoint": 21.0,
+    "cooling_setpoint": 25.0,
+    "people_count": 15
+  },
+  "schedule_edits": {
+    "heating_schedule_edit": {
+      "schedule_name": "Htg-SetP-Sch",
+      "target_for": "For: WeekDays",
+      "target_until": "Until: 14:00",
+      "old_value": "20",
+      "new_value": 21.0,
+      "updated_field": "Field_6"
+    },
+    "cooling_schedule_edit": {
+      "schedule_name": "Clg-SetP-Sch",
+      "target_for": "For: WeekDays",
+      "target_until": "Until: 14:00",
+      "old_value": "22",
+      "new_value": 25.0,
+      "updated_field": "Field_6"
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "zone_occupancy_summary": [
+    {
+      "zone_name": "CLASSROOM_LEFT",
+      "avg_occupant_count": 1.298819255222525,
+      "min_occupant_count": 0.0,
+      "max_occupant_count": 10.0
+    },
+    {
+      "zone_name": "CLASSROOM_RIGHT",
+      "avg_occupant_count": 3.896457765667575,
+      "min_occupant_count": 0.0,
+      "max_occupant_count": 30.0
+    },
+    {
+      "zone_name": "HALLWAY_ROOM3",
+      "avg_occupant_count": 0.049954586739327886,
+      "min_occupant_count": 0.0,
+      "max_occupant_count": 5.0
+    },
+    {
+      "zone_name": "ROOM2_SMALL",
+      "avg_occupant_count": 0.259763851044505,
+      "min_occupant_count": 0.0,
+      "max_occupant_count": 2.0
+    }
+  ],
+  "zone_temperature_summary": [
+    {
+      "zone_name": "CLASSROOM_LEFT",
+      "avg_mean_air_temperature_c": 20.903470989224065,
+      "min_mean_air_temperature_c": 8.364625027266637,
+      "max_mean_air_temperature_c": 30.79443592440032
+    },
+    {
+      "zone_name": "CLASSROOM_RIGHT",
+      "avg_mean_air_temperature_c": 22.159817984767137,
+      "min_mean_air_temperature_c": 8.53960552841845,
+      "max_mean_air_temperature_c": 31.9478251219763
+    },
+    {
+      "zone_name": "HALLWAY_ROOM3",
+      "avg_mean_air_temperature_c": 21.6436106272354,
+      "min_mean_air_temperature_c": 8.89647574352937,
+      "max_mean_air_temperature_c": 32.65395361062152
+    },
+    {
+      "zone_name": "ROOM2_SMALL",
+      "avg_mean_air_temperature_c": 21.980777776220283,
+      "min_mean_air_temperature_c": 10.338657377693718,
+      "max_mean_air_temperature_c": 31.02310745558498
+    }
+  ],
+  "energy_summary": {}
+}

@@ -1,0 +1,84 @@
+{
+  "zone_occupancy_summary": [
+    {
+      "zone_name": "CLASSROOM_LEFT",
+      "avg_occupant_count": 1.3059360730593608,
+      "min_occupant_count": 0.0,
+      "max_occupant_count": 10.0
+    },
+    {
+      "zone_name": "CLASSROOM_RIGHT",
+      "avg_occupant_count": 3.9178082191780823,
+      "min_occupant_count": 0.0,
+      "max_occupant_count": 30.0
+    },
+    {
+      "zone_name": "HALLWAY_ROOM3",
+      "avg_occupant_count": 0.0502283105022831,
+      "min_occupant_count": 0.0,
+      "max_occupant_count": 5.0
+    },
+    {
+      "zone_name": "ROOM2_SMALL",
+      "avg_occupant_count": 0.26118721461187216,
+      "min_occupant_count": 0.0,
+      "max_occupant_count": 2.0
+    }
+  ],
+  "zone_temperature_summary": [
+    {
+      "zone_name": "CLASSROOM_LEFT",
+      "avg_mean_air_temperature_c": 20.906993094534975,
+      "min_mean_air_temperature_c": 8.364625027266637,
+      "max_mean_air_temperature_c": 29.447213668296804
+    },
+    {
+      "zone_name": "CLASSROOM_RIGHT",
+      "avg_mean_air_temperature_c": 22.16217245427353,
+      "min_mean_air_temperature_c": 8.53960552841845,
+      "max_mean_air_temperature_c": 31.105061345640134
+    },
+    {
+      "zone_name": "HALLWAY_ROOM3",
+      "avg_mean_air_temperature_c": 21.642605355338695,
+      "min_mean_air_temperature_c": 8.89647574352937,
+      "max_mean_air_temperature_c": 30.86227756405041
+    },
+    {
+      "zone_name": "ROOM2_SMALL",
+      "avg_mean_air_temperature_c": 21.983185722326517,
+      "min_mean_air_temperature_c": 10.338657377693718,
+      "max_mean_air_temperature_c": 29.437738558953612
+    }
+  ],
+  "energy_summary": {
+    "cooling_electricity": {
+      "joules": 0.0,
+      "kwh": 0.0
+    },
+    "electricity_facility": {
+      "joules": 6561924684.952383,
+      "kwh": 1822.7568569312175
+    },
+    "fans_electricity": {
+      "joules": 0.0,
+      "kwh": 0.0
+    },
+    "heating_diesel": {
+      "joules": 43817977688.71813,
+      "kwh": 12171.660469088369
+    },
+    "interiorequipment_electricity": {
+      "joules": 712800000.0,
+      "kwh": 198.0
+    },
+    "interiorlights_electricity": {
+      "joules": 5782718304.0,
+      "kwh": 1606.31064
+    },
+    "pumps_electricity": {
+      "joules": 66406380.95238092,
+      "kwh": 18.44621693121692
+    }
+  }
+}

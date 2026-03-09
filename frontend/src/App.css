@@ -1,0 +1,73 @@
+.app-layout {
+  padding: 2rem;
+  font-family: Arial, sans-serif;
+  margin: 0 auto;
+  color: #1f2937;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+.card {
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.card-form {
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.setpoint-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.occupancy-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.btn-primary {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: #111827;
+  color: #fff;
+  font-weight: 600;
+}
+
+.energy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.9rem;
+}
+
+.energy-card {
+  padding: 0.9rem;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.input-field {
+  display: block;
+  width: 100%;
+  margin-top: 0.35rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.table-cell {
+  padding: 0.65rem 0.35rem;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}

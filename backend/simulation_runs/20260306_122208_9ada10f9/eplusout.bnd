@@ -1,0 +1,290 @@
+Program Version,EnergyPlus, Version 25.2.0-cf7368216c, YMD=2026.03.06 12:22
+! This file shows details about the branches, nodes, and other
+! elements of the flow connections.
+! This file is intended for use in "debugging" potential problems
+! that may also be detected by the program, but may be more easily
+! identified by "eye".
+! This file is also intended to support software which draws a
+! schematic diagram of the HVAC system.
+! ===============================================================
+! #Nodes,<Number of Unique Nodes>
+ #Nodes,28
+! <Node>,<NodeNumber>,<Node Name>,<Node Fluid Type>,<# Times Node Referenced After Definition>
+ Node,1,HAIER_ZONE_SUPPLYNODE,Air,3
+ Node,2,HAIER_SUPPLY_OUTLET,Air,6
+ Node,3,HW-SUPPLYINLET,Water,2
+ Node,4,HW-SUPPLYPUMPOUTLET,Water,3
+ Node,5,HW-BOILER-OUTLET,Water,3
+ Node,6,HW-SUPPLYOUTLET,Water,4
+ Node,7,HW-LOOP-DEMANDINLET,Water,2
+ Node,8,HW-DEMAND-SPLITTER-INLET-NODE,Water,1
+ Node,9,HW-DEMAND-CL-IN,Water,1
+ Node,10,HW-DEMAND-CL-OUT,Water,1
+ Node,11,HW-DEMAND-CR-IN,Water,1
+ Node,12,HW-DEMAND-CR-OUT,Water,1
+ Node,13,HW-DEMAND-H-IN,Water,1
+ Node,14,HW-DEMAND-H-OUT,Water,1
+ Node,15,HW-DEMAND-R2-IN,Water,1
+ Node,16,HW-DEMAND-R2-OUT,Water,1
+ Node,17,HW-DEMAND-MIXER-OUTLET-NODE,Water,1
+ Node,18,HW-LOOP-DEMANDOUTLET,Water,2
+ Node,19,HAIER_SUPPLY_INLET,Air,3
+ Node,20,HALLWAY_ROOM3 AIR NODE,Air,1
+ Node,21,HALLWAY_ROOM3_AIR_INLET,Air,3
+ Node,22,HAIER_ZONE_RETURNNODE,Air,1
+ Node,23,CLASSROOM_LEFT AIR NODE,Air,0
+ Node,24,CLASSROOM_RIGHT AIR NODE,Air,0
+ Node,25,ROOM2_SMALL AIR NODE,Air,0
+ Node,26,HAIER_DEMAND_OUTLET,Air,2
+ Node,27,CABAC_AFTER_FAN_NODE,Air,1
+ Node,28,CABAC_AFTER_COOLCOIL_NODE,Air,0
+! ===============================================================
+! Suspicious nodes have 0 references.  It is normal for some nodes, however.
+! Listing nodes with 0 references (culled from previous list):
+! <Suspicious Node>,<NodeNumber>,<Node Name>,<Node Fluid Type>,<# Times Node Referenced After Definition>
+ Suspicious Node,23,CLASSROOM_LEFT AIR NODE,Air,0
+ Suspicious Node,24,CLASSROOM_RIGHT AIR NODE,Air,0
+ Suspicious Node,25,ROOM2_SMALL AIR NODE,Air,0
+ Suspicious Node,28,CABAC_AFTER_COOLCOIL_NODE,Air,0
+! ===============================================================
+! <#Branch Lists>,<Number of Branch Lists>
+ #Branch Lists,3
+! <Branch List>,<Branch List Count>,<Branch List Name>,<Loop Name>,<Loop Type>,<Number of Branches>
+! <Branch>,<Branch Count>,<Branch Name>,<Loop Name>,<Loop Type>,<Branch Inlet Node Name>,<Branch Outlet Node Name>
+ Branch List,1,HW-LOOP-SUPPLY BRANCHES,HW-LOOP,Plant Supply,1
+   Branch,1,HW-SUPPLY BRANCH,HW-LOOP,Plant Supply,HW-SUPPLYINLET,HW-SUPPLYOUTLET
+ Branch List,2,HW-LOOP-DEMAND BRANCHES,HW-LOOP,Plant Demand,6
+   Branch,1,HW-DEMAND INLET BRANCH,HW-LOOP,Plant Demand,HW-LOOP-DEMANDINLET,HW-DEMAND-SPLITTER-INLET-NODE
+   Branch,2,HW-DEMAND BRANCH CL,HW-LOOP,Plant Demand,HW-DEMAND-CL-IN,HW-DEMAND-CL-OUT
+   Branch,3,HW-DEMAND BRANCH CR,HW-LOOP,Plant Demand,HW-DEMAND-CR-IN,HW-DEMAND-CR-OUT
+   Branch,4,HW-DEMAND BRANCH H,HW-LOOP,Plant Demand,HW-DEMAND-H-IN,HW-DEMAND-H-OUT
+   Branch,5,HW-DEMAND BRANCH R2,HW-LOOP,Plant Demand,HW-DEMAND-R2-IN,HW-DEMAND-R2-OUT
+   Branch,6,HW-DEMAND OUTLET BRANCH,HW-LOOP,Plant Demand,HW-DEMAND-MIXER-OUTLET-NODE,HW-LOOP-DEMANDOUTLET
+ Branch List,3,HAIER_SUPPLY_BRANCHLIST,HAIER_AIRLOOP,Air,1
+   Branch,1,HAIER_SUPPLY_BRANCH,HAIER_AIRLOOP,Air,HAIER_SUPPLY_INLET,HAIER_SUPPLY_OUTLET
+! ===============================================================
+! <#Supply Air Paths>,<Number of Supply Air Paths>
+ #Supply Air Paths,1
+! <Supply Air Path>,<Supply Air Path Count>,<Supply Air Path Name>,<AirLoopHVAC Name>
+! <#Components on Supply Air Path>,<Number of Components>
+! <Supply Air Path Component>,<Component Count>,<Component Type>,<Component Name>,<AirLoopHVAC Name>
+! <#Outlet Nodes on Supply Air Path Component>,<Number of Nodes>
+! <Supply Air Path Component Nodes>,<Node Count>,<Component Type>,<Component Name>,<Inlet Node Name>,<Outlet Node Name>,<AirLoopHVAC Name>
+ Supply Air Path,1,HAIER_SUPPLYPATH,**Unknown**
+   #Components on Supply Air Path,1
+   Supply Air Path Component,1,AIRLOOPHVAC:ZONESPLITTER,HAIER_ZONESPLITTER,**Unknown**
+     #Outlet Nodes on Supply Air Path Component,1
+     Supply Air Path Component Nodes,1,AIRLOOPHVAC:ZONESPLITTER,HAIER_ZONESPLITTER,HAIER_SUPPLY_OUTLET,HAIER_ZONE_SUPPLYNODE,**Unknown**
+! <#Nodes on Supply Air Path>,<Number of Nodes>
+! <Supply Air Path Node>,<Node Type>,<Node Count>,<Node Name>,<AirLoopHVAC Name>
+#Nodes on Supply Air Path,2
+   Supply Air Path Node,Inlet Node,1,HAIER_SUPPLY_OUTLET,**Unknown**
+   Supply Air Path Node,Outlet Node,2,HAIER_ZONE_SUPPLYNODE,**Unknown**
+! ===============================================================
+! <#Return Air Paths>,<Number of Return Air Paths>
+ #Return Air Paths,1
+! <Return Air Path>,<Return Air Path Count>,<Return Air Path Name>,<AirLoopHVAC Name>
+! <#Components on Return Air Path>,<Number of Components>
+! <Return Air Path Component>,<Component Count>,<Component Type>,<Component Name>,<AirLoopHVAC Name>
+! <#Inlet Nodes on Return Air Path Component>,<Number of Nodes>
+! <Return Air Path Component Nodes>,<Node Count>,<Component Type>,<Component Name>,<Inlet Node Name>,<Outlet Node Name>,<AirLoopHVAC Name>
+ Return Air Path,1,HAIER_RETURNPATH,HAIER_AIRLOOP
+   #Components on Return Air Path,1
+   Return Air Path Component,1,AIRLOOPHVAC:ZONEMIXER,HAIER_ZONEMIXER,HAIER_AIRLOOP
+     #Inlet Nodes on Return Air Path Component,1
+     Return Air Path Component Nodes,1,AIRLOOPHVAC:ZONEMIXER,HAIER_ZONEMIXER,HAIER_ZONE_RETURNNODE,HAIER_DEMAND_OUTLET,HAIER_AIRLOOP
+! <#Nodes on Return Air Path>,<Number of Nodes>
+! <Return Air Path Node>,<Node Type>,<Node Count>,<Node Name>,<AirLoopHVAC Name>
+   #Nodes on Return Air Path,2
+   Return Air Path Node,Outlet Node,1,HAIER_DEMAND_OUTLET,HAIER_AIRLOOP
+   Return Air Path Node,Inlet Node,2,HAIER_ZONE_RETURNNODE,HAIER_AIRLOOP
+! ===============================================================
+! #Outdoor Air Nodes,<Number of Outdoor Air Nodes>
+ #Outdoor Air Nodes,0
+! ===============================================================
+! <#Component Sets>,<Number of Component Sets>
+ #Component Sets,13
+! <Component Set>,<Component Set Count>,<Parent Object Type>,<Parent Object Name>,<Component Type>,<Component Name>,<Inlet Node ID>,<Outlet Node ID>,<Description>
+ Component Set,1,BRANCH,HW-SUPPLY BRANCH,PUMP:CONSTANTSPEED,HW-PUMP,HW-SUPPLYINLET,HW-SUPPLYPUMPOUTLET,Water Nodes
+ Component Set,2,BRANCH,HW-SUPPLY BRANCH,BOILER:HOTWATER,HW-BOILER,HW-SUPPLYPUMPOUTLET,HW-BOILER-OUTLET,Hot Water Nodes
+ Component Set,3,BRANCH,HW-SUPPLY BRANCH,PIPE:ADIABATIC,HW-SUPPLY OUTLET PIPE,HW-BOILER-OUTLET,HW-SUPPLYOUTLET,Pipe Nodes
+ Component Set,4,BRANCH,HW-DEMAND INLET BRANCH,PIPE:ADIABATIC,HW-DEMAND INLET HEADER PIPE,HW-LOOP-DEMANDINLET,HW-DEMAND-SPLITTER-INLET-NODE,Pipe Nodes
+ Component Set,5,BRANCH,HW-DEMAND BRANCH CL,ZONEHVAC:BASEBOARD:CONVECTIVE:WATER,RADIATOR_CL,HW-DEMAND-CL-IN,HW-DEMAND-CL-OUT,Hot Water Nodes
+ Component Set,6,BRANCH,HW-DEMAND BRANCH CR,ZONEHVAC:BASEBOARD:CONVECTIVE:WATER,RADIATOR_CR,HW-DEMAND-CR-IN,HW-DEMAND-CR-OUT,Hot Water Nodes
+ Component Set,7,BRANCH,HW-DEMAND BRANCH H,ZONEHVAC:BASEBOARD:CONVECTIVE:WATER,RADIATOR_H,HW-DEMAND-H-IN,HW-DEMAND-H-OUT,Hot Water Nodes
+ Component Set,8,BRANCH,HW-DEMAND BRANCH R2,ZONEHVAC:BASEBOARD:CONVECTIVE:WATER,RADIATOR_R2,HW-DEMAND-R2-IN,HW-DEMAND-R2-OUT,Hot Water Nodes
+ Component Set,9,BRANCH,HW-DEMAND OUTLET BRANCH,PIPE:ADIABATIC,HW-DEMAND OUTLET HEADER PIPE,HW-DEMAND-MIXER-OUTLET-NODE,HW-LOOP-DEMANDOUTLET,Pipe Nodes
+ Component Set,10,BRANCH,HAIER_SUPPLY_BRANCH,AIRLOOPHVAC:UNITARYSYSTEM,HAIER_UNITARYSYSTEM,HAIER_SUPPLY_INLET,HAIER_SUPPLY_OUTLET,Air Nodes
+ Component Set,11,ZONEHVAC:AIRDISTRIBUTIONUNIT,HAIER_ADU,AIRTERMINAL:SINGLEDUCT:CONSTANTVOLUME:NOREHEAT,HAIER_TERMINAL,HAIER_ZONE_SUPPLYNODE,HALLWAY_ROOM3_AIR_INLET,Air Nodes
+ Component Set,12,AIRLOOPHVAC:UNITARYSYSTEM,HAIER_UNITARYSYSTEM,FAN:ONOFF,HAIER_CAB_FAN,HAIER_SUPPLY_INLET,CABAC_AFTER_FAN_NODE,Air Nodes
+ Component Set,13,AIRLOOPHVAC:UNITARYSYSTEM,HAIER_UNITARYSYSTEM,COIL:COOLING:DX:SINGLESPEED,HAIER_CAB_DX_COOL,CABAC_AFTER_FAN_NODE,CABAC_AFTER_COOLCOIL_NODE,Air Nodes
+! ===============================================================
+! <# Plant Loops>,<Number of Plant Loops>
+ #Plant Loops,1
+! <Plant Loop>,<Plant Loop Name>,<Loop Type>,<Inlet Node Name>,<Outlet Node Name>,<Branch List>,<Connector List>
+! <Plant Loop Connector>,<Connector Type>,<Connector Name>,<Loop Name>,<Loop Type>,<Number of Inlets/Outlets>
+! <Plant Loop Connector Branches>,<Connector Node Count>,<Connector Type>,<Connector Name>,<Inlet Branch>,<Outlet Branch>,<Loop Name>,<Loop Type>
+! <Plant Loop Connector Nodes>,<Connector Node Count>,<Connector Type>,<Connector Name>,<Inlet Node>,<Outlet Node>,<Loop Name>,<Loop Type>
+! <Plant Loop Supply Connection>,<Plant Loop Name>,<Supply Side Outlet Node Name>,<Demand Side Inlet Node Name>
+! <Plant Loop Return Connection>,<Plant Loop Name>,<Demand Side Outlet Node Name>,<Supply Side Inlet Node Name>
+ Plant Loop,HW-LOOP,Demand,HW-LOOP-DEMANDINLET,HW-LOOP-DEMANDOUTLET,HW-LOOP-DEMAND BRANCHES,HW-LOOP-DEMAND CONNECTORS
+   Plant Loop Connector,Splitter,HW-DEMAND SPLITTER,HW-LOOP,Demand,4
+     Plant Loop Connector Branches,1,Splitter,HW-DEMAND SPLITTER,HW-DEMAND INLET BRANCH,HW-DEMAND BRANCH CL,HW-LOOP,Demand
+     Plant Loop Connector Nodes,   1,Splitter,HW-DEMAND SPLITTER,HW-DEMAND-SPLITTER-INLET-NODE,HW-DEMAND-CL-IN,HW-LOOP,Demand
+     Plant Loop Connector Branches,2,Splitter,HW-DEMAND SPLITTER,HW-DEMAND INLET BRANCH,HW-DEMAND BRANCH CR,HW-LOOP,Demand
+     Plant Loop Connector Nodes,   2,Splitter,HW-DEMAND SPLITTER,HW-DEMAND-SPLITTER-INLET-NODE,HW-DEMAND-CR-IN,HW-LOOP,Demand
+     Plant Loop Connector Branches,3,Splitter,HW-DEMAND SPLITTER,HW-DEMAND INLET BRANCH,HW-DEMAND BRANCH H,HW-LOOP,Demand
+     Plant Loop Connector Nodes,   3,Splitter,HW-DEMAND SPLITTER,HW-DEMAND-SPLITTER-INLET-NODE,HW-DEMAND-H-IN,HW-LOOP,Demand
+     Plant Loop Connector Branches,4,Splitter,HW-DEMAND SPLITTER,HW-DEMAND INLET BRANCH,HW-DEMAND BRANCH R2,HW-LOOP,Demand
+     Plant Loop Connector Nodes,   4,Splitter,HW-DEMAND SPLITTER,HW-DEMAND-SPLITTER-INLET-NODE,HW-DEMAND-R2-IN,HW-LOOP,Demand
+   Plant Loop Connector,Mixer,HW-DEMAND MIXER,HW-LOOP,Demand,4
+     Plant Loop Connector Branches,1,Mixer,HW-DEMAND MIXER,HW-DEMAND BRANCH CL,HW-DEMAND OUTLET BRANCH,HW-LOOP,Demand
+     Plant Loop Connector Nodes,   1,Mixer,HW-DEMAND MIXER,HW-DEMAND-CL-OUT,HW-DEMAND-MIXER-OUTLET-NODE,HW-LOOP,Demand
+     Plant Loop Connector Branches,2,Mixer,HW-DEMAND MIXER,HW-DEMAND BRANCH CR,HW-DEMAND OUTLET BRANCH,HW-LOOP,Demand
+     Plant Loop Connector Nodes,   2,Mixer,HW-DEMAND MIXER,HW-DEMAND-CR-OUT,HW-DEMAND-MIXER-OUTLET-NODE,HW-LOOP,Demand
+     Plant Loop Connector Branches,3,Mixer,HW-DEMAND MIXER,HW-DEMAND BRANCH H,HW-DEMAND OUTLET BRANCH,HW-LOOP,Demand
+     Plant Loop Connector Nodes,   3,Mixer,HW-DEMAND MIXER,HW-DEMAND-H-OUT,HW-DEMAND-MIXER-OUTLET-NODE,HW-LOOP,Demand
+     Plant Loop Connector Branches,4,Mixer,HW-DEMAND MIXER,HW-DEMAND BRANCH R2,HW-DEMAND OUTLET BRANCH,HW-LOOP,Demand
+     Plant Loop Connector Nodes,   4,Mixer,HW-DEMAND MIXER,HW-DEMAND-R2-OUT,HW-DEMAND-MIXER-OUTLET-NODE,HW-LOOP,Demand
+ Plant Loop,HW-LOOP,Supply,HW-SUPPLYINLET,HW-SUPPLYOUTLET,HW-LOOP-SUPPLY BRANCHES,
+ Plant Loop Supply Connection,HW-LOOP,HW-SUPPLYOUTLET,HW-LOOP-DEMANDINLET
+ Plant Loop Return Connection,HW-LOOP,HW-LOOP-DEMANDOUTLET,HW-SUPPLYINLET
+! ===============================================================
+! <# Condenser Loops>,<Number of Condenser Loops>
+ #Condenser Loops,0
+! <Condenser Loop>,<Condenser Loop Name>,<Loop Type>,<Inlet Node Name>,<Outlet Node Name>,<Branch List>,<Connector List>
+! <Condenser Loop Connector>,<Connector Type>,<Connector Name>,<Loop Name>,<Loop Type>,<Number of Inlets/Outlets>
+! <Condenser Loop Connector Branches>,<Connector Node Count>,<Connector Type>,<Connector Name>,<Inlet Branch>,<Outlet Branch>,<Loop Name>,<Loop Type>
+! <Condenser Loop Connector Nodes>,<Connector Node Count>,<Connector Type>,<Connector Name>,<Inlet Node>,<Outlet Node>,<Loop Name>,<Loop Type>
+! <Condenser Loop Supply Connection>,<Condenser Loop Name>,<Supply Side Outlet Node Name>,<Demand Side Inlet Node Name>
+! <Condenser Loop Return Connection>,<Condenser Loop Name>,<Demand Side Outlet Node Name>,<Supply Side Inlet Node Name>
+! ===============================================================
+! <# Controlled Zones>,<Number of Controlled Zones>
+ #Controlled Zones,4
+! <Controlled Zone>,<Controlled Zone Name>,<Equip List Name>,<Control List Name>,<Zone Node Name>,<# Inlet Nodes>,<# Exhaust Nodes>,<# Return Nodes>
+! <Controlled Zone Inlet>,<Inlet Node Count>,<Controlled Zone Name>,<Supply Air Inlet Node Name>,<SD Sys:Cooling/Heating [DD:Cooling] Inlet Node Name>,<DD Sys:Heating Inlet Node Name>
+! <Controlled Zone Exhaust>,<Exhaust Node Count>,<Controlled Zone Name>,<Exhaust Air Node Name>
+ Controlled Zone,CLASSROOM_LEFT,CL EQUIPMENT,,CLASSROOM_LEFT AIR NODE,0,0,0
+ Controlled Zone,CLASSROOM_RIGHT,CR EQUIPMENT,,CLASSROOM_RIGHT AIR NODE,0,0,0
+ Controlled Zone,HALLWAY_ROOM3,HALLWAY_ROOM3_EQUIPLIST,,HALLWAY_ROOM3 AIR NODE,1,0,1
+   Controlled Zone Inlet,1,HALLWAY_ROOM3,HALLWAY_ROOM3_AIR_INLET,HAIER_ZONE_SUPPLYNODE,N/A
+   Controlled Zone Return,1,HALLWAY_ROOM3,HAIER_ZONE_RETURNNODE
+ Controlled Zone,ROOM2_SMALL,R2 EQUIPMENT,,ROOM2_SMALL AIR NODE,0,0,0
+! ===============================================================
+! <#Zone Equipment Lists>,<Number of Zone Equipment Lists>
+ #Zone Equipment Lists,4
+! <Zone Equipment List>,<Zone Equipment List Count>,<Zone Equipment List Name>,<Zone Name>,<Number of Components>
+! <Zone Equipment Component>,<Component Count>,<Component Type>,<Component Name>,<Zone Name>,<Heating Priority>,<Cooling Priority>
+ Zone Equipment List,1,CL EQUIPMENT,CLASSROOM_LEFT,1
+   Zone Equipment Component,1,ZONEHVAC:BASEBOARD:CONVECTIVE:WATER,RADIATOR_CL,CLASSROOM_LEFT,1,1
+ Zone Equipment List,2,CR EQUIPMENT,CLASSROOM_RIGHT,1
+   Zone Equipment Component,1,ZONEHVAC:BASEBOARD:CONVECTIVE:WATER,RADIATOR_CR,CLASSROOM_RIGHT,1,1
+ Zone Equipment List,3,HALLWAY_ROOM3_EQUIPLIST,HALLWAY_ROOM3,2
+   Zone Equipment Component,1,ZONEHVAC:BASEBOARD:CONVECTIVE:WATER,RADIATOR_H,HALLWAY_ROOM3,2,1
+   Zone Equipment Component,2,ZONEHVAC:AIRDISTRIBUTIONUNIT,HAIER_ADU,HALLWAY_ROOM3,1,2
+ Zone Equipment List,4,R2 EQUIPMENT,ROOM2_SMALL,1
+   Zone Equipment Component,1,ZONEHVAC:BASEBOARD:CONVECTIVE:WATER,RADIATOR_R2,ROOM2_SMALL,1,1
+! ===============================================================
+! <#AirLoopHVACs>,<Number of AirLoopHVACs>
+ #AirLoopHVACs,1
+! <AirLoopHVAC>,<Air Loop Name>,<# Return Nodes>,<# Supply Nodes>,<# Zones Cooled>,<# Zones Heated>,<Outdoor Air Used>
+! <AirLoop Return Connections>,<Connection Count>,<AirLoopHVAC Name>,<Zn Eqp Return Node #>,<Zn Eqp Return Node Name>,<AirLoop Return Node #>,<Air Loop Return Node Name>
+! <AirLoop Supply Connections>,<Connection Count>,<AirLoopHVAC Name>,<Zn Eqp Supply Node #>,<Zn Eqp Supply Node Name>,<AirLoop Supply Node #>,<Air Loop Supply Node Name>
+! <Cooled Zone Info>,<Cooled Zone Count>,<Cooled Zone Name>,<Cooled Zone Inlet Node #>,<Cooled Zone Inlet Node Name>,<AirLoopHVAC Name>
+! <Heated Zone Info>,<Heated Zone Count>,<Heated Zone Name>,<Heated Zone Inlet Node #>,<Heated Zone Inlet Node Name>,<AirLoopHVAC Name>
+! <Outdoor Air Connections>,<OA Inlet Node #>,<OA Return Air Inlet Node Name>,<OA Outlet Node #>,<OA Mixed Air Outlet Node Name>,<AirLoopHVAC Name>
+! <AirLoopHVAC Connector>,<Connector Type>,<Connector Name>,<Loop Name>,<Loop Type>,<Number of Inlets/Outlets>
+! <AirLoopHVAC Connector Branches>,<Connector Node Count>,<Connector Type>,<Connector Name>,<Inlet Branch>,<Outlet Branch>,<Loop Name>,<Loop Type>
+! <AirLoopHVAC Connector Nodes>,<Connector Node Count>,<Connector Type>,<Connector Name>,<Inlet Node>,<Outlet Node>,<Loop Name>,<Loop Type>
+ AirLoopHVAC,HAIER_AIRLOOP,1,1,1,0,No
+   AirLoop Return Connections,1,HAIER_AIRLOOP,26,HAIER_DEMAND_OUTLET,19,HAIER_SUPPLY_INLET
+   AirLoop Supply Connections,1,HAIER_AIRLOOP,1,HAIER_ZONE_SUPPLYNODE,2,HAIER_SUPPLY_OUTLET
+   Cooled Zone Info,1,HALLWAY_ROOM3,21,HALLWAY_ROOM3_AIR_INLET,HAIER_AIRLOOP
+! ===============================================================
+! <#Parent Node Connections>,<Number of Parent Node Connections>
+ #Parent Node Connections,32
+! <Parent Node Connection>,<Node Name>,<Node ObjectType>,<Node ObjectName>,<Node ConnectionType>,<Node FluidStream>
+ Parent Node Connection,HW-SUPPLYINLET,BRANCH,HW-SUPPLY BRANCH,Inlet,1
+ Parent Node Connection,HW-SUPPLYPUMPOUTLET,BRANCH,HW-SUPPLY BRANCH,Internal,1
+ Parent Node Connection,HW-BOILER-OUTLET,BRANCH,HW-SUPPLY BRANCH,Internal,1
+ Parent Node Connection,HW-SUPPLYOUTLET,BRANCH,HW-SUPPLY BRANCH,Outlet,1
+ Parent Node Connection,HW-LOOP-DEMANDINLET,BRANCH,HW-DEMAND INLET BRANCH,Inlet,1
+ Parent Node Connection,HW-DEMAND-SPLITTER-INLET-NODE,BRANCH,HW-DEMAND INLET BRANCH,Outlet,1
+ Parent Node Connection,HW-DEMAND-CL-IN,BRANCH,HW-DEMAND BRANCH CL,Inlet,1
+ Parent Node Connection,HW-DEMAND-CL-OUT,BRANCH,HW-DEMAND BRANCH CL,Outlet,1
+ Parent Node Connection,HW-DEMAND-CR-IN,BRANCH,HW-DEMAND BRANCH CR,Inlet,1
+ Parent Node Connection,HW-DEMAND-CR-OUT,BRANCH,HW-DEMAND BRANCH CR,Outlet,1
+ Parent Node Connection,HW-DEMAND-H-IN,BRANCH,HW-DEMAND BRANCH H,Inlet,1
+ Parent Node Connection,HW-DEMAND-H-OUT,BRANCH,HW-DEMAND BRANCH H,Outlet,1
+ Parent Node Connection,HW-DEMAND-R2-IN,BRANCH,HW-DEMAND BRANCH R2,Inlet,1
+ Parent Node Connection,HW-DEMAND-R2-OUT,BRANCH,HW-DEMAND BRANCH R2,Outlet,1
+ Parent Node Connection,HW-DEMAND-MIXER-OUTLET-NODE,BRANCH,HW-DEMAND OUTLET BRANCH,Inlet,1
+ Parent Node Connection,HW-LOOP-DEMANDOUTLET,BRANCH,HW-DEMAND OUTLET BRANCH,Outlet,1
+ Parent Node Connection,HAIER_SUPPLY_INLET,BRANCH,HAIER_SUPPLY_BRANCH,Inlet,1
+ Parent Node Connection,HAIER_SUPPLY_OUTLET,BRANCH,HAIER_SUPPLY_BRANCH,Outlet,1
+ Parent Node Connection,HAIER_SUPPLY_OUTLET,AIRLOOPHVAC:SUPPLYPATH,HAIER_SUPPLYPATH,Inlet,1
+ Parent Node Connection,HAIER_DEMAND_OUTLET,AIRLOOPHVAC:RETURNPATH,HAIER_RETURNPATH,Outlet,1
+ Parent Node Connection,HW-SUPPLYINLET,PLANTLOOP,HW-LOOP,Inlet,1
+ Parent Node Connection,HW-SUPPLYOUTLET,PLANTLOOP,HW-LOOP,Outlet,1
+ Parent Node Connection,HW-LOOP-DEMANDINLET,PLANTLOOP,HW-LOOP,Inlet,1
+ Parent Node Connection,HW-LOOP-DEMANDOUTLET,PLANTLOOP,HW-LOOP,Outlet,1
+ Parent Node Connection,HW-SUPPLYOUTLET,PLANTLOOP,HW-LOOP,Sensor,1
+ Parent Node Connection,HALLWAY_ROOM3_AIR_INLET,ZONEHVAC:AIRDISTRIBUTIONUNIT,HAIER_ADU,Outlet,1
+ Parent Node Connection,HAIER_SUPPLY_INLET,AIRLOOPHVAC,HAIER_AIRLOOP,Inlet,1
+ Parent Node Connection,HAIER_DEMAND_OUTLET,AIRLOOPHVAC,HAIER_AIRLOOP,Outlet,1
+ Parent Node Connection,HAIER_ZONE_SUPPLYNODE,AIRLOOPHVAC,HAIER_AIRLOOP,Inlet,1
+ Parent Node Connection,HAIER_SUPPLY_OUTLET,AIRLOOPHVAC,HAIER_AIRLOOP,Outlet,1
+ Parent Node Connection,HAIER_SUPPLY_INLET,AIRLOOPHVAC:UNITARYSYSTEM,HAIER_UNITARYSYSTEM,Inlet,1
+ Parent Node Connection,HAIER_SUPPLY_OUTLET,AIRLOOPHVAC:UNITARYSYSTEM,HAIER_UNITARYSYSTEM,Outlet,1
+! ===============================================================
+! <#Non-Parent Node Connections>,<Number of Non-Parent Node Connections>
+ #Non-Parent Node Connections,48
+! <Non-Parent Node Connection>,<Node Name>,<Node ObjectType>,<Node ObjectName>,<Node ConnectionType>,<Node FluidStream>
+ Non-Parent Node Connection,HALLWAY_ROOM3 AIR NODE,ZONEHVAC:EQUIPMENTCONNECTIONS,HALLWAY_ROOM3,ZoneNode,1
+ Non-Parent Node Connection,HALLWAY_ROOM3_AIR_INLET,ZONEHVAC:EQUIPMENTCONNECTIONS,HALLWAY_ROOM3,ZoneInlet,1
+ Non-Parent Node Connection,HAIER_ZONE_RETURNNODE,ZONEHVAC:EQUIPMENTCONNECTIONS,HALLWAY_ROOM3,ZoneReturn,1
+ Non-Parent Node Connection,CLASSROOM_LEFT AIR NODE,ZONEHVAC:EQUIPMENTCONNECTIONS,CLASSROOM_LEFT,ZoneNode,1
+ Non-Parent Node Connection,CLASSROOM_RIGHT AIR NODE,ZONEHVAC:EQUIPMENTCONNECTIONS,CLASSROOM_RIGHT,ZoneNode,1
+ Non-Parent Node Connection,ROOM2_SMALL AIR NODE,ZONEHVAC:EQUIPMENTCONNECTIONS,ROOM2_SMALL,ZoneNode,1
+ Non-Parent Node Connection,HW-SUPPLYOUTLET,SETPOINTMANAGER:SCHEDULED,HW-LOOP-SETPOINTMANAGER,Setpoint,1
+ Non-Parent Node Connection,HALLWAY_ROOM3 AIR NODE,SETPOINTMANAGER:SINGLEZONE:REHEAT,HAIER_SAT_SPM,Sensor,1
+ Non-Parent Node Connection,HALLWAY_ROOM3_AIR_INLET,SETPOINTMANAGER:SINGLEZONE:REHEAT,HAIER_SAT_SPM,Sensor,1
+ Non-Parent Node Connection,HAIER_SUPPLY_OUTLET,SETPOINTMANAGER:SINGLEZONE:REHEAT,HAIER_SAT_SPM,Setpoint,1
+ Non-Parent Node Connection,HW-BOILER-OUTLET,PIPE:ADIABATIC,HW-SUPPLY OUTLET PIPE,Inlet,1
+ Non-Parent Node Connection,HW-SUPPLYOUTLET,PIPE:ADIABATIC,HW-SUPPLY OUTLET PIPE,Outlet,1
+ Non-Parent Node Connection,HW-LOOP-DEMANDINLET,PIPE:ADIABATIC,HW-DEMAND INLET HEADER PIPE,Inlet,1
+ Non-Parent Node Connection,HW-DEMAND-SPLITTER-INLET-NODE,PIPE:ADIABATIC,HW-DEMAND INLET HEADER PIPE,Outlet,1
+ Non-Parent Node Connection,HW-DEMAND-MIXER-OUTLET-NODE,PIPE:ADIABATIC,HW-DEMAND OUTLET HEADER PIPE,Inlet,1
+ Non-Parent Node Connection,HW-LOOP-DEMANDOUTLET,PIPE:ADIABATIC,HW-DEMAND OUTLET HEADER PIPE,Outlet,1
+ Non-Parent Node Connection,HW-DEMAND-SPLITTER-INLET-NODE,CONNECTOR:SPLITTER,HW-DEMAND SPLITTER,Inlet,1
+ Non-Parent Node Connection,HW-DEMAND-CL-IN,CONNECTOR:SPLITTER,HW-DEMAND SPLITTER,Outlet,1
+ Non-Parent Node Connection,HW-DEMAND-CR-IN,CONNECTOR:SPLITTER,HW-DEMAND SPLITTER,Outlet,1
+ Non-Parent Node Connection,HW-DEMAND-H-IN,CONNECTOR:SPLITTER,HW-DEMAND SPLITTER,Outlet,1
+ Non-Parent Node Connection,HW-DEMAND-R2-IN,CONNECTOR:SPLITTER,HW-DEMAND SPLITTER,Outlet,1
+ Non-Parent Node Connection,HW-DEMAND-MIXER-OUTLET-NODE,CONNECTOR:MIXER,HW-DEMAND MIXER,Outlet,1
+ Non-Parent Node Connection,HW-DEMAND-CL-OUT,CONNECTOR:MIXER,HW-DEMAND MIXER,Inlet,1
+ Non-Parent Node Connection,HW-DEMAND-CR-OUT,CONNECTOR:MIXER,HW-DEMAND MIXER,Inlet,1
+ Non-Parent Node Connection,HW-DEMAND-H-OUT,CONNECTOR:MIXER,HW-DEMAND MIXER,Inlet,1
+ Non-Parent Node Connection,HW-DEMAND-R2-OUT,CONNECTOR:MIXER,HW-DEMAND MIXER,Inlet,1
+ Non-Parent Node Connection,HW-SUPPLYPUMPOUTLET,BOILER:HOTWATER,HW-BOILER,Inlet,1
+ Non-Parent Node Connection,HW-BOILER-OUTLET,BOILER:HOTWATER,HW-BOILER,Outlet,1
+ Non-Parent Node Connection,HAIER_SUPPLY_OUTLET,AIRLOOPHVAC:ZONESPLITTER,HAIER_ZONESPLITTER,Inlet,1
+ Non-Parent Node Connection,HAIER_ZONE_SUPPLYNODE,AIRLOOPHVAC:ZONESPLITTER,HAIER_ZONESPLITTER,Outlet,1
+ Non-Parent Node Connection,HW-DEMAND-CL-IN,ZONEHVAC:BASEBOARD:CONVECTIVE:WATER,RADIATOR_CL,Inlet,1
+ Non-Parent Node Connection,HW-DEMAND-CL-OUT,ZONEHVAC:BASEBOARD:CONVECTIVE:WATER,RADIATOR_CL,Outlet,1
+ Non-Parent Node Connection,HW-DEMAND-CR-IN,ZONEHVAC:BASEBOARD:CONVECTIVE:WATER,RADIATOR_CR,Inlet,1
+ Non-Parent Node Connection,HW-DEMAND-CR-OUT,ZONEHVAC:BASEBOARD:CONVECTIVE:WATER,RADIATOR_CR,Outlet,1
+ Non-Parent Node Connection,HW-DEMAND-H-IN,ZONEHVAC:BASEBOARD:CONVECTIVE:WATER,RADIATOR_H,Inlet,1
+ Non-Parent Node Connection,HW-DEMAND-H-OUT,ZONEHVAC:BASEBOARD:CONVECTIVE:WATER,RADIATOR_H,Outlet,1
+ Non-Parent Node Connection,HW-DEMAND-R2-IN,ZONEHVAC:BASEBOARD:CONVECTIVE:WATER,RADIATOR_R2,Inlet,1
+ Non-Parent Node Connection,HW-DEMAND-R2-OUT,ZONEHVAC:BASEBOARD:CONVECTIVE:WATER,RADIATOR_R2,Outlet,1
+ Non-Parent Node Connection,HAIER_ZONE_SUPPLYNODE,AIRTERMINAL:SINGLEDUCT:CONSTANTVOLUME:NOREHEAT,HAIER_TERMINAL,Inlet,1
+ Non-Parent Node Connection,HALLWAY_ROOM3_AIR_INLET,AIRTERMINAL:SINGLEDUCT:CONSTANTVOLUME:NOREHEAT,HAIER_TERMINAL,Outlet,1
+ Non-Parent Node Connection,HAIER_DEMAND_OUTLET,AIRLOOPHVAC:ZONEMIXER,HAIER_ZONEMIXER,Outlet,1
+ Non-Parent Node Connection,HAIER_ZONE_RETURNNODE,AIRLOOPHVAC:ZONEMIXER,HAIER_ZONEMIXER,Inlet,1
+ Non-Parent Node Connection,HAIER_SUPPLY_INLET,FAN:ONOFF,HAIER_CAB_FAN,Inlet,1
+ Non-Parent Node Connection,CABAC_AFTER_FAN_NODE,FAN:ONOFF,HAIER_CAB_FAN,Outlet,1
+ Non-Parent Node Connection,CABAC_AFTER_FAN_NODE,COIL:COOLING:DX:SINGLESPEED,HAIER_CAB_DX_COOL,Inlet,1
+ Non-Parent Node Connection,CABAC_AFTER_COOLCOIL_NODE,COIL:COOLING:DX:SINGLESPEED,HAIER_CAB_DX_COOL,Outlet,1
+ Non-Parent Node Connection,HW-SUPPLYINLET,PUMP:CONSTANTSPEED,HW-PUMP,Inlet,1
+ Non-Parent Node Connection,HW-SUPPLYPUMPOUTLET,PUMP:CONSTANTSPEED,HW-PUMP,Outlet,1

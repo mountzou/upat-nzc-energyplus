@@ -1,0 +1,62 @@
+{
+  "message": "Setpoint and occupancy preprocessing completed",
+  "source_model": "model.idf",
+  "prepared_model": "in.idf",
+  "applied_inputs": {
+    "heating_setpoint": 22.0,
+    "cooling_setpoint": 24.0,
+    "zone_occupancy": {
+      "Classroom_Left": 20,
+      "Classroom_Right": 20,
+      "Room2_Small": 1,
+      "Hallway_Room3": 1
+    }
+  },
+  "schedule_edits": {
+    "heating_schedule_edit": {
+      "schedule_name": "Htg-SetP-Sch",
+      "target_for": "For: WeekDays",
+      "target_until": "Until: 14:00",
+      "old_value": "20",
+      "new_value": 22.0,
+      "updated_field": "Field_6"
+    },
+    "cooling_schedule_edit": {
+      "schedule_name": "Clg-SetP-Sch",
+      "target_for": "For: WeekDays",
+      "target_until": "Until: 14:00",
+      "old_value": "22",
+      "new_value": 24.0,
+      "updated_field": "Field_6"
+    }
+  },
+  "occupancy_edits": {
+    "updated_count": 4,
+    "updates": [
+      {
+        "people_object": "Classroom_Left People",
+        "zone_name": "Classroom_Left",
+        "old_value": 20.0,
+        "new_value": 20
+      },
+      {
+        "people_object": "Classroom_Right People",
+        "zone_name": "Classroom_Right",
+        "old_value": 20.0,
+        "new_value": 20
+      },
+      {
+        "people_object": "Room2_Small People",
+        "zone_name": "Room2_Small",
+        "old_value": 1.0,
+        "new_value": 1
+      },
+      {
+        "people_object": "Hallway_Room3 People",
+        "zone_name": "Hallway_Room3",
+        "old_value": 41.0,
+        "new_value": 1
+      }
+    ]
+  }
+}

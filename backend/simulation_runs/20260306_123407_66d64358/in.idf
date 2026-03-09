@@ -1,0 +1,3481 @@
+!- Linux Line endings 
+
+Version,
+    25.2;                     !- Version Identifier
+
+SimulationControl,
+    Yes,                      !- Do Zone Sizing Calculation
+    Yes,                      !- Do System Sizing Calculation
+    No,                       !- Do Plant Sizing Calculation
+    Yes,                      !- Run Simulation for Sizing Periods
+    Yes,                      !- Run Simulation for Weather File Run Periods
+    No,                       !- Do HVAC Sizing Simulation for Sizing Periods
+    1;                        !- Maximum Number of HVAC Sizing Simulation Passes
+
+Building,
+    23,                       !- Name
+    0,                        !- North Axis
+    City,                     !- Terrain
+    0.05,                     !- Loads Convergence Tolerance Value
+    0.05,                     !- Temperature Convergence Tolerance Value
+    FullExterior,             !- Solar Distribution
+    30,                       !- Maximum Number of Warmup Days
+    6;                        !- Minimum Number of Warmup Days
+
+SurfaceConvectionAlgorithm:Inside,
+    TARP;                     !- Algorithm
+
+SurfaceConvectionAlgorithm:Outside,
+    DOE-2;                    !- Algorithm
+
+HeatBalanceAlgorithm,
+    ConductionTransferFunction;    !- Algorithm
+
+ZoneAirContaminantBalance,
+    Yes,                      !- Carbon Dioxide Concentration
+    Outdoor_CO2_Level;        !- Outdoor Carbon Dioxide Schedule Name
+
+Timestep,
+    6;                        !- Number of Timesteps per Hour
+
+Site:Location,
+    Kalamata_Greece,          !- Name
+    37.02,                    !- Latitude
+    22.11,                    !- Longitude
+    2,                        !- Time Zone
+    8;                        !- Elevation
+
+SizingPeriod:DesignDay,
+    KalamataSummerDesignDay,    !- Name
+    6,                        !- Month
+    10,                       !- Day of Month
+    SummerDesignDay,          !- Day Type
+    33.2,                     !- Maximum DryBulb Temperature
+    11,                       !- Daily DryBulb Temperature Range
+    DefaultMultipliers,       !- DryBulb Temperature Range Modifier Type
+    ,                         !- DryBulb Temperature Range Modifier Day Schedule Name
+    Wetbulb,                  !- Humidity Condition Type
+    23,                       !- Wetbulb or DewPoint at Maximum DryBulb
+    ,                         !- Humidity Condition Day Schedule Name
+    ,                         !- Humidity Ratio at Maximum DryBulb
+    ,                         !- Enthalpy at Maximum DryBulb
+    ,                         !- Daily WetBulb Temperature Range
+    101325,                   !- Barometric Pressure
+    3,                        !- Wind Speed
+    0,                        !- Wind Direction
+    No,                       !- Rain Indicator
+    No,                       !- Snow Indicator
+    No,                       !- Daylight Saving Time Indicator
+    ASHRAEClearSky,           !- Solar Model Indicator
+    ,                         !- Beam Solar Day Schedule Name
+    ,                         !- Diffuse Solar Day Schedule Name
+    ,                         !- ASHRAE Clear Sky Optical Depth for Beam Irradiance taub
+    ,                         !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance taud
+    1;                        !- Sky Clearness
+
+SizingPeriod:DesignDay,
+    KalamataWinterDesignDay,    !- Name
+    1,                        !- Month
+    21,                       !- Day of Month
+    WinterDesignDay,          !- Day Type
+    1.2,                      !- Maximum DryBulb Temperature
+    0,                        !- Daily DryBulb Temperature Range
+    DefaultMultipliers,       !- DryBulb Temperature Range Modifier Type
+    ,                         !- DryBulb Temperature Range Modifier Day Schedule Name
+    WetBulb,                  !- Humidity Condition Type
+    -1.5,                     !- Wetbulb or DewPoint at Maximum DryBulb
+    ,                         !- Humidity Condition Day Schedule Name
+    ,                         !- Humidity Ratio at Maximum DryBulb
+    ,                         !- Enthalpy at Maximum DryBulb
+    ,                         !- Daily WetBulb Temperature Range
+    101325,                   !- Barometric Pressure
+    3,                        !- Wind Speed
+    0,                        !- Wind Direction
+    No,                       !- Rain Indicator
+    No,                       !- Snow Indicator
+    No,                       !- Daylight Saving Time Indicator
+    ASHRAEClearSky,           !- Solar Model Indicator
+    ,                         !- Beam Solar Day Schedule Name
+    ,                         !- Diffuse Solar Day Schedule Name
+    ,                         !- ASHRAE Clear Sky Optical Depth for Beam Irradiance taub
+    ,                         !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance taud
+    0.9;                      !- Sky Clearness
+
+RunPeriod,
+    RunPeriod1,               !- Name
+    1,                        !- Begin Month
+    1,                        !- Begin Day of Month
+    ,                         !- Begin Year
+    12,                       !- End Month
+    31,                       !- End Day of Month
+    ,                         !- End Year
+    Tuesday,                  !- Day of Week for Start Day
+    Yes,                      !- Use Weather File Holidays and Special Days
+    Yes,                      !- Use Weather File Daylight Saving Period
+    No,                       !- Apply Weekend Holiday Rule
+    Yes,                      !- Use Weather File Rain Indicators
+    Yes;                      !- Use Weather File Snow Indicators
+
+RunPeriodControl:SpecialDays,
+    Ochi_Day,                 !- Name
+    10/28,                    !- Start Date
+    1,                        !- Duration
+    Holiday;                  !- Special Day Type
+
+RunPeriodControl:SpecialDays,
+    Polytechnic_Uprising_Day,    !- Name
+    11/17,                    !- Start Date
+    1,                        !- Duration
+    Holiday;                  !- Special Day Type
+
+RunPeriodControl:SpecialDays,
+    Independence_Day,         !- Name
+    03/25,                    !- Start Date
+    1,                        !- Duration
+    Holiday;                  !- Special Day Type
+
+RunPeriodControl:SpecialDays,
+    Labour_Day,               !- Name
+    05/01,                    !- Start Date
+    1,                        !- Duration
+    Holiday;                  !- Special Day Type
+
+RunPeriodControl:SpecialDays,
+    Christmas_Break_Dec,      !- Name
+    12/24,                    !- Start Date
+    8,                        !- Duration
+    Holiday;                  !- Special Day Type
+
+RunPeriodControl:SpecialDays,
+    Christmas_Break_Jan,      !- Name
+    01/01,                    !- Start Date
+    6,                        !- Duration
+    Holiday;                  !- Special Day Type
+
+RunPeriodControl:SpecialDays,
+    Easter_Break,             !- Name
+    04/10,                    !- Start Date
+    14,                       !- Duration
+    Holiday;                  !- Special Day Type
+
+RunPeriodControl:SpecialDays,
+    Summer_Break,             !- Name
+    06/16,                    !- Start Date
+    87,                       !- Duration
+    Holiday;                  !- Special Day Type
+
+ScheduleTypeLimits,
+    Any Number;               !- Name
+
+ScheduleTypeLimits,
+    Fraction,                 !- Name
+    0,                        !- Lower Limit Value
+    1,                        !- Upper Limit Value
+    CONTINUOUS;               !- Numeric Type
+
+ScheduleTypeLimits,
+    Control Type,             !- Name
+    0,                        !- Lower Limit Value
+    4,                        !- Upper Limit Value
+    DISCRETE;                 !- Numeric Type
+
+ScheduleTypeLimits,
+    Temperature,              !- Name
+    -60,                      !- Lower Limit Value
+    200,                      !- Upper Limit Value
+    CONTINUOUS,               !- Numeric Type
+    Temperature;              !- Unit Type
+
+ScheduleTypeLimits,
+    On/Off,                   !- Name
+    0,                        !- Lower Limit Value
+    1,                        !- Upper Limit Value
+    DISCRETE;                 !- Numeric Type
+
+ScheduleTypeLimits,
+    FlowRate,                 !- Name
+    0,                        !- Lower Limit Value
+    10,                       !- Upper Limit Value
+    CONTINUOUS;               !- Numeric Type
+
+Schedule:Compact,
+    EQUIP-1,                  !- Name
+    Fraction,                 !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: WeekDays,            !- Field 2
+    Until: 08:30,             !- Field 3
+    0.0,                      !- Field 4
+    Until: 16:00,             !- Field 5
+    1.0,                      !- Field 6
+    Until: 24:00,             !- Field 7
+    0.0,                      !- Field 8
+    For: Weekends Holiday SummerDesignDay WinterDesignDay CustomDay1 CustomDay2,    !- Field 9
+    Until: 24:00,             !- Field 10
+    0.0;                      !- Field 11
+
+Schedule:Compact,
+    OCCRPY-ROOM1,             !- Name
+    Fraction,                 !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: Weekdays,            !- Field 2
+    Until: 08:10,             !- Field 3
+    0.0,                      !- Field 4
+    Until: 10:00,             !- Field 5
+    1.0,                      !- Field 6
+    Until: 10:10,             !- Field 7
+    0.0,                      !- Field 8
+    Until: 12:00,             !- Field 9
+    1.0,                      !- Field 10
+    Until: 12:10,             !- Field 11
+    0.0,                      !- Field 12
+    Until: 15:00,             !- Field 13
+    1.0,                      !- Field 14
+    Until: 24:00,             !- Field 15
+    0.0,                      !- Field 16
+    For: Weekends Holiday SummerDesignDay WinterDesignDay CRstomDay1 CRstomDay2,    !- Field 17
+    Until: 24:00,             !- Field 18
+    0.0;                      !- Field 19
+
+Schedule:Compact,
+    LIGHTS-1,                 !- Name
+    On/Off,                   !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: WeekDays,            !- Field 2
+    Until: 08:10,             !- Field 3
+    0.0,                      !- Field 4
+    Until: 10:00,             !- Field 5
+    1.0,                      !- Field 6
+    Until: 10:10,             !- Field 7
+    0.0,                      !- Field 8
+    Until: 12:00,             !- Field 9
+    1.0,                      !- Field 10
+    Until: 12:10,             !- Field 11
+    0.0,                      !- Field 12
+    Until: 16:00,             !- Field 13
+    1.0,                      !- Field 14
+    Until: 24:00,             !- Field 15
+    0.0,                      !- Field 16
+    For: Weekends Holiday SummerDesignDay WinterDesignDay CRstomDay1 CRstomDay2,    !- Field 17
+    Until: 24:00,             !- Field 18
+    0;                        !- Field 19
+
+Schedule:Compact,
+    INFIL-SCH1,               !- Name
+    Fraction,                 !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: Weekdays,            !- Field 2
+    Until: 08:00,             !- Field 3
+    0.05,                     !- Field 4
+    Until: 08:10,             !- Field 5
+    1.0,                      !- Field 6
+    Until: 10:00,             !- Field 7
+    0.05,                     !- Field 8
+    Until: 10:10,             !- Field 9
+    1.0,                      !- Field 10
+    Until: 12:00,             !- Field 11
+    0.05,                     !- Field 12
+    Until: 12:10,             !- Field 13
+    1.0,                      !- Field 14
+    Until: 15:00,             !- Field 15
+    0.05,                     !- Field 16
+    Until: 15:10,             !- Field 17
+    1.0,                      !- Field 18
+    Until: 24:00,             !- Field 19
+    0.05,                     !- Field 20
+    For: Weekends Holiday SummerDesignDay WinterDesignDay CRstomDay1 CRstomDay2,    !- Field 21
+    Until: 24:00,             !- Field 22
+    0.05;                     !- Field 23
+
+Schedule:Compact,
+    Vent-Sch1,                !- Name
+    Fraction,                 !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: Weekdays,            !- Field 2
+    Until: 08:00,             !- Field 3
+    0.0,                      !- Field 4
+    Until: 08:10,             !- Field 5
+    1.0,                      !- Field 6
+    Until: 10:00,             !- Field 7
+    0.0,                      !- Field 8
+    Until: 10:10,             !- Field 9
+    1.0,                      !- Field 10
+    Until: 12:00,             !- Field 11
+    0.0,                      !- Field 12
+    Until: 12:10,             !- Field 13
+    1.0,                      !- Field 14
+    Until: 15:00,             !- Field 15
+    0.0,                      !- Field 16
+    Until: 15:10,             !- Field 17
+    1.0,                      !- Field 18
+    Until: 24:00,             !- Field 19
+    0.0,                      !- Field 20
+    For: Weekends Holiday SummerDesignDay WinterDesignDay CRstomDay1 CRstomDay2,    !- Field 21
+    Until: 24:00,             !- Field 22
+    0.0;                      !- Field 23
+
+Schedule:Compact,
+    ActSchd1,                 !- Name
+    Any Number,               !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: Weekdays,            !- Field 2
+    Until: 08:10,             !- Field 3
+    0.0,                      !- Field 4
+    Until: 10:00,             !- Field 5
+    53.1,                     !- Field 6
+    Until: 10:10,             !- Field 7
+    0.0,                      !- Field 8
+    Until: 12:00,             !- Field 9
+    97.3,                     !- Field 10
+    Until: 12:10,             !- Field 11
+    0.0,                      !- Field 12
+    Until: 15:00,             !- Field 13
+    53.1,                     !- Field 14
+    Until: 24:00,             !- Field 15
+    0,                        !- Field 16
+    For: Weekends Holiday SummerDesignDay WinterDesignDay CRstomDay1 CRstomDay2,    !- Field 17
+    Until: 24:00,             !- Field 18
+    0;                        !- Field 19
+
+Schedule:Compact,
+    OCCRPY-ROOM2,             !- Name
+    Fraction,                 !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: Weekdays,            !- Field 2
+    Until: 10:00,             !- Field 3
+    0.0,                      !- Field 4
+    Until: 10:10,             !- Field 5
+    1.0,                      !- Field 6
+    Until: 12:00,             !- Field 7
+    0.0,                      !- Field 8
+    Until: 12:10,             !- Field 9
+    1.0,                      !- Field 10
+    Until: 15:00,             !- Field 11
+    0.0,                      !- Field 12
+    Until: 15:10,             !- Field 13
+    1.0,                      !- Field 14
+    Until: 24:00,             !- Field 15
+    0.0,                      !- Field 16
+    For: Weekends Holiday SummerDesignDay WinterDesignDay CRstomDay1 CRstomDay2,    !- Field 17
+    Until: 24:00,             !- Field 18
+    0.0;                      !- Field 19
+
+Schedule:Compact,
+    LIGHTS-2,                 !- Name
+    On/Off,                   !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: WeekDays,            !- Field 2
+    Until: 08:00,             !- Field 3
+    0.0,                      !- Field 4
+    Until: 08:10,             !- Field 5
+    1.0,                      !- Field 6
+    Until: 10:00,             !- Field 7
+    0.0,                      !- Field 8
+    Until: 10:10,             !- Field 9
+    1.0,                      !- Field 10
+    Until: 12:00,             !- Field 11
+    0.0,                      !- Field 12
+    Until: 12:10,             !- Field 13
+    1.0,                      !- Field 14
+    Until: 15:00,             !- Field 15
+    0.0,                      !- Field 16
+    Until: 15:10,             !- Field 17
+    1.0,                      !- Field 18
+    Until: 24:00,             !- Field 19
+    0.0,                      !- Field 20
+    For: Weekends Holiday SummerDesignDay WinterDesignDay CRstomDay1 CRstomDay2,    !- Field 21
+    Until: 24:00,             !- Field 22
+    0;                        !- Field 23
+
+Schedule:Compact,
+    INFIL-SCH2,               !- Name
+    Fraction,                 !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: Weekdays,            !- Field 2
+    Until: 08:10,             !- Field 3
+    0.05,                     !- Field 4
+    Until: 08:20,             !- Field 5
+    1.0,                      !- Field 6
+    Until: 10:10,             !- Field 7
+    0.05,                     !- Field 8
+    Until: 10:20,             !- Field 9
+    1.0,                      !- Field 10
+    Until: 12:10,             !- Field 11
+    0.05,                     !- Field 12
+    Until: 12:20,             !- Field 13
+    1.0,                      !- Field 14
+    Until: 15:10,             !- Field 15
+    0.05,                     !- Field 16
+    Until: 15:20,             !- Field 17
+    1.0,                      !- Field 18
+    Until: 24:00,             !- Field 19
+    0.05,                     !- Field 20
+    For: Weekends Holiday SummerDesignDay WinterDesignDay CRstomDay1 CRstomDay2,    !- Field 21
+    Until: 24:00,             !- Field 22
+    0.05;                     !- Field 23
+
+Schedule:Compact,
+    Vent-Sch2,                !- Name
+    Fraction,                 !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: Weekdays,            !- Field 2
+    Until: 08:10,             !- Field 3
+    0.0,                      !- Field 4
+    Until: 08:20,             !- Field 5
+    1.0,                      !- Field 6
+    Until: 10:10,             !- Field 7
+    0.0,                      !- Field 8
+    Until: 10:20,             !- Field 9
+    1.0,                      !- Field 10
+    Until: 12:10,             !- Field 11
+    0.0,                      !- Field 12
+    Until: 12:20,             !- Field 13
+    1.0,                      !- Field 14
+    Until: 15:10,             !- Field 15
+    0.0,                      !- Field 16
+    Until: 15:20,             !- Field 17
+    1.0,                      !- Field 18
+    Until: 24:00,             !- Field 19
+    0.0,                      !- Field 20
+    For: Weekends Holiday SummerDesignDay WinterDesignDay CRstomDay1 CRstomDay2,    !- Field 21
+    Until: 24:00,             !- Field 22
+    0.0;                      !- Field 23
+
+Schedule:Compact,
+    ActSchd2,                 !- Name
+    Any Number,               !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: Weekdays,            !- Field 2
+    Until: 10:00,             !- Field 3
+    0.00,                     !- Field 4
+    Until: 10:10,             !- Field 5
+    97.3,                     !- Field 6
+    Until: 12:00,             !- Field 7
+    0.00,                     !- Field 8
+    Until: 12:10,             !- Field 9
+    97.3,                     !- Field 10
+    Until: 15:00,             !- Field 11
+    0.00,                     !- Field 12
+    Until: 15:10,             !- Field 13
+    97.3,                     !- Field 14
+    Until: 24:00,             !- Field 15
+    0,                        !- Field 16
+    For: Weekends Holiday SummerDesignDay WinterDesignDay CRstomDay1 CRstomDay2,    !- Field 17
+    Until: 24:00,             !- Field 18
+    0;                        !- Field 19
+
+Schedule:Compact,
+    Heat-Avail,               !- Name
+    Fraction,                 !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: Weekdays,            !- Field 2
+    Until: 08:10,             !- Field 3
+    0.0,                      !- Field 4
+    Until: 10:00,             !- Field 5
+    1.0,                      !- Field 6
+    Until: 10:10,             !- Field 7
+    0.0,                      !- Field 8
+    Until: 12:00,             !- Field 9
+    1.0,                      !- Field 10
+    Until: 12:10,             !- Field 11
+    0.0,                      !- Field 12
+    Until: 15:00,             !- Field 13
+    1.0,                      !- Field 14
+    Until: 24:00,             !- Field 15
+    0.0,                      !- Field 16
+    For: Weekends Holiday SummerDesignDay WinterDesignDay CRstomDay1 CRstomDay2,    !- Field 17
+    Until: 24:00,             !- Field 18
+    0.0;                      !- Field 19
+
+Schedule:Compact,
+    HVAC-Avail,               !- Name
+    Fraction,                 !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: Weekdays,            !- Field 2
+    Until: 08:00,             !- Field 3
+    0.0,                      !- Field 4
+    Until: 10:10,             !- Field 5
+    1.0,                      !- Field 6
+    Until: 10:20,             !- Field 7
+    0.0
+      Until: 12:10,    !- Field 8
+    1.0,                      !- Field 9
+    Until: 12:20,             !- Field 10
+    0.0
+      Until: 15:10,    !- Field 11
+    1.0,                      !- Field 12
+    Until: 24:00,             !- Field 13
+    0.0,                      !- Field 14
+    For: Weekends Holiday SummerDesignDay WinterDesignDay CRstomDay1 CRstomDay2,    !- Field 15
+    Until: 24:00,             !- Field 16
+    0.0;                      !- Field 17
+
+Schedule:Compact,
+    FanOpModeCycling,         !- Name
+    Any Number,               !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: AllDays,             !- Field 2
+    Until: 24:00,             !- Field 3
+    0;                        !- Field 4
+
+Schedule:Compact,
+    Zone Control Type Sched1,    !- Name
+    Control Type,             !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: Weekdays,            !- Field 2
+    Until: 08:00,             !- Field 3
+    0,                        !- Field 4
+    Until: 14:00,             !- Field 5
+    1,                        !- Field 6
+    Until: 24:00,             !- Field 7
+    0,                        !- Field 8
+    For: WinterDesignDay SummerDesignDay,    !- Field 9
+    Until: 24:00,             !- Field 10
+    1,                        !- Field 11
+    For: Weekends Holiday CRstomDay1 CRstomDay2,    !- Field 12
+    Until: 24:00,             !- Field 13
+    0.0;                      !- Field 14
+
+Schedule:Compact,
+    Zone Control Type Sched2,    !- Name
+    Control Type,             !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: Weekdays,            !- Field 2
+    Until: 08:00,             !- Field 3
+    0,                        !- Field 4
+    Until: 14:00,             !- Field 5
+    4,                        !- Field 6
+    Until: 24:00,             !- Field 7
+    0,                        !- Field 8
+    For: WinterDesignDay SummerDesignDay,    !- Field 9
+    Until: 24:00,             !- Field 10
+    4,                        !- Field 11
+    For: Weekends Holiday CRstomDay1 CRstomDay2,    !- Field 12
+    Until: 24:00,             !- Field 13
+    0.0;                      !- Field 14
+
+Schedule:Compact,
+    Htg-SetP-Sch,             !- Name
+    Temperature,              !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: WeekDays,            !- Field 2
+    Until: 08:00,             !- Field 3
+    16,                       !- Field 4
+    Until: 14:00,             !- Field 5
+    21,                       !- Field 6
+    Until: 24:00,             !- Field 7
+    16,                       !- Field 8
+    For: WeekEnds Holiday SummerDesignDay WinterDesignDay CRstomDay1 CRstomDay2,    !- Field 9
+    Until: 24:00,             !- Field 10
+    16;                       !- Field 11
+
+Schedule:Compact,
+    Clg-SetP-Sch,             !- Name
+    Temperature,              !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: WeekDays,            !- Field 2
+    Until: 08:00,             !- Field 3
+    30,                       !- Field 4
+    Until: 14:00,             !- Field 5
+    25,                       !- Field 6
+    Until: 24:00,             !- Field 7
+    30,                       !- Field 8
+    For: WeekEnds Holiday SummerDesignDay WinterDesignDay CRstomDay1 CRstomDay2,    !- Field 9
+    Until: 24:00,             !- Field 10
+    30;                       !- Field 11
+
+Schedule:Compact,
+    HW-Heating-Schedule,      !- Name
+    Fraction,                 !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: AllDays,             !- Field 2
+    Until: 24:00,             !- Field 3
+    1.0;                      !- Field 4
+
+Schedule:Compact,
+    HW-Setpoint-Schedule,     !- Name
+    Temperature,              !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: AllDays,             !- Field 2
+    Until: 24:00,             !- Field 3
+    60.0;                     !- Field 4
+
+Schedule:Constant,
+    Outdoor_CO2_Level,        !- Name
+    Any Number,               !- Schedule Type Limits Name
+    420;                      !- Hourly Value
+
+Material,
+    Plaster_15mm,             !- Name
+    Smooth,                   !- Roughness
+    0.015,                    !- Thickness
+    0.35,                     !- Conductivity
+    1200,                     !- Density
+    840,                      !- Specific Heat
+    0.9,                      !- Thermal Absorptance
+    0.7,                      !- Solar Absorptance
+    0.7;                      !- Visible Absorptance
+
+Material,
+    Brick_Masonry_200mm,      !- Name
+    Rough,                    !- Roughness
+    0.2,                      !- Thickness
+    0.72,                     !- Conductivity
+    1800,                     !- Density
+    840,                      !- Specific Heat
+    0.9,                      !- Thermal Absorptance
+    0.65,                     !- Solar Absorptance
+    0.65;                     !- Visible Absorptance
+
+Material,
+    Concrete_RC_200mm,        !- Name
+    MediumRough,              !- Roughness
+    0.2,                      !- Thickness
+    1.7,                      !- Conductivity
+    2400,                     !- Density
+    900,                      !- Specific Heat
+    0.9,                      !- Thermal Absorptance
+    0.65,                     !- Solar Absorptance
+    0.65;                     !- Visible Absorptance
+
+Material,
+    Linoleum_3mm,             !- Name
+    Smooth,                   !- Roughness
+    0.003,                    !- Thickness
+    0.17,                     !- Conductivity
+    1200,                     !- Density
+    1400,                     !- Specific Heat
+    0.9,                      !- Thermal Absorptance
+    0.5,                      !- Solar Absorptance
+    0.5;                      !- Visible Absorptance
+
+Material,
+    Wood_Floor_20mm,          !- Name
+    MediumSmooth,             !- Roughness
+    0.02,                     !- Thickness
+    0.14,                     !- Conductivity
+    650,                      !- Density
+    1600,                     !- Specific Heat
+    0.9,                      !- Thermal Absorptance
+    0.55,                     !- Solar Absorptance
+    0.55;                     !- Visible Absorptance
+
+Material,
+    Door_Wood_40mm,           !- Name
+    MediumSmooth,             !- Roughness
+    0.04,                     !- Thickness
+    0.14,                     !- Conductivity
+    600,                      !- Density
+    1600,                     !- Specific Heat
+    0.9,                      !- Thermal Absorptance
+    0.6,                      !- Solar Absorptance
+    0.6;                      !- Visible Absorptance
+
+Material,
+    Door_Metal_Steel_2mm,     !- Name
+    Smooth,                   !- Roughness
+    0.002,                    !- Thickness
+    45,                       !- Conductivity
+    7850,                     !- Density
+    500,                      !- Specific Heat
+    0.9,                      !- Thermal Absorptance
+    0.7,                      !- Solar Absorptance
+    0.7;                      !- Visible Absorptance
+
+WindowMaterial:SimpleGlazingSystem,
+    Simple_DoubleClear,       !- Name
+    2.8,                      !- UFactor
+    0.62,                     !- Solar Heat Gain Coefficient
+    0.78;                     !- Visible Transmittance
+
+Construction,
+    Window_DoubleClear_Alu,    !- Name
+    Simple_DoubleClear;       !- Outside Layer
+
+Construction,
+    Wall_BrickPlaster,        !- Name
+    Plaster_15mm,             !- Outside Layer
+    Brick_Masonry_200mm,      !- Layer 2
+    Plaster_15mm;             !- Layer 3
+
+Construction,
+    Ceiling_RCSlab_Plaster,    !- Name
+    Plaster_15mm,             !- Outside Layer
+    Concrete_RC_200mm,        !- Layer 2
+    Plaster_15mm;             !- Layer 3
+
+Construction,
+    Floor_Linoleum_on_RC,     !- Name
+    Linoleum_3mm,             !- Outside Layer
+    Concrete_RC_200mm;        !- Layer 2
+
+Construction,
+    Floor_Wood_on_RC,         !- Name
+    Wood_Floor_20mm,          !- Outside Layer
+    Concrete_RC_200mm;        !- Layer 2
+
+Construction,
+    Door_Wood,                !- Name
+    Door_Wood_40mm;           !- Outside Layer
+
+Construction,
+    Door_Metal,               !- Name
+    Door_Metal_Steel_2mm;     !- Outside Layer
+
+GlobalGeometryRules,
+    UpperLeftCorner,          !- Starting Vertex Position
+    CounterClockWise,         !- Vertex Entry Direction
+    World;                    !- Coordinate System
+
+Zone,
+    Classroom_Left,           !- Name
+    0,                        !- Direction of Relative North
+    0,                        !- X Origin
+    0,                        !- Y Origin
+    0,                        !- Z Origin
+    1,                        !- Type
+    1,                        !- Multiplier
+    3;                        !- Ceiling Height
+
+Zone,
+    Classroom_Right,          !- Name
+    0,                        !- Direction of Relative North
+    0,                        !- X Origin
+    0,                        !- Y Origin
+    0,                        !- Z Origin
+    1,                        !- Type
+    1,                        !- Multiplier
+    3;                        !- Ceiling Height
+
+Zone,
+    Hallway_Room3,            !- Name
+    0,                        !- Direction of Relative North
+    0,                        !- X Origin
+    0,                        !- Y Origin
+    0,                        !- Z Origin
+    1,                        !- Type
+    1,                        !- Multiplier
+    3;                        !- Ceiling Height
+
+Zone,
+    Room2_Small,              !- Name
+    0,                        !- Direction of Relative North
+    0,                        !- X Origin
+    0,                        !- Y Origin
+    0,                        !- Z Origin
+    1,                        !- Type
+    1,                        !- Multiplier
+    3;                        !- Ceiling Height
+
+BuildingSurface:Detailed,
+    CL_Floor,                 !- Name
+    Floor,                    !- Surface Type
+    Floor_linoleum_on_RC,     !- Construction Name
+    Classroom_Left,           !- Zone Name
+    ,                         !- Space Name
+    Ground,                   !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    NoSun,                    !- Sun Exposure
+    NoWind,                   !- Wind Exposure
+    1,                        !- View Factor to Ground
+    4,                        !- Number of Vertices
+    0,                        !- Vertex 1 Xcoordinate
+    6.67,                     !- Vertex 1 Ycoordinate
+    0,                        !- Vertex 1 Zcoordinate
+    0,                        !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    0,                        !- Vertex 2 Zcoordinate
+    6.69,                     !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    6.69,                     !- Vertex 4 Xcoordinate
+    6.67,                     !- Vertex 4 Ycoordinate
+    0;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    CL_Roof,                  !- Name
+    Roof,                     !- Surface Type
+    Ceiling_RCSlab_Plaster,    !- Construction Name
+    Classroom_Left,           !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    0.5,                      !- View Factor to Ground
+    4,                        !- Number of Vertices
+    0,                        !- Vertex 1 Xcoordinate
+    6.67,                     !- Vertex 1 Ycoordinate
+    3,                        !- Vertex 1 Zcoordinate
+    0,                        !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    3,                        !- Vertex 2 Zcoordinate
+    6.69,                     !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    3,                        !- Vertex 3 Zcoordinate
+    6.69,                     !- Vertex 4 Xcoordinate
+    6.67,                     !- Vertex 4 Ycoordinate
+    3;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    CL_Wall_West_1,           !- Name
+    Wall,                     !- Surface Type
+    Wall_BrickPlaster,        !- Construction Name
+    Classroom_Left,           !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    0.5,                      !- View Factor to Ground
+    4,                        !- Number of Vertices
+    0,                        !- Vertex 1 Xcoordinate
+    1.5,                      !- Vertex 1 Ycoordinate
+    3,                        !- Vertex 1 Zcoordinate
+    0,                        !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    3,                        !- Vertex 2 Zcoordinate
+    0,                        !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    0,                        !- Vertex 4 Xcoordinate
+    1.5,                      !- Vertex 4 Ycoordinate
+    0;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    CL_Wall_West_2,           !- Name
+    Wall,                     !- Surface Type
+    Wall_BrickPlaster,        !- Construction Name
+    Classroom_Left,           !- Zone Name
+    ,                         !- Space Name
+    Adiabatic,                !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    NoSun,                    !- Sun Exposure
+    NoWind,                   !- Wind Exposure
+    0.5,                      !- View Factor to Ground
+    4,                        !- Number of Vertices
+    0,                        !- Vertex 1 Xcoordinate
+    5.17,                     !- Vertex 1 Ycoordinate
+    3,                        !- Vertex 1 Zcoordinate
+    0,                        !- Vertex 2 Xcoordinate
+    1.5,                      !- Vertex 2 Ycoordinate
+    3,                        !- Vertex 2 Zcoordinate
+    0,                        !- Vertex 3 Xcoordinate
+    1.5,                      !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    0,                        !- Vertex 4 Xcoordinate
+    5.17,                     !- Vertex 4 Ycoordinate
+    0;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    CL_Wall_West_3,           !- Name
+    Wall,                     !- Surface Type
+    Wall_BrickPlaster,        !- Construction Name
+    Classroom_Left,           !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    0.5,                      !- View Factor to Ground
+    4,                        !- Number of Vertices
+    0,                        !- Vertex 1 Xcoordinate
+    6.67,                     !- Vertex 1 Ycoordinate
+    3,                        !- Vertex 1 Zcoordinate
+    0,                        !- Vertex 2 Xcoordinate
+    5.17,                     !- Vertex 2 Ycoordinate
+    3,                        !- Vertex 2 Zcoordinate
+    0,                        !- Vertex 3 Xcoordinate
+    5.17,                     !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    0,                        !- Vertex 4 Xcoordinate
+    6.67,                     !- Vertex 4 Ycoordinate
+    0;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    CL_Wall_South,            !- Name
+    Wall,                     !- Surface Type
+    Wall_BrickPlaster,        !- Construction Name
+    Classroom_Left,           !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    0.5,                      !- View Factor to Ground
+    4,                        !- Number of Vertices
+    6.69,                     !- Vertex 1 Xcoordinate
+    0,                        !- Vertex 1 Ycoordinate
+    3,                        !- Vertex 1 Zcoordinate
+    0,                        !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    3,                        !- Vertex 2 Zcoordinate
+    0,                        !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    6.69,                     !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    0;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    CL_Wall_North,            !- Name
+    Wall,                     !- Surface Type
+    Wall_BrickPlaster,        !- Construction Name
+    Classroom_Left,           !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    NoSun,                    !- Sun Exposure
+    NoWind,                   !- Wind Exposure
+    0.5,                      !- View Factor to Ground
+    4,                        !- Number of Vertices
+    6.69,                     !- Vertex 1 Xcoordinate
+    6.67,                     !- Vertex 1 Ycoordinate
+    3,                        !- Vertex 1 Zcoordinate
+    0,                        !- Vertex 2 Xcoordinate
+    6.67,                     !- Vertex 2 Ycoordinate
+    3,                        !- Vertex 2 Zcoordinate
+    0,                        !- Vertex 3 Xcoordinate
+    6.67,                     !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    6.69,                     !- Vertex 4 Xcoordinate
+    6.67,                     !- Vertex 4 Ycoordinate
+    0;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    CL_Wall_East_1,           !- Name
+    Wall,                     !- Surface Type
+    Wall_BrickPlaster,        !- Construction Name
+    Classroom_Left,           !- Zone Name
+    ,                         !- Space Name
+    Adiabatic,                !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    NoSun,                    !- Sun Exposure
+    NoWind,                   !- Wind Exposure
+    0.5,                      !- View Factor to Ground
+    4,                        !- Number of Vertices
+    6.69,                     !- Vertex 1 Xcoordinate
+    6.67,                     !- Vertex 1 Ycoordinate
+    3,                        !- Vertex 1 Zcoordinate
+    6.69,                     !- Vertex 2 Xcoordinate
+    3.09,                     !- Vertex 2 Ycoordinate
+    3,                        !- Vertex 2 Zcoordinate
+    6.69,                     !- Vertex 3 Xcoordinate
+    3.09,                     !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    6.69,                     !- Vertex 4 Xcoordinate
+    6.67,                     !- Vertex 4 Ycoordinate
+    0;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    CL_Wall_East_2,           !- Name
+    Wall,                     !- Surface Type
+    Wall_BrickPlaster,        !- Construction Name
+    Classroom_Left,           !- Zone Name
+    ,                         !- Space Name
+    Surface,                  !- Outside Boundary Condition
+    H3_Wall_West,             !- Outside Boundary Condition Object
+    NoSun,                    !- Sun Exposure
+    NoWind,                   !- Wind Exposure
+    0.5,                      !- View Factor to Ground
+    4,                        !- Number of Vertices
+    6.69,                     !- Vertex 1 Xcoordinate
+    3.09,                     !- Vertex 1 Ycoordinate
+    3,                        !- Vertex 1 Zcoordinate
+    6.69,                     !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    3,                        !- Vertex 2 Zcoordinate
+    6.69,                     !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    6.69,                     !- Vertex 4 Xcoordinate
+    3.09,                     !- Vertex 4 Ycoordinate
+    0;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    CR_Floor,                 !- Name
+    Floor,                    !- Surface Type
+    Floor_Linoleum_on_RC,     !- Construction Name
+    Classroom_Right,          !- Zone Name
+    ,                         !- Space Name
+    Ground,                   !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    NoSun,                    !- Sun Exposure
+    NoWind,                   !- Wind Exposure
+    1,                        !- View Factor to Ground
+    4,                        !- Number of Vertices
+    13.3,                     !- Vertex 1 Xcoordinate
+    6.67,                     !- Vertex 1 Ycoordinate
+    0,                        !- Vertex 1 Zcoordinate
+    22.77,                    !- Vertex 2 Xcoordinate
+    6.67,                     !- Vertex 2 Ycoordinate
+    0,                        !- Vertex 2 Zcoordinate
+    22.77,                    !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    13.3,                     !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    0;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    CR_Roof,                  !- Name
+    Roof,                     !- Surface Type
+    Ceiling_RCSlab_Plaster,    !- Construction Name
+    Classroom_Right,          !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    0.5,                      !- View Factor to Ground
+    4,                        !- Number of Vertices
+    13.3,                     !- Vertex 1 Xcoordinate
+    6.67,                     !- Vertex 1 Ycoordinate
+    3,                        !- Vertex 1 Zcoordinate
+    22.77,                    !- Vertex 2 Xcoordinate
+    6.67,                     !- Vertex 2 Ycoordinate
+    3,                        !- Vertex 2 Zcoordinate
+    22.77,                    !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    3,                        !- Vertex 3 Zcoordinate
+    13.3,                     !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    3;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    CR_Wall_West_1,           !- Name
+    Wall,                     !- Surface Type
+    Wall_BrickPlaster,        !- Construction Name
+    Classroom_Right,          !- Zone Name
+    ,                         !- Space Name
+    Surface,                  !- Outside Boundary Condition
+    H3_Wall_East,             !- Outside Boundary Condition Object
+    NoSun,                    !- Sun Exposure
+    NoWind,                   !- Wind Exposure
+    0.5,                      !- View Factor to Ground
+    4,                        !- Number of Vertices
+    13.3,                     !- Vertex 1 Xcoordinate
+    2.98,                     !- Vertex 1 Ycoordinate
+    3,                        !- Vertex 1 Zcoordinate
+    13.3,                     !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    3,                        !- Vertex 2 Zcoordinate
+    13.3,                     !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    13.3,                     !- Vertex 4 Xcoordinate
+    2.98,                     !- Vertex 4 Ycoordinate
+    0;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    CR_Wall_West_2,           !- Name
+    Wall,                     !- Surface Type
+    Wall_BrickPlaster,        !- Construction Name
+    Classroom_Right,          !- Zone Name
+    ,                         !- Space Name
+    Surface,                  !- Outside Boundary Condition
+    R2_Wall_East,             !- Outside Boundary Condition Object
+    NoSun,                    !- Sun Exposure
+    NoWind,                   !- Wind Exposure
+    0.5,                      !- View Factor to Ground
+    4,                        !- Number of Vertices
+    13.3,                     !- Vertex 1 Xcoordinate
+    6.67,                     !- Vertex 1 Ycoordinate
+    3,                        !- Vertex 1 Zcoordinate
+    13.3,                     !- Vertex 2 Xcoordinate
+    2.98,                     !- Vertex 2 Ycoordinate
+    3,                        !- Vertex 2 Zcoordinate
+    13.3,                     !- Vertex 3 Xcoordinate
+    2.98,                     !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    13.3,                     !- Vertex 4 Xcoordinate
+    6.67,                     !- Vertex 4 Ycoordinate
+    0;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    CR_Wall_North,            !- Name
+    Wall,                     !- Surface Type
+    Wall_BrickPlaster,        !- Construction Name
+    Classroom_Right,          !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    0.5,                      !- View Factor to Ground
+    4,                        !- Number of Vertices
+    22.77,                    !- Vertex 1 Xcoordinate
+    6.67,                     !- Vertex 1 Ycoordinate
+    3,                        !- Vertex 1 Zcoordinate
+    13.3,                     !- Vertex 2 Xcoordinate
+    6.67,                     !- Vertex 2 Ycoordinate
+    3,                        !- Vertex 2 Zcoordinate
+    13.3,                     !- Vertex 3 Xcoordinate
+    6.67,                     !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    22.77,                    !- Vertex 4 Xcoordinate
+    6.67,                     !- Vertex 4 Ycoordinate
+    0;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    CR_Wall_South,            !- Name
+    Wall,                     !- Surface Type
+    Wall_BrickPlaster,        !- Construction Name
+    Classroom_Right,          !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    0.5,                      !- View Factor to Ground
+    4,                        !- Number of Vertices
+    13.3,                     !- Vertex 1 Xcoordinate
+    0,                        !- Vertex 1 Ycoordinate
+    0,                        !- Vertex 1 Zcoordinate
+    22.77,                    !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    0,                        !- Vertex 2 Zcoordinate
+    22.77,                    !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    3,                        !- Vertex 3 Zcoordinate
+    13.3,                     !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    3;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    CR_Wall_East,             !- Name
+    Wall,                     !- Surface Type
+    Wall_BrickPlaster,        !- Construction Name
+    Classroom_Right,          !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    0.5,                      !- View Factor to Ground
+    4,                        !- Number of Vertices
+    22.77,                    !- Vertex 1 Xcoordinate
+    0,                        !- Vertex 1 Ycoordinate
+    3,                        !- Vertex 1 Zcoordinate
+    22.77,                    !- Vertex 2 Xcoordinate
+    6.67,                     !- Vertex 2 Ycoordinate
+    3,                        !- Vertex 2 Zcoordinate
+    22.77,                    !- Vertex 3 Xcoordinate
+    6.67,                     !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    22.77,                    !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    0;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    H3_Floor,                 !- Name
+    Floor,                    !- Surface Type
+    Floor_Linoleum_on_RC,     !- Construction Name
+    Hallway_Room3,            !- Zone Name
+    ,                         !- Space Name
+    Ground,                   !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    NoSun,                    !- Sun Exposure
+    NoWind,                   !- Wind Exposure
+    1,                        !- View Factor to Ground
+    4,                        !- Number of Vertices
+    6.92,                     !- Vertex 1 Xcoordinate
+    3.09,                     !- Vertex 1 Ycoordinate
+    0,                        !- Vertex 1 Zcoordinate
+    13.07,                    !- Vertex 2 Xcoordinate
+    3.09,                     !- Vertex 2 Ycoordinate
+    0,                        !- Vertex 2 Zcoordinate
+    13.07,                    !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    6.92,                     !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    0;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    H3_Roof,                  !- Name
+    Roof,                     !- Surface Type
+    Ceiling_RCSlab_Plaster,    !- Construction Name
+    Hallway_Room3,            !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    0.5,                      !- View Factor to Ground
+    6,                        !- Number of Vertices
+    6.92,                     !- Vertex 1 Xcoordinate
+    3.09,                     !- Vertex 1 Ycoordinate
+    3,                        !- Vertex 1 Zcoordinate
+    13.07,                    !- Vertex 2 Xcoordinate
+    3.09,                     !- Vertex 2 Ycoordinate
+    3,                        !- Vertex 2 Zcoordinate
+    13.07,                    !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    3,                        !- Vertex 3 Zcoordinate
+    6.92,                     !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    3;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    H3_Wall_West,             !- Name
+    Wall,                     !- Surface Type
+    Wall_BrickPlaster,        !- Construction Name
+    Hallway_Room3,            !- Zone Name
+    ,                         !- Space Name
+    Surface,                  !- Outside Boundary Condition
+    CL_Wall_East_2,           !- Outside Boundary Condition Object
+    NoSun,                    !- Sun Exposure
+    NoWind,                   !- Wind Exposure
+    0.5,                      !- View Factor to Ground
+    4,                        !- Number of Vertices
+    6.92,                     !- Vertex 1 Xcoordinate
+    3.09,                     !- Vertex 1 Ycoordinate
+    0,                        !- Vertex 1 Zcoordinate
+    6.92,                     !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    0,                        !- Vertex 2 Zcoordinate
+    6.92,                     !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    3,                        !- Vertex 3 Zcoordinate
+    6.92,                     !- Vertex 4 Xcoordinate
+    3.09,                     !- Vertex 4 Ycoordinate
+    3;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    H3_Wall_South,            !- Name
+    Wall,                     !- Surface Type
+    Wall_BrickPlaster,        !- Construction Name
+    Hallway_Room3,            !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    0.5,                      !- View Factor to Ground
+    4,                        !- Number of Vertices
+    6.92,                     !- Vertex 1 Xcoordinate
+    0,                        !- Vertex 1 Ycoordinate
+    0,                        !- Vertex 1 Zcoordinate
+    13.07,                    !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    0,                        !- Vertex 2 Zcoordinate
+    13.07,                    !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    3,                        !- Vertex 3 Zcoordinate
+    6.92,                     !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    3;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    H3_Wall_East,             !- Name
+    Wall,                     !- Surface Type
+    Wall_BrickPlaster,        !- Construction Name
+    Hallway_Room3,            !- Zone Name
+    ,                         !- Space Name
+    Surface,                  !- Outside Boundary Condition
+    CR_Wall_West_1,           !- Outside Boundary Condition Object
+    NoSun,                    !- Sun Exposure
+    NoWind,                   !- Wind Exposure
+    0.5,                      !- View Factor to Ground
+    4,                        !- Number of Vertices
+    13.07,                    !- Vertex 1 Xcoordinate
+    0,                        !- Vertex 1 Ycoordinate
+    3,                        !- Vertex 1 Zcoordinate
+    13.07,                    !- Vertex 2 Xcoordinate
+    3.09,                     !- Vertex 2 Ycoordinate
+    3,                        !- Vertex 2 Zcoordinate
+    13.07,                    !- Vertex 3 Xcoordinate
+    3.09,                     !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    13.07,                    !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    0;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    H3_Wall_North_1,          !- Name
+    Wall,                     !- Surface Type
+    Wall_BrickPlaster,        !- Construction Name
+    Hallway_Room3,            !- Zone Name
+    ,                         !- Space Name
+    Surface,                  !- Outside Boundary Condition
+    R2_Wall_South,            !- Outside Boundary Condition Object
+    NoSun,                    !- Sun Exposure
+    NoWind,                   !- Wind Exposure
+    0.5,                      !- View Factor to Ground
+    4,                        !- Number of Vertices
+    13.07,                    !- Vertex 1 Xcoordinate
+    3.09,                     !- Vertex 1 Ycoordinate
+    3,                        !- Vertex 1 Zcoordinate
+    9.31,                     !- Vertex 2 Xcoordinate
+    3.09,                     !- Vertex 2 Ycoordinate
+    3,                        !- Vertex 2 Zcoordinate
+    9.31,                     !- Vertex 3 Xcoordinate
+    3.09,                     !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    13.07,                    !- Vertex 4 Xcoordinate
+    3.09,                     !- Vertex 4 Ycoordinate
+    0;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    H3_Wall_North_2,          !- Name
+    Wall,                     !- Surface Type
+    Wall_BrickPlaster,        !- Construction Name
+    Hallway_Room3,            !- Zone Name
+    ,                         !- Space Name
+    Adiabatic,                !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    NoSun,                    !- Sun Exposure
+    NoWind,                   !- Wind Exposure
+    0.5,                      !- View Factor to Ground
+    4,                        !- Number of Vertices
+    9.31,                     !- Vertex 1 Xcoordinate
+    3.09,                     !- Vertex 1 Ycoordinate
+    3,                        !- Vertex 1 Zcoordinate
+    6.92,                     !- Vertex 2 Xcoordinate
+    3.09,                     !- Vertex 2 Ycoordinate
+    3,                        !- Vertex 2 Zcoordinate
+    6.92,                     !- Vertex 3 Xcoordinate
+    3.09,                     !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    9.31,                     !- Vertex 4 Xcoordinate
+    3.09,                     !- Vertex 4 Ycoordinate
+    0;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    R2_Floor,                 !- Name
+    Floor,                    !- Surface Type
+    Floor_Linoleum_on_RC,     !- Construction Name
+    Room2_Small,              !- Zone Name
+    ,                         !- Space Name
+    Ground,                   !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    NoSun,                    !- Sun Exposure
+    NoWind,                   !- Wind Exposure
+    1,                        !- View Factor to Ground
+    4,                        !- Number of Vertices
+    9.54,                     !- Vertex 1 Xcoordinate
+    6.67,                     !- Vertex 1 Ycoordinate
+    0,                        !- Vertex 1 Zcoordinate
+    9.54,                     !- Vertex 2 Xcoordinate
+    3.21,                     !- Vertex 2 Ycoordinate
+    0,                        !- Vertex 2 Zcoordinate
+    13.07,                    !- Vertex 3 Xcoordinate
+    3.21,                     !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    13.07,                    !- Vertex 4 Xcoordinate
+    6.67,                     !- Vertex 4 Ycoordinate
+    0;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    R2_Roof,                  !- Name
+    Roof,                     !- Surface Type
+    Ceiling_RCSlab_Plaster,    !- Construction Name
+    Room2_Small,              !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    0.5,                      !- View Factor to Ground
+    4,                        !- Number of Vertices
+    9.54,                     !- Vertex 1 Xcoordinate
+    6.67,                     !- Vertex 1 Ycoordinate
+    3,                        !- Vertex 1 Zcoordinate
+    9.54,                     !- Vertex 2 Xcoordinate
+    3.21,                     !- Vertex 2 Ycoordinate
+    3,                        !- Vertex 2 Zcoordinate
+    13.07,                    !- Vertex 3 Xcoordinate
+    3.21,                     !- Vertex 3 Ycoordinate
+    3,                        !- Vertex 3 Zcoordinate
+    13.07,                    !- Vertex 4 Xcoordinate
+    6.67,                     !- Vertex 4 Ycoordinate
+    3;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    R2_Wall_West,             !- Name
+    Wall,                     !- Surface Type
+    Wall_BrickPlaster,        !- Construction Name
+    Room2_Small,              !- Zone Name
+    ,                         !- Space Name
+    Adiabatic,                !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    NoSun,                    !- Sun Exposure
+    NoWind,                   !- Wind Exposure
+    0.5,                      !- View Factor to Ground
+    4,                        !- Number of Vertices
+    9.54,                     !- Vertex 1 Xcoordinate
+    3.21,                     !- Vertex 1 Ycoordinate
+    3,                        !- Vertex 1 Zcoordinate
+    9.54,                     !- Vertex 2 Xcoordinate
+    6.67,                     !- Vertex 2 Ycoordinate
+    3,                        !- Vertex 2 Zcoordinate
+    9.54,                     !- Vertex 3 Xcoordinate
+    6.67,                     !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    9.54,                     !- Vertex 4 Xcoordinate
+    3.21,                     !- Vertex 4 Ycoordinate
+    0;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    R2_Wall_South,            !- Name
+    Wall,                     !- Surface Type
+    Wall_BrickPlaster,        !- Construction Name
+    Room2_Small,              !- Zone Name
+    ,                         !- Space Name
+    Surface,                  !- Outside Boundary Condition
+    H3_Wall_North_1,          !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    0.5,                      !- View Factor to Ground
+    4,                        !- Number of Vertices
+    9.54,                     !- Vertex 1 Xcoordinate
+    3.21,                     !- Vertex 1 Ycoordinate
+    3,                        !- Vertex 1 Zcoordinate
+    9.54,                     !- Vertex 2 Xcoordinate
+    3.21,                     !- Vertex 2 Ycoordinate
+    0,                        !- Vertex 2 Zcoordinate
+    13.07,                    !- Vertex 3 Xcoordinate
+    3.21,                     !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    13.07,                    !- Vertex 4 Xcoordinate
+    3.21,                     !- Vertex 4 Ycoordinate
+    3;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    R2_Wall_East,             !- Name
+    Wall,                     !- Surface Type
+    Wall_BrickPlaster,        !- Construction Name
+    Room2_Small,              !- Zone Name
+    ,                         !- Space Name
+    Surface,                  !- Outside Boundary Condition
+    CR_Wall_West_2,           !- Outside Boundary Condition Object
+    NoSun,                    !- Sun Exposure
+    NoWind,                   !- Wind Exposure
+    0.5,                      !- View Factor to Ground
+    4,                        !- Number of Vertices
+    13.07,                    !- Vertex 1 Xcoordinate
+    6.67,                     !- Vertex 1 Ycoordinate
+    3,                        !- Vertex 1 Zcoordinate
+    13.07,                    !- Vertex 2 Xcoordinate
+    6.67,                     !- Vertex 2 Ycoordinate
+    0,                        !- Vertex 2 Zcoordinate
+    13.07,                    !- Vertex 3 Xcoordinate
+    3.21,                     !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    13.07,                    !- Vertex 4 Xcoordinate
+    3.21,                     !- Vertex 4 Ycoordinate
+    3;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    R2_Wall_North,            !- Name
+    Wall,                     !- Surface Type
+    Wall_BrickPlaster,        !- Construction Name
+    Room2_Small,              !- Zone Name
+    ,                         !- Space Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    0.5,                      !- View Factor to Ground
+    4,                        !- Number of Vertices
+    13.07,                    !- Vertex 1 Xcoordinate
+    6.67,                     !- Vertex 1 Ycoordinate
+    3,                        !- Vertex 1 Zcoordinate
+    9.54,                     !- Vertex 2 Xcoordinate
+    6.67,                     !- Vertex 2 Ycoordinate
+    3,                        !- Vertex 2 Zcoordinate
+    9.54,                     !- Vertex 3 Xcoordinate
+    6.67,                     !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    13.07,                    !- Vertex 4 Xcoordinate
+    6.67,                     !- Vertex 4 Ycoordinate
+    0;                        !- Vertex 4 Zcoordinate
+
+FenestrationSurface:Detailed,
+    CL_North_Window_1,        !- Name
+    Window,                   !- Surface Type
+    Window_DoubleClear_Alu,    !- Construction Name
+    CL_Wall_North,            !- Building Surface Name
+    ,                         !- Outside Boundary Condition Object
+    ,                         !- View Factor to Ground
+    Frame_Aluminum,           !- Frame and Divider Name
+    1,                        !- Multiplier
+    4,                        !- Number of Vertices
+    1,                        !- Vertex 1 Xcoordinate
+    6.67,                     !- Vertex 1 Ycoordinate
+    0.7,                      !- Vertex 1 Zcoordinate
+    2.5,                      !- Vertex 2 Xcoordinate
+    6.67,                     !- Vertex 2 Ycoordinate
+    0.7,                      !- Vertex 2 Zcoordinate
+    2.5,                      !- Vertex 3 Xcoordinate
+    6.67,                     !- Vertex 3 Ycoordinate
+    2.3,                      !- Vertex 3 Zcoordinate
+    1,                        !- Vertex 4 Xcoordinate
+    6.67,                     !- Vertex 4 Ycoordinate
+    2.3;                      !- Vertex 4 Zcoordinate
+
+FenestrationSurface:Detailed,
+    CL_North_Window_2,        !- Name
+    Window,                   !- Surface Type
+    Window_DoubleClear_Alu,    !- Construction Name
+    CL_Wall_North,            !- Building Surface Name
+    ,                         !- Outside Boundary Condition Object
+    ,                         !- View Factor to Ground
+    Frame_Aluminum,           !- Frame and Divider Name
+    1,                        !- Multiplier
+    4,                        !- Number of Vertices
+    5.69,                     !- Vertex 1 Xcoordinate
+    6.67,                     !- Vertex 1 Ycoordinate
+    2.3,                      !- Vertex 1 Zcoordinate
+    4.19,                     !- Vertex 2 Xcoordinate
+    6.67,                     !- Vertex 2 Ycoordinate
+    0.7,                      !- Vertex 2 Zcoordinate
+    4.19,                     !- Vertex 3 Xcoordinate
+    6.67,                     !- Vertex 3 Ycoordinate
+    0.7,                      !- Vertex 3 Zcoordinate
+    5.69,                     !- Vertex 4 Xcoordinate
+    7.67,                     !- Vertex 4 Ycoordinate
+    2.3;                      !- Vertex 4 Zcoordinate
+
+FenestrationSurface:Detailed,
+    CL_South_Window_1,        !- Name
+    Window,                   !- Surface Type
+    Window_DoubleClear_Alu,    !- Construction Name
+    CL_Wall_South,            !- Building Surface Name
+    ,                         !- Outside Boundary Condition Object
+    ,                         !- View Factor to Ground
+    Frame_Aluminum,           !- Frame and Divider Name
+    1,                        !- Multiplier
+    4,                        !- Number of Vertices
+    2.2,                      !- Vertex 1 Xcoordinate
+    0,                        !- Vertex 1 Ycoordinate
+    1.4,                      !- Vertex 1 Zcoordinate
+    3,                        !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    1.4,                      !- Vertex 2 Zcoordinate
+    3,                        !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    2.3,                      !- Vertex 3 Zcoordinate
+    2.2,                      !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    2.3;                      !- Vertex 4 Zcoordinate
+
+FenestrationSurface:Detailed,
+    CL_South_Window_2,        !- Name
+    Window,                   !- Surface Type
+    Window_DoubleClear_Alu,    !- Construction Name
+    CL_Wall_South,            !- Building Surface Name
+    ,                         !- Outside Boundary Condition Object
+    ,                         !- View Factor to Ground
+    Frame_Aluminum,           !- Frame and Divider Name
+    1,                        !- Multiplier
+    4,                        !- Number of Vertices
+    5,                        !- Vertex 1 Xcoordinate
+    0,                        !- Vertex 1 Ycoordinate
+    1.4,                      !- Vertex 1 Zcoordinate
+    5.8,                      !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    1.4,                      !- Vertex 2 Zcoordinate
+    5.8,                      !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    2.3,                      !- Vertex 3 Zcoordinate
+    5,                        !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    2.3;                      !- Vertex 4 Zcoordinate
+
+FenestrationSurface:Detailed,
+    R2_North_Window,          !- Name
+    Window,                   !- Surface Type
+    Window_DoubleClear_Alu,    !- Construction Name
+    R2_Wall_North,            !- Building Surface Name
+    ,                         !- Outside Boundary Condition Object
+    ,                         !- View Factor to Ground
+    Frame_Aluminum,           !- Frame and Divider Name
+    1,                        !- Multiplier
+    4,                        !- Number of Vertices
+    10,                       !- Vertex 1 Xcoordinate
+    6.67,                     !- Vertex 1 Ycoordinate
+    1.4,                      !- Vertex 1 Zcoordinate
+    10.8,                     !- Vertex 2 Xcoordinate
+    6.67,                     !- Vertex 2 Ycoordinate
+    1.4,                      !- Vertex 2 Zcoordinate
+    10.8,                     !- Vertex 3 Xcoordinate
+    6.67,                     !- Vertex 3 Ycoordinate
+    2.3,                      !- Vertex 3 Zcoordinate
+    10,                       !- Vertex 4 Xcoordinate
+    6.67,                     !- Vertex 4 Ycoordinate
+    2.3;                      !- Vertex 4 Zcoordinate
+
+FenestrationSurface:Detailed,
+    H3_South_Window,          !- Name
+    Window,                   !- Surface Type
+    Window_DoubleClear_Alu,    !- Construction Name
+    H3_Wall_South,            !- Building Surface Name
+    ,                         !- Outside Boundary Condition Object
+    ,                         !- View Factor to Ground
+    Frame_Aluminum,           !- Frame and Divider Name
+    1,                        !- Multiplier
+    4,                        !- Number of Vertices
+    7.2,                      !- Vertex 1 Xcoordinate
+    0,                        !- Vertex 1 Ycoordinate
+    1.4,                      !- Vertex 1 Zcoordinate
+    8,                        !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    1.4,                      !- Vertex 2 Zcoordinate
+    8,                        !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    2.3,                      !- Vertex 3 Zcoordinate
+    7.2,                      !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    2.3;                      !- Vertex 4 Zcoordinate
+
+FenestrationSurface:Detailed,
+    CR_North_Window_1,        !- Name
+    Window,                   !- Surface Type
+    Window_DoubleClear_Alu,    !- Construction Name
+    CR_Wall_North,            !- Building Surface Name
+    ,                         !- Outside Boundary Condition Object
+    ,                         !- View Factor to Ground
+    Frame_Aluminum,           !- Frame and Divider Name
+    1,                        !- Multiplier
+    4,                        !- Number of Vertices
+    14,                       !- Vertex 1 Xcoordinate
+    6.67,                     !- Vertex 1 Ycoordinate
+    0.7,                      !- Vertex 1 Zcoordinate
+    15.5,                     !- Vertex 2 Xcoordinate
+    6.67,                     !- Vertex 2 Ycoordinate
+    0.7,                      !- Vertex 2 Zcoordinate
+    15.5,                     !- Vertex 3 Xcoordinate
+    6.67,                     !- Vertex 3 Ycoordinate
+    2.3,                      !- Vertex 3 Zcoordinate
+    14,                       !- Vertex 4 Xcoordinate
+    6.67,                     !- Vertex 4 Ycoordinate
+    2.3;                      !- Vertex 4 Zcoordinate
+
+FenestrationSurface:Detailed,
+    CR_North_Window_2,        !- Name
+    Window,                   !- Surface Type
+    Window_DoubleClear_Alu,    !- Construction Name
+    CR_Wall_North,            !- Building Surface Name
+    ,                         !- Outside Boundary Condition Object
+    ,                         !- View Factor to Ground
+    Frame_Aluminum,           !- Frame and Divider Name
+    1,                        !- Multiplier
+    4,                        !- Number of Vertices
+    16.5,                     !- Vertex 1 Xcoordinate
+    6.67,                     !- Vertex 1 Ycoordinate
+    0.7,                      !- Vertex 1 Zcoordinate
+    18,                       !- Vertex 2 Xcoordinate
+    6.67,                     !- Vertex 2 Ycoordinate
+    0.7,                      !- Vertex 2 Zcoordinate
+    18,                       !- Vertex 3 Xcoordinate
+    6.67,                     !- Vertex 3 Ycoordinate
+    2.3,                      !- Vertex 3 Zcoordinate
+    16.5,                     !- Vertex 4 Xcoordinate
+    6.67,                     !- Vertex 4 Ycoordinate
+    2.3;                      !- Vertex 4 Zcoordinate
+
+FenestrationSurface:Detailed,
+    CR_North_Window_3,        !- Name
+    Window,                   !- Surface Type
+    Window_DoubleClear_Alu,    !- Construction Name
+    CR_Wall_North,            !- Building Surface Name
+    ,                         !- Outside Boundary Condition Object
+    ,                         !- View Factor to Ground
+    Frame_Aluminum,           !- Frame and Divider Name
+    1,                        !- Multiplier
+    4,                        !- Number of Vertices
+    19,                       !- Vertex 1 Xcoordinate
+    6.67,                     !- Vertex 1 Ycoordinate
+    0.7,                      !- Vertex 1 Zcoordinate
+    20.5,                     !- Vertex 2 Xcoordinate
+    6.67,                     !- Vertex 2 Ycoordinate
+    0.7,                      !- Vertex 2 Zcoordinate
+    20.5,                     !- Vertex 3 Xcoordinate
+    6.67,                     !- Vertex 3 Ycoordinate
+    2.3,                      !- Vertex 3 Zcoordinate
+    19,                       !- Vertex 4 Xcoordinate
+    6.67,                     !- Vertex 4 Ycoordinate
+    2.3;                      !- Vertex 4 Zcoordinate
+
+FenestrationSurface:Detailed,
+    CR_South_Window_1,        !- Name
+    Window,                   !- Surface Type
+    Window_DoubleClear_Alu,    !- Construction Name
+    CR_Wall_South,            !- Building Surface Name
+    ,                         !- Outside Boundary Condition Object
+    ,                         !- View Factor to Ground
+    Frame_Aluminum,           !- Frame and Divider Name
+    1,                        !- Multiplier
+    4,                        !- Number of Vertices
+    14,                       !- Vertex 1 Xcoordinate
+    0,                        !- Vertex 1 Ycoordinate
+    1.4,                      !- Vertex 1 Zcoordinate
+    14.8,                     !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    1.4,                      !- Vertex 2 Zcoordinate
+    14.8,                     !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    2.3,                      !- Vertex 3 Zcoordinate
+    14,                       !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    2.3;                      !- Vertex 4 Zcoordinate
+
+FenestrationSurface:Detailed,
+    CR_South_Window_2,        !- Name
+    Window,                   !- Surface Type
+    Window_DoubleClear_Alu,    !- Construction Name
+    CR_Wall_South,            !- Building Surface Name
+    ,                         !- Outside Boundary Condition Object
+    ,                         !- View Factor to Ground
+    Frame_Aluminum,           !- Frame and Divider Name
+    1,                        !- Multiplier
+    4,                        !- Number of Vertices
+    16,                       !- Vertex 1 Xcoordinate
+    0,                        !- Vertex 1 Ycoordinate
+    1.4,                      !- Vertex 1 Zcoordinate
+    16.8,                     !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    1.4,                      !- Vertex 2 Zcoordinate
+    16.8,                     !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    2.3,                      !- Vertex 3 Zcoordinate
+    16,                       !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    2.3;                      !- Vertex 4 Zcoordinate
+
+FenestrationSurface:Detailed,
+    CR_South_Window_3,        !- Name
+    Window,                   !- Surface Type
+    Window_DoubleClear_Alu,    !- Construction Name
+    CR_Wall_South,            !- Building Surface Name
+    ,                         !- Outside Boundary Condition Object
+    ,                         !- View Factor to Ground
+    Frame_Aluminum,           !- Frame and Divider Name
+    1,                        !- Multiplier
+    4,                        !- Number of Vertices
+    18,                       !- Vertex 1 Xcoordinate
+    0,                        !- Vertex 1 Ycoordinate
+    1.4,                      !- Vertex 1 Zcoordinate
+    18.8,                     !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    1.4,                      !- Vertex 2 Zcoordinate
+    18.8,                     !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    2.3,                      !- Vertex 3 Zcoordinate
+    18,                       !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    2.3;                      !- Vertex 4 Zcoordinate
+
+FenestrationSurface:Detailed,
+    Door_H3_to_CL,            !- Name
+    Door,                     !- Surface Type
+    Door_Wood,                !- Construction Name
+    H3_Wall_West,             !- Building Surface Name
+    Door_CL_to_H3,            !- Outside Boundary Condition Object
+    ,                         !- View Factor to Ground
+    ,                         !- Frame and Divider Name
+    1,                        !- Multiplier
+    4,                        !- Number of Vertices
+    6.92,                     !- Vertex 1 Xcoordinate
+    0.9,                      !- Vertex 1 Ycoordinate
+    2.15,                     !- Vertex 1 Zcoordinate
+    6.92,                     !- Vertex 2 Xcoordinate
+    1.8,                      !- Vertex 2 Ycoordinate
+    2.15,                     !- Vertex 2 Zcoordinate
+    6.92,                     !- Vertex 3 Xcoordinate
+    1.8,                      !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    6.92,                     !- Vertex 4 Xcoordinate
+    0.9,                      !- Vertex 4 Ycoordinate
+    0;                        !- Vertex 4 Zcoordinate
+
+FenestrationSurface:Detailed,
+    Door_CL_to_H3,            !- Name
+    Door,                     !- Surface Type
+    Door_Wood,                !- Construction Name
+    CL_Wall_East_2,           !- Building Surface Name
+    Door_H3_to_CL,            !- Outside Boundary Condition Object
+    ,                         !- View Factor to Ground
+    ,                         !- Frame and Divider Name
+    1,                        !- Multiplier
+    4,                        !- Number of Vertices
+    6.69,                     !- Vertex 1 Xcoordinate
+    0.9,                      !- Vertex 1 Ycoordinate
+    0,                        !- Vertex 1 Zcoordinate
+    6.69,                     !- Vertex 2 Xcoordinate
+    1.8,                      !- Vertex 2 Ycoordinate
+    0,                        !- Vertex 2 Zcoordinate
+    6.69,                     !- Vertex 3 Xcoordinate
+    1.8,                      !- Vertex 3 Ycoordinate
+    2.15,                     !- Vertex 3 Zcoordinate
+    6.69,                     !- Vertex 4 Xcoordinate
+    0.9,                      !- Vertex 4 Ycoordinate
+    2.15;                     !- Vertex 4 Zcoordinate
+
+FenestrationSurface:Detailed,
+    Door_H3_to_CR,            !- Name
+    Door,                     !- Surface Type
+    Door_Metal,               !- Construction Name
+    H3_Wall_East,             !- Building Surface Name
+    Door_CR_to_H3,            !- Outside Boundary Condition Object
+    ,                         !- View Factor to Ground
+    ,                         !- Frame and Divider Name
+    1,                        !- Multiplier
+    4,                        !- Number of Vertices
+    13.07,                    !- Vertex 1 Xcoordinate
+    1,                        !- Vertex 1 Ycoordinate
+    2.15,                     !- Vertex 1 Zcoordinate
+    13.07,                    !- Vertex 2 Xcoordinate
+    2.5,                      !- Vertex 2 Ycoordinate
+    2.15,                     !- Vertex 2 Zcoordinate
+    13.07,                    !- Vertex 3 Xcoordinate
+    2.5,                      !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    13.07,                    !- Vertex 4 Xcoordinate
+    1,                        !- Vertex 4 Ycoordinate
+    0;                        !- Vertex 4 Zcoordinate
+
+FenestrationSurface:Detailed,
+    Door_CR_to_H3,            !- Name
+    Door,                     !- Surface Type
+    Door_Metal,               !- Construction Name
+    CR_Wall_West_1,           !- Building Surface Name
+    Door_H3_to_CR,            !- Outside Boundary Condition Object
+    ,                         !- View Factor to Ground
+    ,                         !- Frame and Divider Name
+    1,                        !- Multiplier
+    4,                        !- Number of Vertices
+    13.3,                     !- Vertex 1 Xcoordinate
+    1,                        !- Vertex 1 Ycoordinate
+    0,                        !- Vertex 1 Zcoordinate
+    13.3,                     !- Vertex 2 Xcoordinate
+    2.5,                      !- Vertex 2 Ycoordinate
+    0,                        !- Vertex 2 Zcoordinate
+    13.3,                     !- Vertex 3 Xcoordinate
+    2.5,                      !- Vertex 3 Ycoordinate
+    2.15,                     !- Vertex 3 Zcoordinate
+    13.3,                     !- Vertex 4 Xcoordinate
+    1,                        !- Vertex 4 Ycoordinate
+    2.15;                     !- Vertex 4 Zcoordinate
+
+FenestrationSurface:Detailed,
+    Door_H3_to_R2,            !- Name
+    Door,                     !- Surface Type
+    Door_Wood,                !- Construction Name
+    H3_Wall_North_1,          !- Building Surface Name
+    Door_R2_to_H3,            !- Outside Boundary Condition Object
+    ,                         !- View Factor to Ground
+    ,                         !- Frame and Divider Name
+    1,                        !- Multiplier
+    4,                        !- Number of Vertices
+    10.5,                     !- Vertex 1 Xcoordinate
+    3.09,                     !- Vertex 1 Ycoordinate
+    0,                        !- Vertex 1 Zcoordinate
+    11.4,                     !- Vertex 2 Xcoordinate
+    3.09,                     !- Vertex 2 Ycoordinate
+    0,                        !- Vertex 2 Zcoordinate
+    11.4,                     !- Vertex 3 Xcoordinate
+    3.09,                     !- Vertex 3 Ycoordinate
+    2.15,                     !- Vertex 3 Zcoordinate
+    10.5,                     !- Vertex 4 Xcoordinate
+    3.09,                     !- Vertex 4 Ycoordinate
+    2.15;                     !- Vertex 4 Zcoordinate
+
+FenestrationSurface:Detailed,
+    Door_R2_to_H3,            !- Name
+    Door,                     !- Surface Type
+    Door_Wood,                !- Construction Name
+    R2_Wall_South,            !- Building Surface Name
+    Door_H3_to_R2,            !- Outside Boundary Condition Object
+    ,                         !- View Factor to Ground
+    ,                         !- Frame and Divider Name
+    1,                        !- Multiplier
+    4,                        !- Number of Vertices
+    11.4,                     !- Vertex 1 Xcoordinate
+    3.09,                     !- Vertex 1 Ycoordinate
+    2.15,                     !- Vertex 1 Zcoordinate
+    10.5,                     !- Vertex 2 Xcoordinate
+    3.09,                     !- Vertex 2 Ycoordinate
+    2.15,                     !- Vertex 2 Zcoordinate
+    10.5,                     !- Vertex 3 Xcoordinate
+    3.09,                     !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    11.4,                     !- Vertex 4 Xcoordinate
+    3.09,                     !- Vertex 4 Ycoordinate
+    0;                        !- Vertex 4 Zcoordinate
+
+FenestrationSurface:Detailed,
+    Door_H3_South,            !- Name
+    Door,                     !- Surface Type
+    Door_Metal,               !- Construction Name
+    H3_Wall_South,            !- Building Surface Name
+    ,                         !- Outside Boundary Condition Object
+    ,                         !- View Factor to Ground
+    ,                         !- Frame and Divider Name
+    1,                        !- Multiplier
+    4,                        !- Number of Vertices
+    10.7,                     !- Vertex 1 Xcoordinate
+    0,                        !- Vertex 1 Ycoordinate
+    0,                        !- Vertex 1 Zcoordinate
+    11.8,                     !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    0,                        !- Vertex 2 Zcoordinate
+    11.8,                     !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    2.2,                      !- Vertex 3 Zcoordinate
+    10.7,                     !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    2.2;                      !- Vertex 4 Zcoordinate
+
+WindowProperty:FrameAndDivider,
+    Frame_Aluminum,           !- Name
+    0.05,                     !- Frame Width
+    0.04,                     !- Frame Outside Projection
+    0.04,                     !- Frame Inside Projection
+    2,                        !- Frame Conductance
+    1,                        !- Ratio of FrameEdge Glass Conductance to CenterOfGlass Conductance
+    0.6,                      !- Frame Solar Absorptance
+    0.6,                      !- Frame Visible Absorptance
+    0.84,                     !- Frame Thermal Hemispherical Emissivity
+    ,                         !- Divider Type
+    ,                         !- Divider Width
+    0,                        !- Number of Horizontal Dividers
+    0,                        !- Number of Vertical Dividers
+    ,                         !- Divider Outside Projection
+    ,                         !- Divider Inside Projection
+    ,                         !- Divider Conductance
+    ,                         !- Ratio of DividerEdge Glass Conductance to CenterOfGlass Conductance
+    ,                         !- Divider Solar Absorptance
+    ,                         !- Divider Visible Absorptance
+    ;                         !- Divider Thermal Hemispherical Emissivity
+
+People,
+    Classroom_Left People,    !- Name
+    Classroom_Left,           !- Zone or ZoneList or Space or SpaceList Name
+    OCCRPY-ROOM1,             !- Number of People Schedule Name
+    People,                   !- Number of People Calculation Method
+    20,                       !- Number of People
+    ,                         !- People per Floor Area
+    ,                         !- Floor Area per Person
+    0.3,                      !- Fraction Radiant
+    ,                         !- Sensible Heat Fraction
+    ActSchd1;                 !- Activity Level Schedule Name
+
+People,
+    Classroom_Right People,    !- Name
+    Classroom_Right,          !- Zone or ZoneList or Space or SpaceList Name
+    OCCRPY-ROOM1,             !- Number of People Schedule Name
+    People,                   !- Number of People Calculation Method
+    20,                       !- Number of People
+    ,                         !- People per Floor Area
+    ,                         !- Floor Area per Person
+    0.3,                      !- Fraction Radiant
+    ,                         !- Sensible Heat Fraction
+    ActSchd1;                 !- Activity Level Schedule Name
+
+People,
+    Room2_Small People,       !- Name
+    Room2_Small,              !- Zone or ZoneList or Space or SpaceList Name
+    OCCRPY-ROOM1,             !- Number of People Schedule Name
+    People,                   !- Number of People Calculation Method
+    1,                        !- Number of People
+    ,                         !- People per Floor Area
+    ,                         !- Floor Area per Person
+    0.3,                      !- Fraction Radiant
+    ,                         !- Sensible Heat Fraction
+    ActSchd1;                 !- Activity Level Schedule Name
+
+People,
+    Hallway_Room3 People,     !- Name
+    Hallway_Room3,            !- Zone or ZoneList or Space or SpaceList Name
+    OCCRPY-ROOM2,             !- Number of People Schedule Name
+    People,                   !- Number of People Calculation Method
+    41,                       !- Number of People
+    ,                         !- People per Floor Area
+    ,                         !- Floor Area per Person
+    0.3,                      !- Fraction Radiant
+    ,                         !- Sensible Heat Fraction
+    ActSchd2;                 !- Activity Level Schedule Name
+
+Lights,
+    Classroom_Left Lights,    !- Name
+    Classroom_Left,           !- Zone or ZoneList or Space or SpaceList Name
+    LIGHTS-1,                 !- Schedule Name
+    Watts/Area,               !- Design Level Calculation Method
+    ,                         !- Lighting Level
+    10,                       !- Watts per Floor Area
+    ,                         !- Watts per Person
+    0,                        !- Return Air Fraction
+    0.6,                      !- Fraction Radiant
+    0.2,                      !- Fraction Visible
+    1,                        !- Fraction Replaceable
+    General;                  !- EndUse Subcategory
+
+Lights,
+    Classroom_Right Lights,    !- Name
+    Classroom_Right,          !- Zone or ZoneList or Space or SpaceList Name
+    LIGHTS-1,                 !- Schedule Name
+    Watts/Area,               !- Design Level Calculation Method
+    ,                         !- Lighting Level
+    10,                       !- Watts per Floor Area
+    ,                         !- Watts per Person
+    0,                        !- Return Air Fraction
+    0.6,                      !- Fraction Radiant
+    0.2,                      !- Fraction Visible
+    1,                        !- Fraction Replaceable
+    General;                  !- EndUse Subcategory
+
+Lights,
+    Room2_Small Lights,       !- Name
+    Room2_Small,              !- Zone or ZoneList or Space or SpaceList Name
+    LIGHTS-1,                 !- Schedule Name
+    Watts/Area,               !- Design Level Calculation Method
+    ,                         !- Lighting Level
+    10,                       !- Watts per Floor Area
+    ,                         !- Watts per Person
+    0,                        !- Return Air Fraction
+    0.6,                      !- Fraction Radiant
+    0.2,                      !- Fraction Visible
+    1,                        !- Fraction Replaceable
+    General;                  !- EndUse Subcategory
+
+Lights,
+    Hallway_Room3 Lights,     !- Name
+    Hallway_Room3,            !- Zone or ZoneList or Space or SpaceList Name
+    LIGHTS-2,                 !- Schedule Name
+    Watts/Area,               !- Design Level Calculation Method
+    ,                         !- Lighting Level
+    10,                       !- Watts per Floor Area
+    ,                         !- Watts per Person
+    0,                        !- Return Air Fraction
+    0.6,                      !- Fraction Radiant
+    0.2,                      !- Fraction Visible
+    1,                        !- Fraction Replaceable
+    General;                  !- EndUse Subcategory
+
+ElectricEquipment,
+    PC_Principal1,            !- Name
+    Room2_Small,              !- Zone or ZoneList or Space or SpaceList Name
+    EQUIP-1,                  !- Schedule Name
+    EquipmentLevel,           !- Design Level Calculation Method
+    150,                      !- Design Level
+    ,                         !- Watts per Floor Area
+    ,                         !- Watts per Person
+    0,                        !- Fraction Latent
+    0.2,                      !- Fraction Radiant
+    0,                        !- Fraction Lost
+    PlugLoads;                !- EndUse Subcategory
+
+ZoneInfiltration:DesignFlowRate,
+    Infiltration Classroom_Left,    !- Name
+    Classroom_Left,           !- Zone or ZoneList or Space or SpaceList Name
+    INFIL-SCH1,               !- Schedule Name
+    AirChanges/Hour,          !- Design Flow Rate Calculation Method
+    ,                         !- Design Flow Rate
+    ,                         !- Flow Rate per Floor Area
+    ,                         !- Flow Rate per Exterior Surface Area
+    0.5,                      !- Air Changes per Hour
+    1,                        !- Constant Term Coefficient
+    0,                        !- Temperature Term Coefficient
+    0,                        !- Velocity Term Coefficient
+    0;                        !- Velocity Squared Term Coefficient
+
+ZoneInfiltration:DesignFlowRate,
+    Infiltration Classroom_Right,    !- Name
+    Classroom_Right,          !- Zone or ZoneList or Space or SpaceList Name
+    INFIL-SCH1,               !- Schedule Name
+    AirChanges/Hour,          !- Design Flow Rate Calculation Method
+    ,                         !- Design Flow Rate
+    ,                         !- Flow Rate per Floor Area
+    ,                         !- Flow Rate per Exterior Surface Area
+    0.5,                      !- Air Changes per Hour
+    1,                        !- Constant Term Coefficient
+    0,                        !- Temperature Term Coefficient
+    0,                        !- Velocity Term Coefficient
+    0;                        !- Velocity Squared Term Coefficient
+
+ZoneInfiltration:DesignFlowRate,
+    Infiltration Room2_Small,    !- Name
+    Room2_Small,              !- Zone or ZoneList or Space or SpaceList Name
+    INFIL-SCH1,               !- Schedule Name
+    AirChanges/Hour,          !- Design Flow Rate Calculation Method
+    ,                         !- Design Flow Rate
+    ,                         !- Flow Rate per Floor Area
+    ,                         !- Flow Rate per Exterior Surface Area
+    0.5,                      !- Air Changes per Hour
+    1,                        !- Constant Term Coefficient
+    0,                        !- Temperature Term Coefficient
+    0,                        !- Velocity Term Coefficient
+    0;                        !- Velocity Squared Term Coefficient
+
+ZoneInfiltration:DesignFlowRate,
+    Infiltration Hallway_Room3,    !- Name
+    Hallway_Room3,            !- Zone or ZoneList or Space or SpaceList Name
+    INFIL-SCH2,               !- Schedule Name
+    AirChanges/Hour,          !- Design Flow Rate Calculation Method
+    ,                         !- Design Flow Rate
+    ,                         !- Flow Rate per Floor Area
+    ,                         !- Flow Rate per Exterior Surface Area
+    0.5,                      !- Air Changes per Hour
+    1,                        !- Constant Term Coefficient
+    0,                        !- Temperature Term Coefficient
+    0,                        !- Velocity Term Coefficient
+    0;                        !- Velocity Squared Term Coefficient
+
+ZoneVentilation:DesignFlowRate,
+    Vent_Classroom_Left,      !- Name
+    Classroom_Left,           !- Zone or ZoneList or Space or SpaceList Name
+    Vent-Sch1,                !- Schedule Name
+    Flow/Person,              !- Design Flow Rate Calculation Method
+    ,                         !- Design Flow Rate
+    ,                         !- Flow Rate per Floor Area
+    0.01,                     !- Flow Rate per Person
+    ,                         !- Air Changes per Hour
+    ,                         !- Ventilation Type
+    ,                         !- Fan Pressure Rise
+    ,                         !- Fan Total Efficiency
+    0,                        !- Constant Term Coefficient
+    0,                        !- Temperature Term Coefficient
+    ,                         !- Velocity Term Coefficient
+    ,                         !- Velocity Squared Term Coefficient
+    ,                         !- Minimum Indoor Temperature
+    ;                         !- Minimum Indoor Temperature Schedule Name
+
+ZoneVentilation:DesignFlowRate,
+    Vent_Classroom_Right,     !- Name
+    Classroom_Right,          !- Zone or ZoneList or Space or SpaceList Name
+    Vent-Sch1,                !- Schedule Name
+    Flow/Person,              !- Design Flow Rate Calculation Method
+    ,                         !- Design Flow Rate
+    ,                         !- Flow Rate per Floor Area
+    0.01,                     !- Flow Rate per Person
+    ,                         !- Air Changes per Hour
+    ,                         !- Ventilation Type
+    ,                         !- Fan Pressure Rise
+    ,                         !- Fan Total Efficiency
+    0,                        !- Constant Term Coefficient
+    0,                        !- Temperature Term Coefficient
+    ,                         !- Velocity Term Coefficient
+    ,                         !- Velocity Squared Term Coefficient
+    ,                         !- Minimum Indoor Temperature
+    ;                         !- Minimum Indoor Temperature Schedule Name
+
+ZoneVentilation:DesignFlowRate,
+    Vent_Room2_Small,         !- Name
+    Room2_Small,              !- Zone or ZoneList or Space or SpaceList Name
+    Vent-Sch1,                !- Schedule Name
+    Flow/Person,              !- Design Flow Rate Calculation Method
+    ,                         !- Design Flow Rate
+    ,                         !- Flow Rate per Floor Area
+    0.01,                     !- Flow Rate per Person
+    ,                         !- Air Changes per Hour
+    ,                         !- Ventilation Type
+    ,                         !- Fan Pressure Rise
+    ,                         !- Fan Total Efficiency
+    0,                        !- Constant Term Coefficient
+    0,                        !- Temperature Term Coefficient
+    ,                         !- Velocity Term Coefficient
+    ,                         !- Velocity Squared Term Coefficient
+    ,                         !- Minimum Indoor Temperature
+    ;                         !- Minimum Indoor Temperature Schedule Name
+
+ZoneVentilation:DesignFlowRate,
+    Vent_Hallway_Room3,       !- Name
+    Hallway_Room3,            !- Zone or ZoneList or Space or SpaceList Name
+    Vent-Sch2,                !- Schedule Name
+    Flow/Person,              !- Design Flow Rate Calculation Method
+    ,                         !- Design Flow Rate
+    ,                         !- Flow Rate per Floor Area
+    0.01,                     !- Flow Rate per Person
+    ,                         !- Air Changes per Hour
+    ,                         !- Ventilation Type
+    ,                         !- Fan Pressure Rise
+    ,                         !- Fan Total Efficiency
+    0,                        !- Constant Term Coefficient
+    0,                        !- Temperature Term Coefficient
+    ,                         !- Velocity Term Coefficient
+    ,                         !- Velocity Squared Term Coefficient
+    ,                         !- Minimum Indoor Temperature
+    ;                         !- Minimum Indoor Temperature Schedule Name
+
+Sizing:Zone,
+    Classroom_Left,           !- Zone or ZoneList Name
+    SupplyAirTemperature,     !- Zone Cooling Design Supply Air Temperature Input Method
+    14,                       !- Zone Cooling Design Supply Air Temperature
+    ,                         !- Zone Cooling Design Supply Air Temperature Difference
+    SupplyAirTemperature,     !- Zone Heating Design Supply Air Temperature Input Method
+    40,                       !- Zone Heating Design Supply Air Temperature
+    ,                         !- Zone Heating Design Supply Air Temperature Difference
+    0.009,                    !- Zone Cooling Design Supply Air Humidity Ratio
+    0.004,                    !- Zone Heating Design Supply Air Humidity Ratio
+    ,                         !- Design Specification Outdoor Air Object Name
+    ,                         !- Zone Heating Sizing Factor
+    ,                         !- Zone Cooling Sizing Factor
+    ;                         !- Cooling Design Air Flow Method
+
+Sizing:Zone,
+    Classroom_Right,          !- Zone or ZoneList Name
+    SupplyAirTemperature,     !- Zone Cooling Design Supply Air Temperature Input Method
+    14,                       !- Zone Cooling Design Supply Air Temperature
+    ,                         !- Zone Cooling Design Supply Air Temperature Difference
+    SupplyAirTemperature,     !- Zone Heating Design Supply Air Temperature Input Method
+    40,                       !- Zone Heating Design Supply Air Temperature
+    ,                         !- Zone Heating Design Supply Air Temperature Difference
+    0.009,                    !- Zone Cooling Design Supply Air Humidity Ratio
+    0.004,                    !- Zone Heating Design Supply Air Humidity Ratio
+    ,                         !- Design Specification Outdoor Air Object Name
+    ,                         !- Zone Heating Sizing Factor
+    ,                         !- Zone Cooling Sizing Factor
+    ;                         !- Cooling Design Air Flow Method
+
+Sizing:Zone,
+    Hallway_Room3,            !- Zone or ZoneList Name
+    SupplyAirTemperature,     !- Zone Cooling Design Supply Air Temperature Input Method
+    14,                       !- Zone Cooling Design Supply Air Temperature
+    ,                         !- Zone Cooling Design Supply Air Temperature Difference
+    SupplyAirTemperature,     !- Zone Heating Design Supply Air Temperature Input Method
+    40,                       !- Zone Heating Design Supply Air Temperature
+    ,                         !- Zone Heating Design Supply Air Temperature Difference
+    0.009,                    !- Zone Cooling Design Supply Air Humidity Ratio
+    0.004,                    !- Zone Heating Design Supply Air Humidity Ratio
+    ,                         !- Design Specification Outdoor Air Object Name
+    ,                         !- Zone Heating Sizing Factor
+    ,                         !- Zone Cooling Sizing Factor
+    ;                         !- Cooling Design Air Flow Method
+
+Sizing:Zone,
+    Room2_Small,              !- Zone or ZoneList Name
+    SupplyAirTemperature,     !- Zone Cooling Design Supply Air Temperature Input Method
+    14,                       !- Zone Cooling Design Supply Air Temperature
+    ,                         !- Zone Cooling Design Supply Air Temperature Difference
+    SupplyAirTemperature,     !- Zone Heating Design Supply Air Temperature Input Method
+    40,                       !- Zone Heating Design Supply Air Temperature
+    ,                         !- Zone Heating Design Supply Air Temperature Difference
+    0.009,                    !- Zone Cooling Design Supply Air Humidity Ratio
+    0.004,                    !- Zone Heating Design Supply Air Humidity Ratio
+    ,                         !- Design Specification Outdoor Air Object Name
+    ,                         !- Zone Heating Sizing Factor
+    ,                         !- Zone Cooling Sizing Factor
+    ;                         !- Cooling Design Air Flow Method
+
+Sizing:System,
+    Haier_AirLoop,            !- AirLoop Name
+    Sensible,                 !- Type of Load to Size On
+    autosize,                 !- Design Outdoor Air Flow Rate
+    0.3,                      !- Central Heating Maximum System Air Flow Ratio
+    4.5,                      !- Preheat Design Temperature
+    0.008,                    !- Preheat Design Humidity Ratio
+    11,                       !- Precool Design Temperature
+    0.008,                    !- Precool Design Humidity Ratio
+    12.8,                     !- Central Cooling Design Supply Air Temperature
+    16.7,                     !- Central Heating Design Supply Air Temperature
+    NonCoincident,            !- Type of Zone Sum to Use
+    No,                       !- 100 Outdoor Air in Cooling
+    No,                       !- 100 Outdoor Air in Heating
+    0.0085,                   !- Central Cooling Design Supply Air Humidity Ratio
+    0.008,                    !- Central Heating Design Supply Air Humidity Ratio
+    DesignDay,                !- Cooling Supply Air Flow Rate Method
+    0.333,                    !- Cooling Supply Air Flow Rate
+    ,                         !- Cooling Supply Air Flow Rate Per Floor Area
+    ,                         !- Cooling Fraction of Autosized Cooling Supply Air Flow Rate
+    ,                         !- Cooling Supply Air Flow Rate Per Unit Cooling Capacity
+    DesignDay,                !- Heating Supply Air Flow Rate Method
+    0,                        !- Heating Supply Air Flow Rate
+    ,                         !- Heating Supply Air Flow Rate Per Floor Area
+    ,                         !- Heating Fraction of Autosized Heating Supply Air Flow Rate
+    ,                         !- Heating Fraction of Autosized Cooling Supply Air Flow Rate
+    ,                         !- Heating Supply Air Flow Rate Per Unit Heating Capacity
+    ZoneSum,                  !- System Outdoor Air Method
+    0.5,                      !- Zone Maximum Outdoor Air Fraction
+    CoolingDesignCapacity,    !- Cooling Design Capacity Method
+    autosize,                 !- Cooling Design Capacity
+    ,                         !- Cooling Design Capacity Per Floor Area
+    ,                         !- Fraction of Autosized Cooling Design Capacity
+    HeatingDesignCapacity,    !- Heating Design Capacity Method
+    0,                        !- Heating Design Capacity
+    ,                         !- Heating Design Capacity Per Floor Area
+    ,                         !- Fraction of Autosized Heating Design Capacity
+    ,                         !- Central Cooling Capacity Control Method
+    ,                         !- Occupant Diversity
+    ;                         !- Heating Coil Sizing Method
+
+Sizing:Plant,
+    HW-Loop,                  !- Plant or Condenser Loop Name
+    Heating,                  !- Loop Type
+    82,                       !- Design Loop Exit Temperature
+    11;                       !- Loop Design Temperature Difference
+
+ZoneControl:Thermostat,
+    Classroom_Left Thermostat,    !- Name
+    Classroom_Left,           !- Zone or ZoneList Name
+    Zone Control Type Sched1,    !- Control Type Schedule Name
+    ThermostatSetpoint:SingleHeating,    !- Control 1 Object Type
+    HtgSP-Control;            !- Control 1 Name
+
+ZoneControl:Thermostat,
+    Classroom_Right Thermostat,    !- Name
+    Classroom_Right,          !- Zone or ZoneList Name
+    Zone Control Type Sched1,    !- Control Type Schedule Name
+    ThermostatSetpoint:SingleHeating,    !- Control 1 Object Type
+    HtgSP-Control;            !- Control 1 Name
+
+ZoneControl:Thermostat,
+    Hallway_Room3 Thermostat,    !- Name
+    Hallway_Room3,            !- Zone or ZoneList Name
+    Zone Control Type Sched2,    !- Control Type Schedule Name
+    ThermostatSetpoint:DualSetpoint,    !- Control 1 Object Type
+    DualSP-Control;           !- Control 1 Name
+
+ZoneControl:Thermostat,
+    Room2_Small Thermostat,    !- Name
+    Room2_Small,              !- Zone or ZoneList Name
+    Zone Control Type Sched1,    !- Control Type Schedule Name
+    ThermostatSetpoint:SingleHeating,    !- Control 1 Object Type
+    HtgSP-Control;            !- Control 1 Name
+
+ThermostatSetpoint:SingleHeating,
+    HtgSP-Control,            !- Name
+    Htg-SetP-Sch;             !- Setpoint Temperature Schedule Name
+
+ThermostatSetpoint:DualSetpoint,
+    DualSP-Control,           !- Name
+    Htg-SetP-Sch,             !- Heating Setpoint Temperature Schedule Name
+    Clg-SetP-Sch;             !- Cooling Setpoint Temperature Schedule Name
+
+ZoneHVAC:Baseboard:Convective:Water,
+    Radiator_CL,              !- Name
+    Heat-Avail,               !- Availability Schedule Name
+    HW-Demand-CL-In,          !- Inlet Node Name
+    HW-Demand-CL-Out,         !- Outlet Node Name
+    HeatingDesignCapacity,    !- Heating Design Capacity Method
+    10000,                    !- Heating Design Capacity
+    ,                         !- Heating Design Capacity Per Floor Area
+    ,                         !- Fraction of Autosized Heating Design Capacity
+    250,                      !- UFactor Times Area Value
+    0.00016,                  !- Maximum Water Flow Rate
+    0.001;                    !- Convergence Tolerance
+
+ZoneHVAC:Baseboard:Convective:Water,
+    Radiator_CR,              !- Name
+    Heat-Avail,               !- Availability Schedule Name
+    HW-Demand-CR-In,          !- Inlet Node Name
+    HW-Demand-CR-Out,         !- Outlet Node Name
+    HeatingDesignCapacity,    !- Heating Design Capacity Method
+    12000,                    !- Heating Design Capacity
+    ,                         !- Heating Design Capacity Per Floor Area
+    ,                         !- Fraction of Autosized Heating Design Capacity
+    280,                      !- UFactor Times Area Value
+    0.0002,                   !- Maximum Water Flow Rate
+    0.001;                    !- Convergence Tolerance
+
+ZoneHVAC:Baseboard:Convective:Water,
+    Radiator_H,               !- Name
+    HVAC-Avail,               !- Availability Schedule Name
+    HW-Demand-H-In,           !- Inlet Node Name
+    HW-Demand-H-Out,          !- Outlet Node Name
+    HeatingDesignCapacity,    !- Heating Design Capacity Method
+    8000,                     !- Heating Design Capacity
+    ,                         !- Heating Design Capacity Per Floor Area
+    ,                         !- Fraction of Autosized Heating Design Capacity
+    180,                      !- UFactor Times Area Value
+    0.00013,                  !- Maximum Water Flow Rate
+    0.001;                    !- Convergence Tolerance
+
+ZoneHVAC:Baseboard:Convective:Water,
+    Radiator_R2,              !- Name
+    Heat-Avail,               !- Availability Schedule Name
+    HW-Demand-R2-In,          !- Inlet Node Name
+    HW-Demand-R2-Out,         !- Outlet Node Name
+    HeatingDesignCapacity,    !- Heating Design Capacity Method
+    5000,                     !- Heating Design Capacity
+    ,                         !- Heating Design Capacity Per Floor Area
+    ,                         !- Fraction of Autosized Heating Design Capacity
+    110,                      !- UFactor Times Area Value
+    7e-05,                    !- Maximum Water Flow Rate
+    0.001;                    !- Convergence Tolerance
+
+AirTerminal:SingleDuct:ConstantVolume:NoReheat,
+    Haier_Terminal,           !- Name
+    HVAC-Avail,               !- Availability Schedule Name
+    Haier_Zone_SupplyNode,    !- Air Inlet Node Name
+    Hallway_Room3_Air_Inlet,    !- Air Outlet Node Name
+    0.333;                    !- Maximum Air Flow Rate
+
+ZoneHVAC:AirDistributionUnit,
+    Haier_ADU,                !- Name
+    Hallway_Room3_Air_Inlet,    !- Air Distribution Unit Outlet Node Name
+    AirTerminal:SingleDuct:ConstantVolume:NoReheat,    !- Air Terminal Object Type
+    Haier_Terminal;           !- Air Terminal Name
+
+ZoneHVAC:EquipmentList,
+    CL Equipment,             !- Name
+    SequentialLoad,           !- Load Distribution Scheme
+    ZoneHVAC:Baseboard:Convective:Water,    !- Zone Equipment 1 Object Type
+    Radiator_CL,              !- Zone Equipment 1 Name
+    1,                        !- Zone Equipment 1 Cooling Sequence
+    1,                        !- Zone Equipment 1 Heating or NoLoad Sequence
+    ,                         !- Zone Equipment 1 Sequential Cooling Fraction Schedule Name
+    ;                         !- Zone Equipment 1 Sequential Heating Fraction Schedule Name
+
+ZoneHVAC:EquipmentList,
+    CR Equipment,             !- Name
+    SequentialLoad,           !- Load Distribution Scheme
+    ZoneHVAC:Baseboard:Convective:Water,    !- Zone Equipment 1 Object Type
+    Radiator_CR,              !- Zone Equipment 1 Name
+    1,                        !- Zone Equipment 1 Cooling Sequence
+    1,                        !- Zone Equipment 1 Heating or NoLoad Sequence
+    ,                         !- Zone Equipment 1 Sequential Cooling Fraction Schedule Name
+    ;                         !- Zone Equipment 1 Sequential Heating Fraction Schedule Name
+
+ZoneHVAC:EquipmentList,
+    R2 Equipment,             !- Name
+    SequentialLoad,           !- Load Distribution Scheme
+    ZoneHVAC:Baseboard:Convective:Water,    !- Zone Equipment 1 Object Type
+    Radiator_R2,              !- Zone Equipment 1 Name
+    1,                        !- Zone Equipment 1 Cooling Sequence
+    1,                        !- Zone Equipment 1 Heating or NoLoad Sequence
+    ,                         !- Zone Equipment 1 Sequential Cooling Fraction Schedule Name
+    ;                         !- Zone Equipment 1 Sequential Heating Fraction Schedule Name
+
+ZoneHVAC:EquipmentList,
+    Hallway_Room3_EquipList,    !- Name
+    SequentialLoad,           !- Load Distribution Scheme
+    ZoneHVAC:Baseboard:Convective:Water,    !- Zone Equipment 1 Object Type
+    Radiator_H,               !- Zone Equipment 1 Name
+    2,                        !- Zone Equipment 1 Cooling Sequence
+    1,                        !- Zone Equipment 1 Heating or NoLoad Sequence
+    ,                         !- Zone Equipment 1 Sequential Cooling Fraction Schedule Name
+    ,                         !- Zone Equipment 1 Sequential Heating Fraction Schedule Name
+    ZoneHVAC:AirDistributionUnit,    !- Zone Equipment 2 Object Type
+    Haier_ADU,                !- Zone Equipment 2 Name
+    1,                        !- Zone Equipment 2 Cooling Sequence
+    2,                        !- Zone Equipment 2 Heating or NoLoad Sequence
+    ,                         !- Zone Equipment 2 Sequential Cooling Fraction Schedule Name
+    ;                         !- Zone Equipment 2 Sequential Heating Fraction Schedule Name
+
+ZoneHVAC:EquipmentConnections,
+    Hallway_Room3,            !- Zone Name
+    Hallway_Room3_EquipList,    !- Zone Conditioning Equipment List Name
+    Hallway_Room3_Air_Inlet,    !- Zone Air Inlet Node or NodeList Name
+    ,                         !- Zone Air Exhaust Node or NodeList Name
+    Hallway_Room3 Air Node,    !- Zone Air Node Name
+    Haier_Zone_ReturnNode;    !- Zone Return Air Node or NodeList Name
+
+ZoneHVAC:EquipmentConnections,
+    Classroom_Left,           !- Zone Name
+    CL Equipment,             !- Zone Conditioning Equipment List Name
+    ,                         !- Zone Air Inlet Node or NodeList Name
+    ,                         !- Zone Air Exhaust Node or NodeList Name
+    Classroom_Left Air Node,    !- Zone Air Node Name
+    ;                         !- Zone Return Air Node or NodeList Name
+
+ZoneHVAC:EquipmentConnections,
+    Classroom_Right,          !- Zone Name
+    CR Equipment,             !- Zone Conditioning Equipment List Name
+    ,                         !- Zone Air Inlet Node or NodeList Name
+    ,                         !- Zone Air Exhaust Node or NodeList Name
+    Classroom_Right Air Node,    !- Zone Air Node Name
+    ;                         !- Zone Return Air Node or NodeList Name
+
+ZoneHVAC:EquipmentConnections,
+    Room2_Small,              !- Zone Name
+    R2 Equipment,             !- Zone Conditioning Equipment List Name
+    ,                         !- Zone Air Inlet Node or NodeList Name
+    ,                         !- Zone Air Exhaust Node or NodeList Name
+    Room2_Small Air Node,     !- Zone Air Node Name
+    ;                         !- Zone Return Air Node or NodeList Name
+
+Fan:OnOff,
+    Haier_Cab_Fan,            !- Name
+    HVAC-Avail,               !- Availability Schedule Name
+    0.7,                      !- Fan Total Efficiency
+    600,                      !- Pressure Rise
+    0.333,                    !- Maximum Flow Rate
+    0.9,                      !- Motor Efficiency
+    1,                        !- Motor In Airstream Fraction
+    Haier_Supply_Inlet,       !- Air Inlet Node Name
+    CabAC_After_Fan_Node;     !- Air Outlet Node Name
+
+Coil:Cooling:DX:SingleSpeed,
+    Haier_Cab_DX_Cool,        !- Name
+    HVAC-Avail,               !- Availability Schedule Name
+    7200,                     !- Gross Rated Total Cooling Capacity
+    0.76,                     !- Gross Rated Sensible Heat Ratio
+    3.23,                     !- Gross Rated Cooling COP
+    0.4,                      !- Rated Air Flow Rate
+    0,                        !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate
+    0,                        !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate
+    CabAC_After_Fan_Node,     !- Air Inlet Node Name
+    CabAC_After_CoolCoil_Node,    !- Air Outlet Node Name
+    Haier_CoolCapFT,          !- Total Cooling Capacity Function of Temperature Curve Name
+    Haier_CoolCapFF,          !- Total Cooling Capacity Function of Flow Fraction Curve Name
+    Haier_CoolEIRFT,          !- Energy Input Ratio Function of Temperature Curve Name
+    Haier_CoolEIRFF,          !- Energy Input Ratio Function of Flow Fraction Curve Name
+    Haier_CoolPLF;            !- Part Load Fraction Correlation Curve Name
+
+AirLoopHVAC:UnitarySystem,
+    Haier_UnitarySystem,      !- Name
+    Load,                     !- Control Type
+    Hallway_Room3,            !- Controlling Zone or Thermostat Location
+    None,                     !- Dehumidification Control Type
+    HVAC-Avail,               !- Availability Schedule Name
+    Haier_Supply_Inlet,       !- Air Inlet Node Name
+    Haier_Supply_Outlet,      !- Air Outlet Node Name
+    Fan:OnOff,                !- Supply Fan Object Type
+    Haier_Cab_Fan,            !- Supply Fan Name
+    BlowThrough,              !- Fan Placement
+    ,                         !- Supply Air Fan Operating Mode Schedule Name
+    ,                         !- Heating Coil Object Type
+    ,                         !- Heating Coil Name
+    ,                         !- DX Heating Coil Sizing Ratio
+    Coil:Cooling:DX:SingleSpeed,    !- Cooling Coil Object Type
+    Haier_Cab_DX_Cool,        !- Cooling Coil Name
+    No,                       !- Use DOAS DX Cooling Coil
+    ,                         !- Minimum Supply Air Temperature
+    SensibleOnlyLoadControl,    !- Latent Load Control
+    ,                         !- Supplemental Heating Coil Object Type
+    ,                         !- Supplemental Heating Coil Name
+    SupplyAirFlowRate,        !- Cooling Supply Air Flow Rate Method
+    0.333,                    !- Cooling Supply Air Flow Rate
+    ,                         !- Cooling Supply Air Flow Rate Per Floor Area
+    ,                         !- Cooling Fraction of Autosized Cooling Supply Air Flow Rate
+    ,                         !- Cooling Supply Air Flow Rate Per Unit of Capacity
+    SupplyAirFlowRate,        !- Heating Supply Air Flow Rate Method
+    0,                        !- Heating Supply Air Flow Rate
+    ,                         !- Heating Supply Air Flow Rate Per Floor Area
+    ,                         !- Heating Fraction of Autosized Heating Supply Air Flow Rate
+    ,                         !- Heating Supply Air Flow Rate Per Unit of Capacity
+    SupplyAirFlowRate,        !- No Load Supply Air Flow Rate Method
+    0,                        !- No Load Supply Air Flow Rate
+    ,                         !- No Load Supply Air Flow Rate Per Floor Area
+    ,                         !- No Load Fraction of Autosized Cooling Supply Air Flow Rate
+    ,                         !- No Load Fraction of Autosized Heating Supply Air Flow Rate
+    ,                         !- No Load Supply Air Flow Rate Per Unit of Capacity During Cooling Operation
+    ,                         !- No Load Supply Air Flow Rate Per Unit of Capacity During Heating Operation
+    ,                         !- No Load Supply Air Flow Rate Control Set To Low Speed
+    ,                         !- Maximum Supply Air Temperature
+    ,                         !- Maximum Outdoor DryBulb Temperature for Supplemental Heater Operation
+    ,                         !- Outdoor DryBulb Temperature Sensor Node Name
+    ,                         !- Ancillary OnCycle Electric Power
+    ,                         !- Ancillary OffCycle Electric Power
+    ,                         !- Design Heat Recovery Water Flow Rate
+    ,                         !- Maximum Temperature for Heat Recovery
+    ,                         !- Heat Recovery Water Inlet Node Name
+    ,                         !- Heat Recovery Water Outlet Node Name
+    ;                         !- Design Specification Multispeed Object Type
+
+AirLoopHVAC,
+    Haier_AirLoop,            !- Name
+    ,                         !- Controller List Name
+    Haier_AvailMgrList,       !- Availability Manager List Name
+    autosize,                 !- Design Supply Air Flow Rate
+    Haier_Supply_BranchList,    !- Branch List Name
+    ,                         !- Connector List Name
+    Haier_Supply_Inlet,       !- Supply Side Inlet Node Name
+    Haier_Demand_Outlet,      !- Demand Side Outlet Node Name
+    Haier_DemandInletNodes,    !- Demand Side Inlet Node Names
+    Haier_SupplyOutletNodes;    !- Supply Side Outlet Node Names
+
+AirLoopHVAC:ZoneSplitter,
+    Haier_ZoneSplitter,       !- Name
+    Haier_Supply_Outlet,      !- Inlet Node Name
+    Haier_Zone_SupplyNode;    !- Outlet 1 Node Name
+
+AirLoopHVAC:SupplyPath,
+    Haier_SupplyPath,         !- Name
+    Haier_Supply_Outlet,      !- Supply Air Path Inlet Node Name
+    AirLoopHVAC:ZoneSplitter,    !- Component 1 Object Type
+    Haier_ZoneSplitter;       !- Component 1 Name
+
+AirLoopHVAC:ZoneMixer,
+    Haier_ZoneMixer,          !- Name
+    Haier_Demand_Outlet,      !- Outlet Node Name
+    Haier_Zone_ReturnNode;    !- Inlet 1 Node Name
+
+AirLoopHVAC:ReturnPath,
+    Haier_ReturnPath,         !- Name
+    Haier_Demand_Outlet,      !- Return Air Path Outlet Node Name
+    AirLoopHVAC:ZoneMixer,    !- Component 1 Object Type
+    Haier_ZoneMixer;          !- Component 1 Name
+
+Branch,
+    HW-Supply Branch,         !- Name
+    ,                         !- Pressure Drop Curve Name
+    Pump:ConstantSpeed,       !- Component 1 Object Type
+    HW-Pump,                  !- Component 1 Name
+    HW-SupplyInlet,           !- Component 1 Inlet Node Name
+    HW-SupplyPumpOutlet,      !- Component 1 Outlet Node Name
+    Boiler:HotWater,          !- Component 2 Object Type
+    HW-Boiler,                !- Component 2 Name
+    HW-SupplyPumpOutlet,      !- Component 2 Inlet Node Name
+    HW-Boiler-Outlet,         !- Component 2 Outlet Node Name
+    Pipe:Adiabatic,           !- Component 3 Object Type
+    HW-Supply Outlet Pipe,    !- Component 3 Name
+    HW-Boiler-Outlet,         !- Component 3 Inlet Node Name
+    HW-SupplyOutlet;          !- Component 3 Outlet Node Name
+
+Branch,
+    HW-Demand Inlet Branch,    !- Name
+    ,                         !- Pressure Drop Curve Name
+    Pipe:Adiabatic,           !- Component 1 Object Type
+    HW-Demand Inlet Header Pipe,    !- Component 1 Name
+    HW-Loop-DemandInlet,      !- Component 1 Inlet Node Name
+    HW-Demand-Splitter-Inlet-Node;    !- Component 1 Outlet Node Name
+
+Branch,
+    HW-Demand Branch CL,      !- Name
+    ,                         !- Pressure Drop Curve Name
+    ZoneHVAC:Baseboard:Convective:Water,    !- Component 1 Object Type
+    Radiator_CL,              !- Component 1 Name
+    HW-Demand-CL-In,          !- Component 1 Inlet Node Name
+    HW-Demand-CL-Out;         !- Component 1 Outlet Node Name
+
+Branch,
+    HW-Demand Branch CR,      !- Name
+    ,                         !- Pressure Drop Curve Name
+    ZoneHVAC:Baseboard:Convective:Water,    !- Component 1 Object Type
+    Radiator_CR,              !- Component 1 Name
+    HW-Demand-CR-In,          !- Component 1 Inlet Node Name
+    HW-Demand-CR-Out;         !- Component 1 Outlet Node Name
+
+Branch,
+    HW-Demand Branch H,       !- Name
+    ,                         !- Pressure Drop Curve Name
+    ZoneHVAC:Baseboard:Convective:Water,    !- Component 1 Object Type
+    Radiator_H,               !- Component 1 Name
+    HW-Demand-H-In,           !- Component 1 Inlet Node Name
+    HW-Demand-H-Out;          !- Component 1 Outlet Node Name
+
+Branch,
+    HW-Demand Branch R2,      !- Name
+    ,                         !- Pressure Drop Curve Name
+    ZoneHVAC:Baseboard:Convective:Water,    !- Component 1 Object Type
+    Radiator_R2,              !- Component 1 Name
+    HW-Demand-R2-In,          !- Component 1 Inlet Node Name
+    HW-Demand-R2-Out;         !- Component 1 Outlet Node Name
+
+Branch,
+    HW-Demand Outlet Branch,    !- Name
+    ,                         !- Pressure Drop Curve Name
+    Pipe:Adiabatic,           !- Component 1 Object Type
+    HW-Demand Outlet Header Pipe,    !- Component 1 Name
+    HW-Demand-Mixer-Outlet-Node,    !- Component 1 Inlet Node Name
+    HW-Loop-DemandOutlet;     !- Component 1 Outlet Node Name
+
+Branch,
+    Haier_Supply_Branch,      !- Name
+    ,                         !- Pressure Drop Curve Name
+    AirLoopHVAC:UnitarySystem,    !- Component 1 Object Type
+    Haier_UnitarySystem,      !- Component 1 Name
+    Haier_Supply_Inlet,       !- Component 1 Inlet Node Name
+    Haier_Supply_Outlet;      !- Component 1 Outlet Node Name
+
+BranchList,
+    HW-Loop-Supply Branches,    !- Name
+    HW-Supply Branch;         !- Branch 1 Name
+
+BranchList,
+    HW-Loop-Demand Branches,    !- Name
+    HW-Demand Inlet Branch,    !- Branch 1 Name
+    HW-Demand Branch CL,      !- Branch 2 Name
+    HW-Demand Branch CR,      !- Branch 3 Name
+    HW-Demand Branch H,       !- Branch 4 Name
+    HW-Demand Branch R2,      !- Branch 5 Name
+    HW-Demand Outlet Branch;    !- Branch 6 Name
+
+BranchList,
+    Haier_Supply_BranchList,    !- Name
+    Haier_Supply_Branch;      !- Branch 1 Name
+
+Connector:Splitter,
+    HW-Demand Splitter,       !- Name
+    HW-Demand Inlet Branch,    !- Inlet Branch Name
+    HW-Demand Branch CL,      !- Outlet Branch 1 Name
+    HW-Demand Branch CR,      !- Outlet Branch 2 Name
+    HW-Demand Branch H,       !- Outlet Branch 3 Name
+    HW-Demand Branch R2;      !- Outlet Branch 4 Name
+
+Connector:Mixer,
+    HW-Demand Mixer,          !- Name
+    HW-Demand Outlet Branch,    !- Outlet Branch Name
+    HW-Demand Branch CL,      !- Inlet Branch 1 Name
+    HW-Demand Branch CR,      !- Inlet Branch 2 Name
+    HW-Demand Branch H,       !- Inlet Branch 3 Name
+    HW-Demand Branch R2;      !- Inlet Branch 4 Name
+
+ConnectorList,
+    HW-Loop-Demand Connectors,    !- Name
+    Connector:Splitter,       !- Connector 1 Object Type
+    HW-Demand Splitter,       !- Connector 1 Name
+    Connector:Mixer,          !- Connector 2 Object Type
+    HW-Demand Mixer;          !- Connector 2 Name
+
+NodeList,
+    Haier_DemandInletNodes,    !- Name
+    Haier_Zone_SupplyNode;    !- Node 1 Name
+
+NodeList,
+    Haier_SupplyOutletNodes,    !- Name
+    Haier_Supply_Outlet;      !- Node 1 Name
+
+Pipe:Adiabatic,
+    HW-Supply Outlet Pipe,    !- Name
+    HW-Boiler-Outlet,         !- Inlet Node Name
+    HW-SupplyOutlet;          !- Outlet Node Name
+
+Pipe:Adiabatic,
+    HW-Demand Inlet Header Pipe,    !- Name
+    HW-Loop-DemandInlet,      !- Inlet Node Name
+    HW-Demand-Splitter-Inlet-Node;    !- Outlet Node Name
+
+Pipe:Adiabatic,
+    HW-Demand Outlet Header Pipe,    !- Name
+    HW-Demand-Mixer-Outlet-Node,    !- Inlet Node Name
+    HW-Loop-DemandOutlet;     !- Outlet Node Name
+
+Pump:ConstantSpeed,
+    HW-Pump,                  !- Name
+    HW-SupplyInlet,           !- Inlet Node Name
+    HW-SupplyPumpOutlet,      !- Outlet Node Name
+    0.0004,                   !- Design Flow Rate
+    50000,                    !- Design Pump Head
+    25,                       !- Design Power Consumption
+    0.9,                      !- Motor Efficiency
+    0,                        !- Fraction of Motor Inefficiencies to Fluid Stream
+    INTERMITTENT;             !- Pump Control Type
+
+Boiler:HotWater,
+    HW-Boiler,                !- Name
+    Diesel,                   !- Fuel Type
+    Autosize,                 !- Nominal Capacity
+    0.8,                      !- Nominal Thermal Efficiency
+    LeavingBoiler,            !- Efficiency Curve Temperature Evaluation Variable
+    ,                         !- Normalized Boiler Efficiency Curve Name
+    0.0004,                   !- Design Water Flow Rate
+    0.2,                      !- Minimum Part Load Ratio
+    1,                        !- Maximum Part Load Ratio
+    0.9,                      !- Optimum Part Load Ratio
+    HW-SupplyPumpOutlet,      !- Boiler Water Inlet Node Name
+    HW-Boiler-Outlet,         !- Boiler Water Outlet Node Name
+    100,                      !- Water Outlet Upper Temperature Limit
+    ConstantFlow,             !- Boiler Flow Mode
+    0,                        !- On Cycle Parasitic Electric Load
+    1;                        !- Sizing Factor
+
+PlantLoop,
+    HW-Loop,                  !- Name
+    Water,                    !- Fluid Type
+    ,                         !- User Defined Fluid Type
+    HW-Loop-Operation,        !- Plant Equipment Operation Scheme Name
+    HW-SupplyOutlet,          !- Loop Temperature Setpoint Node Name
+    90,                       !- Maximum Loop Temperature
+    10,                       !- Minimum Loop Temperature
+    0.0004,                   !- Maximum Loop Flow Rate
+    0,                        !- Minimum Loop Flow Rate
+    0.1,                      !- Plant Loop Volume
+    HW-SupplyInlet,           !- Plant Side Inlet Node Name
+    HW-SupplyOutlet,          !- Plant Side Outlet Node Name
+    HW-Loop-Supply Branches,    !- Plant Side Branch List Name
+    ,                         !- Plant Side Connector List Name
+    HW-Loop-DemandInlet,      !- Demand Side Inlet Node Name
+    HW-Loop-DemandOutlet,     !- Demand Side Outlet Node Name
+    HW-Loop-Demand Branches,    !- Demand Side Branch List Name
+    HW-Loop-Demand Connectors,    !- Demand Side Connector List Name
+    Optimal;                  !- Load Distribution Scheme
+
+PlantEquipmentList,
+    HW-Boiler-EquipmentList,    !- Name
+    Boiler:HotWater,          !- Equipment 1 Object Type
+    HW-Boiler;                !- Equipment 1 Name
+
+PlantEquipmentOperation:HeatingLoad,
+    HW-Heating-Operation,     !- Name
+    0,                        !- Load Range 1 Lower Limit
+    1000000000,               !- Load Range 1 Upper Limit
+    HW-Boiler-EquipmentList;    !- Range 1 Equipment List Name
+
+PlantEquipmentOperationSchemes,
+    HW-Loop-Operation,        !- Name
+    PlantEquipmentOperation:HeatingLoad,    !- Control Scheme 1 Object Type
+    HW-Heating-Operation,     !- Control Scheme 1 Name
+    HW-Heating-Schedule;      !- Control Scheme 1 Schedule Name
+
+AvailabilityManager:Scheduled,
+    Haier_AvailMgr,           !- Name
+    HVAC-Avail;               !- Schedule Name
+
+AvailabilityManagerAssignmentList,
+    Haier_AvailMgrList,       !- Name
+    AvailabilityManager:Scheduled,    !- Availability Manager 1 Object Type
+    Haier_AvailMgr;           !- Availability Manager 1 Name
+
+SetpointManager:Scheduled,
+    HW-Loop-SetpointManager,    !- Name
+    Temperature,              !- Control Variable
+    HW-Setpoint-Schedule,     !- Schedule Name
+    HW-SupplyOutlet;          !- Setpoint Node or NodeList Name
+
+SetpointManager:SingleZone:Reheat,
+    Haier_SAT_SPM,            !- Name
+    Temperature,              !- Control Variable
+    12.8,                     !- Minimum Supply Air Temperature
+    40,                       !- Maximum Supply Air Temperature
+    Hallway_Room3,            !- Control Zone Name
+    Hallway_Room3 Air Node,    !- Zone Node Name
+    Hallway_Room3_Air_Inlet,    !- Zone Inlet Node Name
+    Haier_Supply_Outlet;      !- Setpoint Node or NodeList Name
+
+Curve:Quadratic,
+    Haier_CoolCapFF,          !- Name
+    0.8,                      !- Coefficient1 Constant
+    0.2,                      !- Coefficient2 x
+    0,                        !- Coefficient3 x2
+    0.5,                      !- Minimum Value of x
+    1.5,                      !- Maximum Value of x
+    ,                         !- Minimum Curve Output
+    ,                         !- Maximum Curve Output
+    Dimensionless,            !- Input Unit Type for X
+    Dimensionless;            !- Output Unit Type
+
+Curve:Quadratic,
+    Haier_CoolEIRFF,          !- Name
+    1.1552,                   !- Coefficient1 Constant
+    -0.1808,                  !- Coefficient2 x
+    0.0256,                   !- Coefficient3 x2
+    0.5,                      !- Minimum Value of x
+    1.5,                      !- Maximum Value of x
+    ,                         !- Minimum Curve Output
+    ,                         !- Maximum Curve Output
+    Dimensionless,            !- Input Unit Type for X
+    Dimensionless;            !- Output Unit Type
+
+Curve:Quadratic,
+    Haier_CoolPLF,            !- Name
+    0.85,                     !- Coefficient1 Constant
+    0.15,                     !- Coefficient2 x
+    0,                        !- Coefficient3 x2
+    0,                        !- Minimum Value of x
+    1,                        !- Maximum Value of x
+    ,                         !- Minimum Curve Output
+    ,                         !- Maximum Curve Output
+    Dimensionless,            !- Input Unit Type for X
+    Dimensionless;            !- Output Unit Type
+
+Curve:Quadratic,
+    Haier_HeatCapFF,          !- Name
+    0.8,                      !- Coefficient1 Constant
+    0.2,                      !- Coefficient2 x
+    0,                        !- Coefficient3 x2
+    0.5,                      !- Minimum Value of x
+    1.5,                      !- Maximum Value of x
+    ,                         !- Minimum Curve Output
+    ,                         !- Maximum Curve Output
+    Dimensionless,            !- Input Unit Type for X
+    Dimensionless;            !- Output Unit Type
+
+Curve:Quadratic,
+    Haier_HeatEIRFF,          !- Name
+    1.3824,                   !- Coefficient1 Constant
+    -0.4336,                  !- Coefficient2 x
+    0.0512,                   !- Coefficient3 x2
+    0.5,                      !- Minimum Value of x
+    1.5,                      !- Maximum Value of x
+    ,                         !- Minimum Curve Output
+    ,                         !- Maximum Curve Output
+    Dimensionless,            !- Input Unit Type for X
+    Dimensionless;            !- Output Unit Type
+
+Curve:Quadratic,
+    Haier_HeatPLF,            !- Name
+    0.85,                     !- Coefficient1 Constant
+    0.15,                     !- Coefficient2 x
+    0,                        !- Coefficient3 x2
+    0,                        !- Minimum Value of x
+    1,                        !- Maximum Value of x
+    ,                         !- Minimum Curve Output
+    ,                         !- Maximum Curve Output
+    Dimensionless,            !- Input Unit Type for X
+    Dimensionless;            !- Output Unit Type
+
+Curve:Biquadratic,
+    Haier_CoolCapFT,          !- Name
+    0.942587793,              !- Coefficient1 Constant
+    0.009543347,              !- Coefficient2 x
+    0.00068377,               !- Coefficient3 x2
+    -0.011042676,             !- Coefficient4 y
+    5.249e-06,                !- Coefficient5 y2
+    -9.72e-06,                !- Coefficient6 xy
+    12.77778,                 !- Minimum Value of x
+    23.88889,                 !- Maximum Value of x
+    18.33333,                 !- Minimum Value of y
+    46.11111,                 !- Maximum Value of y
+    ,                         !- Minimum Curve Output
+    ,                         !- Maximum Curve Output
+    Temperature,              !- Input Unit Type for X
+    Temperature,              !- Input Unit Type for Y
+    Dimensionless;            !- Output Unit Type
+
+Curve:Biquadratic,
+    Haier_CoolEIRFT,          !- Name
+    0.342414409,              !- Coefficient1 Constant
+    0.034885008,              !- Coefficient2 x
+    -0.0006237,               !- Coefficient3 x2
+    0.004977216,              !- Coefficient4 y
+    0.000437951,              !- Coefficient5 y2
+    -0.000728028,             !- Coefficient6 xy
+    12.77778,                 !- Minimum Value of x
+    23.88889,                 !- Maximum Value of x
+    18.33333,                 !- Minimum Value of y
+    46.11111,                 !- Maximum Value of y
+    ,                         !- Minimum Curve Output
+    ,                         !- Maximum Curve Output
+    Temperature,              !- Input Unit Type for X
+    Temperature,              !- Input Unit Type for Y
+    Dimensionless;            !- Output Unit Type
+
+Curve:Biquadratic,
+    Haier_HeatCapFT,          !- Name
+    0.758746,                 !- Coefficient1 Constant
+    0.027626,                 !- Coefficient2 x
+    0.000148716,              !- Coefficient3 x2
+    3.4992e-06,               !- Coefficient4 y
+    -0.000103,                !- Coefficient5 y2
+    -4e-06,                   !- Coefficient6 xy
+    16.66667,                 !- Minimum Value of x
+    22.22222,                 !- Maximum Value of x
+    -8.33333,                 !- Minimum Value of y
+    8.33333,                  !- Maximum Value of y
+    ,                         !- Minimum Curve Output
+    ,                         !- Maximum Curve Output
+    Temperature,              !- Input Unit Type for X
+    Temperature,              !- Input Unit Type for Y
+    Dimensionless;            !- Output Unit Type
+
+Curve:Biquadratic,
+    Haier_HeatEIRFT,          !- Name
+    1.19248,                  !- Coefficient1 Constant
+    -0.0300438,               !- Coefficient2 x
+    0.00103745,               !- Coefficient3 x2
+    0.0035,                   !- Coefficient4 y
+    -0.000404,                !- Coefficient5 y2
+    2.3e-05,                  !- Coefficient6 xy
+    16.66667,                 !- Minimum Value of x
+    22.22222,                 !- Maximum Value of x
+    -8.33333,                 !- Minimum Value of y
+    8.33333,                  !- Maximum Value of y
+    ,                         !- Minimum Curve Output
+    ,                         !- Maximum Curve Output
+    Temperature,              !- Input Unit Type for X
+    Temperature,              !- Input Unit Type for Y
+    Dimensionless;            !- Output Unit Type
+
+Output:VariableDictionary,
+    Regular;                  !- Key Field
+
+Output:Surfaces:Drawing,
+    DXF;                      !- Report Type
+
+Output:Constructions,
+    Constructions;            !- Details Type 1
+
+Output:Table:SummaryReports,
+    AllSummary;               !- Report 1 Name
+
+OutputControl:Table:Style,
+    TabAndHTML;               !- Column Separator
+
+Output:Variable,
+    Classroom_Left,           !- Key Value
+    Zone Mean Air Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Left,           !- Key Value
+    Zone Operative Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Left,           !- Key Value
+    Zone Mean Radiant Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Left,           !- Key Value
+    Zone Air Relative Humidity,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Left,           !- Key Value
+    Zone Air CO2 Concentration,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Left,           !- Key Value
+    Zone Generic Air Contaminant Concentration,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Left,           !- Key Value
+    Zone Total Internal Total Heating Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Left,           !- Key Value
+    Zone Infiltration Air Change Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Left,           !- Key Value
+    Zone Infiltration Volume Flow Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Left,           !- Key Value
+    Zone Mechanical Ventilation Mass Flow Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Left,           !- Key Value
+    Zone Cooling Setpoint Not Met Time,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Left,           !- Key Value
+    Zone Heating Setpoint Not Met Time,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Left,           !- Key Value
+    Zone Thermostat Heating Setpoint Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Left,           !- Key Value
+    Zone Thermostat Cooling Setpoint Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Left,           !- Key Value
+    Zone People OcCRpant Count,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Left,           !- Key Value
+    Zone People Total Heating Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Left,           !- Key Value
+    Zone Electric Equipment Total Heating Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Left,           !- Key Value
+    Zone Lights Total Heating Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Left,           !- Key Value
+    Daylighting Reference Point Illuminance,    !- Variable Name
+    Hourly;                   !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Left,           !- Key Value
+    Lights Electric Power,    !- Variable Name
+    Hourly;                   !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Left,           !- Key Value
+    Zone Thermal Comfort ASHRAE 55 Simple Model Summer or Winter Clothes Not Comfortable Time,    !- Variable Name
+    RunPeriod;                !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Left,           !- Key Value
+    Zone People Occupant Count,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Right,          !- Key Value
+    Zone Mean Air Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Right,          !- Key Value
+    Zone Operative Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Right,          !- Key Value
+    Zone Mean Radiant Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Right,          !- Key Value
+    Zone Air Relative Humidity,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Right,          !- Key Value
+    Zone Air CO2 Concentration,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Right,          !- Key Value
+    Zone Generic Air Contaminant Concentration,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Right,          !- Key Value
+    Zone Total Internal Total Heating Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Right,          !- Key Value
+    Zone Infiltration Air Change Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Right,          !- Key Value
+    Zone Infiltration Volume Flow Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Right,          !- Key Value
+    Zone Mechanical Ventilation Mass Flow Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Right,          !- Key Value
+    Zone Cooling Setpoint Not Met Time,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Right,          !- Key Value
+    Zone Heating Setpoint Not Met Time,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Right,          !- Key Value
+    Zone Thermostat Heating Setpoint Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Right,          !- Key Value
+    Zone Thermostat Cooling Setpoint Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Right,          !- Key Value
+    Zone People OcCRpant Count,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Right,          !- Key Value
+    Zone People Total Heating Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Right,          !- Key Value
+    Zone Electric Equipment Total Heating Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Right,          !- Key Value
+    Zone Lights Total Heating Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Right,          !- Key Value
+    Daylighting Reference Point Illuminance,    !- Variable Name
+    Hourly;                   !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Right,          !- Key Value
+    Lights Electric Power,    !- Variable Name
+    Hourly;                   !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Right,          !- Key Value
+    Zone Thermal Comfort ASHRAE 55 Simple Model Summer or Winter Clothes Not Comfortable Time,    !- Variable Name
+    RunPeriod;                !- Reporting Frequency
+
+Output:Variable,
+    Classroom_Right,          !- Key Value
+    Zone People Occupant Count,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Hallway_Room3,            !- Key Value
+    Zone Mean Air Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Hallway_Room3,            !- Key Value
+    Zone Operative Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Hallway_Room3,            !- Key Value
+    Zone Mean Radiant Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Hallway_Room3,            !- Key Value
+    Zone Air Relative Humidity,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Hallway_Room3,            !- Key Value
+    Zone Air CO2 Concentration,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Hallway_Room3,            !- Key Value
+    Zone Generic Air Contaminant Concentration,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Hallway_Room3,            !- Key Value
+    Zone Total Internal Total Heating Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Hallway_Room3,            !- Key Value
+    Zone Infiltration Air Change Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Hallway_Room3,            !- Key Value
+    Zone Infiltration Volume Flow Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Hallway_Room3,            !- Key Value
+    Zone Mechanical Ventilation Mass Flow Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Hallway_Room3,            !- Key Value
+    Zone Cooling Setpoint Not Met Time,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Hallway_Room3,            !- Key Value
+    Zone Heating Setpoint Not Met Time,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Hallway_Room3,            !- Key Value
+    Zone Thermostat Heating Setpoint Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Hallway_Room3,            !- Key Value
+    Zone Thermostat Cooling Setpoint Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Hallway_Room3,            !- Key Value
+    Zone People OcCRpant Count,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Hallway_Room3,            !- Key Value
+    Zone People Total Heating Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Hallway_Room3,            !- Key Value
+    Zone Electric Equipment Total Heating Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Hallway_Room3,            !- Key Value
+    Zone Lights Total Heating Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Hallway_Room3,            !- Key Value
+    Daylighting Reference Point Illuminance,    !- Variable Name
+    Hourly;                   !- Reporting Frequency
+
+Output:Variable,
+    Hallway_Room3,            !- Key Value
+    Lights Electric Power,    !- Variable Name
+    Hourly;                   !- Reporting Frequency
+
+Output:Variable,
+    Hallway_Room3,            !- Key Value
+    Zone Thermal Comfort ASHRAE 55 Simple Model Summer or Winter Clothes Not Comfortable Time,    !- Variable Name
+    RunPeriod;                !- Reporting Frequency
+
+Output:Variable,
+    Hallway_Room3,            !- Key Value
+    Zone People Occupant Count,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Room2_Small,              !- Key Value
+    Zone Mean Air Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Room2_Small,              !- Key Value
+    Zone Operative Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Room2_Small,              !- Key Value
+    Zone Mean Radiant Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Room2_Small,              !- Key Value
+    Zone Air Relative Humidity,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Room2_Small,              !- Key Value
+    Zone Air CO2 Concentration,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Room2_Small,              !- Key Value
+    Zone Generic Air Contaminant Concentration,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Room2_Small,              !- Key Value
+    Zone Total Internal Total Heating Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Room2_Small,              !- Key Value
+    Zone Infiltration Air Change Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Room2_Small,              !- Key Value
+    Zone Infiltration Volume Flow Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Room2_Small,              !- Key Value
+    Zone Mechanical Ventilation Mass Flow Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Room2_Small,              !- Key Value
+    Zone Cooling Setpoint Not Met Time,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Room2_Small,              !- Key Value
+    Zone Heating Setpoint Not Met Time,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Room2_Small,              !- Key Value
+    Zone Thermostat Heating Setpoint Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Room2_Small,              !- Key Value
+    Zone Thermostat Cooling Setpoint Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Room2_Small,              !- Key Value
+    Zone People OcCRpant Count,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Room2_Small,              !- Key Value
+    Zone People Total Heating Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Room2_Small,              !- Key Value
+    Zone Electric Equipment Total Heating Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Room2_Small,              !- Key Value
+    Zone Lights Total Heating Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Room2_Small,              !- Key Value
+    Daylighting Reference Point Illuminance,    !- Variable Name
+    Hourly;                   !- Reporting Frequency
+
+Output:Variable,
+    Room2_Small,              !- Key Value
+    Lights Electric Power,    !- Variable Name
+    Hourly;                   !- Reporting Frequency
+
+Output:Variable,
+    Room2_Small,              !- Key Value
+    Zone Thermal Comfort ASHRAE 55 Simple Model Summer or Winter Clothes Not Comfortable Time,    !- Variable Name
+    RunPeriod;                !- Reporting Frequency
+
+Output:Variable,
+    Room2_Small,              !- Key Value
+    Zone People Occupant Count,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Meter,
+    Electricity:Facility,     !- Key Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Meter,
+    Gas:Facility,             !- Key Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Meter,
+    Heating:Diesel,           !- Key Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Meter,
+    Cooling:Electricity,      !- Key Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Meter,
+    InteriorLights:Electricity,    !- Key Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Meter,
+    InteriorEquipment:Electricity,    !- Key Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Meter,
+    Fans:Electricity,         !- Key Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Meter,
+    Pumps:Electricity,        !- Key Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Meter,
+    Carbon Equivalent:Facility,    !- Key Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Meter,
+    CarbonEquivalentEmissions:Carbon Equivalent,    !- Key Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Meter,
+    CO2:Facility,             !- Key Name
+    RunPeriod;                !- Reporting Frequency
+
+Output:Meter,
+    DieselEmissions:CO2,      !- Key Name
+    RunPeriod;                !- Reporting Frequency
+
+Output:Meter,
+    ElectricityEmissions:CO2,    !- Key Name
+    RunPeriod;                !- Reporting Frequency
+
+Output:SQLite,
+    SimpleAndTabular;         !- Option Type

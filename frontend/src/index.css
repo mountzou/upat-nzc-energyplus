@@ -1,0 +1,40 @@
+/* === Reset === */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* === Base === */
+
+html, body, #root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+  color: #1f2937;
+  background: #f8fafc;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* === Typography === */
+
+h1, h2, h3 {
+  line-height: 1.2;
+}
+
+a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}

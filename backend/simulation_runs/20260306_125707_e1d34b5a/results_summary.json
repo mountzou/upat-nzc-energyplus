@@ -1,0 +1,84 @@
+{
+  "zone_occupancy_summary": [
+    {
+      "zone_name": "CLASSROOM_LEFT",
+      "avg_occupant_count": 2.7275204359673024,
+      "min_occupant_count": 0.0,
+      "max_occupant_count": 21.0
+    },
+    {
+      "zone_name": "CLASSROOM_RIGHT",
+      "avg_occupant_count": 2.59763851044505,
+      "min_occupant_count": 0.0,
+      "max_occupant_count": 20.0
+    },
+    {
+      "zone_name": "HALLWAY_ROOM3",
+      "avg_occupant_count": 0.009990917347865577,
+      "min_occupant_count": 0.0,
+      "max_occupant_count": 1.0
+    },
+    {
+      "zone_name": "ROOM2_SMALL",
+      "avg_occupant_count": 0.1298819255222525,
+      "min_occupant_count": 0.0,
+      "max_occupant_count": 1.0
+    }
+  ],
+  "zone_temperature_summary": [
+    {
+      "zone_name": "CLASSROOM_LEFT",
+      "avg_mean_air_temperature_c": 21.08656811435901,
+      "min_mean_air_temperature_c": 8.40673799689515,
+      "max_mean_air_temperature_c": 30.79443592440032
+    },
+    {
+      "zone_name": "CLASSROOM_RIGHT",
+      "avg_mean_air_temperature_c": 22.0179938304897,
+      "min_mean_air_temperature_c": 8.52126668613864,
+      "max_mean_air_temperature_c": 31.9478251219763
+    },
+    {
+      "zone_name": "HALLWAY_ROOM3",
+      "avg_mean_air_temperature_c": 21.626387468310647,
+      "min_mean_air_temperature_c": 8.89881930409929,
+      "max_mean_air_temperature_c": 32.65395361062152
+    },
+    {
+      "zone_name": "ROOM2_SMALL",
+      "avg_mean_air_temperature_c": 21.91492342034882,
+      "min_mean_air_temperature_c": 10.318454141120807,
+      "max_mean_air_temperature_c": 31.02310745558498
+    }
+  ],
+  "energy_summary": {
+    "cooling_electricity": {
+      "joules": 0.0,
+      "kwh": 0.0
+    },
+    "electricity_facility": {
+      "joules": 6562140798.047621,
+      "kwh": 1822.8168883465612
+    },
+    "fans_electricity": {
+      "joules": 0.0,
+      "kwh": 0.0
+    },
+    "heating_diesel": {
+      "joules": 35929290166.80202,
+      "kwh": 9980.358379667226
+    },
+    "interiorequipment_electricity": {
+      "joules": 712800000.0,
+      "kwh": 198.0
+    },
+    "interiorlights_electricity": {
+      "joules": 5782718304.0,
+      "kwh": 1606.31064
+    },
+    "pumps_electricity": {
+      "joules": 66622494.04761904,
+      "kwh": 18.50624834656084
+    }
+  }
+}

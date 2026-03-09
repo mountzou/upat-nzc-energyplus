@@ -1,0 +1,10 @@
+{
+  "heating_setpoint": 21.0,
+  "cooling_setpoint": 25.0,
+  "zone_occupancy": {
+    "Classroom_Left": 10,
+    "Classroom_Right": 30,
+    "Room2_Small": 2,
+    "Hallway_Room3": 5
+  }
+}

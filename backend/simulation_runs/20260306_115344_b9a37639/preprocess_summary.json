@@ -1,0 +1,10 @@
+{
+  "message": "Placeholder preprocessing step completed",
+  "source_model": "model.idf",
+  "prepared_model": "in.idf",
+  "applied_inputs": {
+    "heating_setpoint": 20.0,
+    "cooling_setpoint": 26.0,
+    "people_count": 15
+  }
+}
