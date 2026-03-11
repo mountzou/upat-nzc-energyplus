@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/chart";
 import { formatDateLabel, formatShortDate } from "@/utils/chartHelpers";
 
-export default function MultiSeriesLineChart({
+export default function MultiLineChart({
   title,
   data,
   series,
