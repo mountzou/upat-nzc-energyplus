@@ -1,13 +1,14 @@
 from fastapi import APIRouter
 
 from app.config import IDF_DIR
-from app.schemas import SimulationInput
+from app.schemas import RoomMetadata, SimulationInput
 from app.services.idf_service import (
     inspect_idf,
     inspect_thermostat,
     inspect_schedule_by_name,
     inspect_people_objects,
 )
+from app.services.room_catalog_service import list_rooms
 from app.services.simulation_service import run_simulation
 
 router = APIRouter()
@@ -15,6 +16,11 @@ router = APIRouter()
 @router.post("/simulate")
 def simulate(sim_input: SimulationInput):
     return run_simulation(sim_input)
+
+
+@router.get("/rooms", response_model=list[RoomMetadata])
+def get_rooms():
+    return list_rooms()
 
 @router.get("/debug/idf")
 def debug_idf():

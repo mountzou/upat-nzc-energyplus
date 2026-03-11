@@ -1,46 +1,94 @@
 import { useEffect, useState } from "react";
 
-import ZoneLineChart from "./components/ZoneLineChart";
-import SingleLineChart from "./components/SingleLineChart";
+import MultiSeriesLineChart from "@/components/MultiSeriesLineChart";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { InputNumber } from "@/components/ui/input-number";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Spinner } from "@/components/ui/spinner";
-import {
-  getZoneLabel,
-  formatDateLabel,
-  pivotByZone,
-} from "./utils/chartHelpers";
+import { buildRoomSeriesChart } from "@/utils/chartHelpers";
+
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 
-const getEnvironmentTypeLabel = (environmentType) => {
-  if (environmentType === 1) return "Design Day";
-  if (environmentType === 3) return "Run Period";
-  return String(environmentType);
+const buildInitialRoomConfigs = (rooms) =>
+  Object.fromEntries(
+    rooms.map((room) => [
+      room.id,
+      {
+        enabled: false,
+        occupancy: room.defaults.occupancy,
+        heating_setpoint: room.defaults.heating_setpoint,
+        cooling_setpoint: room.defaults.cooling_setpoint,
+      },
+    ])
+  );
+
+const scheduleLabels = {
+  occupancy: "Occupancy",
+  lighting: "Lighting",
+  equipment: "Equipment",
+  heating_availability: "Heating availability",
+  hvac_availability: "HVAC availability",
+  thermostat_control: "Thermostat control",
+  secondary_thermostat_control: "Secondary control",
+  ventilation: "Ventilation",
+  activity: "Activity",
+  heating_setpoint: "Heating setpoint",
+  cooling_setpoint: "Cooling setpoint",
+  outdoor_co2: "Outdoor CO2",
 };
 
-const getEnvironmentNameLabel = (environmentName) => {
-  if (environmentName === "RUNPERIOD1") return "Main Run Period";
-  return environmentName;
+const resultEnergyLabels = {
+  electricity_facility: "Facility electricity",
+  heating_diesel: "Heating diesel",
+  cooling_electricity: "Cooling electricity",
+  interiorlights_electricity: "Lighting",
+  interiorequipment_electricity: "Equipment",
+  pumps_electricity: "Pumps",
+  fans_electricity: "Fans",
+};
+
+const formatNumber = (value, digits = 1) =>
+  typeof value === "number" ? value.toFixed(digits) : "n/a";
+
+const getRoomSummaryRows = (roomRun) => {
+  const results = roomRun.results || {};
+  const periodInfo = results.period_info || {};
+  const zoneTemp = results.zone_temperature_summary?.[0];
+  const zoneOccupancy = results.zone_occupancy_summary?.[0];
+  const thermalComfort = results.thermal_comfort_summary?.[0];
+  const energySummary = results.energy_summary || {};
+
+  const energyRows = Object.entries(energySummary)
+    .slice(0, 4)
+    .map(([key, value]) => ({
+      label: resultEnergyLabels[key] || key,
+      value: `${formatNumber(value?.kwh, 2)} kWh`,
+    }));
+
+  return {
+    period: periodInfo.start_date && periodInfo.end_date
+      ? `${periodInfo.start_date} to ${periodInfo.end_date}`
+      : null,
+    avgTemp: zoneTemp?.avg_mean_air_temperature_c,
+    avgOccupancy: zoneOccupancy?.avg_occupant_count,
+    discomfortHours: thermalComfort?.not_comfortable_hours,
+    energyRows,
+  };
 };
 
 function App() {
   const [backendStatus, setBackendStatus] = useState("Checking backend...");
+  const [rooms, setRooms] = useState([]);
+  const [roomConfigs, setRoomConfigs] = useState({});
+  const [roomsLoading, setRoomsLoading] = useState(true);
+  const [roomsError, setRoomsError] = useState(null);
+  const [simulationLoading, setSimulationLoading] = useState(false);
   const [simulationResult, setSimulationResult] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-  const [formData, setFormData] = useState({
-    heating_setpoint: 21,
-    cooling_setpoint: 25,
-    zone_occupancy: {
-      Classroom_Left: 20,
-      Classroom_Right: 20,
-      Room2_Small: 1,
-      Hallway_Room3: 1,
-    },
-  });
+  const [simulationError, setSimulationError] = useState(null);
+  const [showPayload, setShowPayload] = useState(false);
+  const [showResponseJson, setShowResponseJson] = useState(false);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/health`)
@@ -49,25 +97,103 @@ function App() {
       .catch(() => setBackendStatus("Backend unreachable"));
   }, []);
 
-  const handleSetpointChange = (name, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  useEffect(() => {
+    const loadRooms = async () => {
+      setRoomsLoading(true);
+      setRoomsError(null);
 
-  const handleOccupancyChange = (name, value) => {
-    setFormData((prev) => ({
+      try {
+        const res = await fetch(`${API_BASE_URL}/rooms`);
+        if (!res.ok) {
+          throw new Error(`Failed to load rooms (${res.status})`);
+        }
+
+        const data = await res.json();
+        setRooms(data);
+        setRoomConfigs(buildInitialRoomConfigs(data));
+      } catch (error) {
+        setRoomsError(error.message);
+      } finally {
+        setRoomsLoading(false);
+      }
+    };
+
+    loadRooms();
+  }, []);
+
+  const toggleRoom = (roomId) => {
+    setRoomConfigs((prev) => ({
       ...prev,
-      zone_occupancy: {
-        ...prev.zone_occupancy,
-        [name]: value,
+      [roomId]: {
+        ...prev[roomId],
+        enabled: !prev[roomId]?.enabled,
       },
     }));
   };
 
-  const runSimulation = async () => {
-    setLoading(true);
+  const updateRoomValue = (roomId, field, value) => {
+    setRoomConfigs((prev) => ({
+      ...prev,
+      [roomId]: {
+        ...prev[roomId],
+        [field]: value,
+      },
+    }));
+  };
+
+  const selectedRooms = rooms
+    .filter((room) => roomConfigs[room.id]?.enabled)
+    .map((room) => {
+      const config = roomConfigs[room.id];
+      const payload = {
+        room_id: room.id,
+      };
+
+      if (room.supports.occupancy) {
+        payload.occupancy = config.occupancy;
+      }
+
+      if (room.supports.heating_setpoint) {
+        payload.heating_setpoint = config.heating_setpoint;
+      }
+
+      if (room.supports.cooling_setpoint) {
+        payload.cooling_setpoint = config.cooling_setpoint;
+      }
+
+      return payload;
+    });
+
+  const plannedPayload = {
+    rooms: selectedRooms,
+  };
+
+  const selectedCount = selectedRooms.length;
+  const heatingDieselChart = simulationResult
+    ? buildRoomSeriesChart(
+        simulationResult.room_runs || [],
+        "heating_diesel_daily",
+        "kwh"
+      )
+    : { data: [], series: [] };
+  const facilityElectricityChart = simulationResult
+    ? buildRoomSeriesChart(
+        simulationResult.room_runs || [],
+        "electricity_facility_daily",
+        "kwh"
+      )
+    : { data: [], series: [] };
+  const meanAirTemperatureChart = simulationResult
+    ? buildRoomSeriesChart(
+        simulationResult.room_runs || [],
+        "zone_mean_air_temperature_daily",
+        "avg_mean_air_temperature_c"
+      )
+    : { data: [], series: [] };
+
+  const handleRunSimulation = async () => {
+    setSimulationLoading(true);
+    setSimulationError(null);
     setSimulationResult(null);
 
     try {
@@ -76,54 +202,25 @@ function App() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(plannedPayload),
       });
 
       const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.detail || `Simulation request failed (${res.status})`);
+      }
+
+      setShowResponseJson(false);
       setSimulationResult(data);
-    } catch {
-      setSimulationResult({ error: "Simulation request failed" });
+    } catch (error) {
+      setSimulationError(error.message);
     } finally {
-      setLoading(false);
+      setSimulationLoading(false);
     }
   };
 
-  const results = simulationResult?.results;
-  const periodInfo = results?.period_info || null;
-  const energySummary = results?.energy_summary || {};
-  const zoneTemps = results?.zone_temperature_summary || [];
-  const zoneOccupancy = results?.zone_occupancy_summary || [];
-
-  const dailyHeatingDiesel = results?.daily_timeseries?.heating_diesel_daily || [];
-  const dailyElectricityFacility = results?.daily_timeseries?.electricity_facility_daily || [];
-  const dailyZoneMeanAirTemperature = results?.daily_timeseries?.zone_mean_air_temperature_daily || [];
-  const dailyZoneCo2 = results?.daily_timeseries?.zone_co2_daily || [];
-  const dailyZoneOccupancy = results?.daily_timeseries?.zone_occupancy_daily || [];
-  const dailyZoneRelativeHumidity = results?.daily_timeseries?.zone_relative_humidity_daily || [];
-  const dailyZoneOperativeTemperature = results?.daily_timeseries?.zone_operative_temperature_daily || [];
-  const dailyZoneHeatingSetpoint = results?.daily_timeseries?.zone_heating_setpoint_daily || [];
-  const dailyZoneCoolingSetpoint = results?.daily_timeseries?.zone_cooling_setpoint_daily || [];
-
-  const zoneTemperatureChartData = pivotByZone(dailyZoneMeanAirTemperature, "avg_mean_air_temperature_c");
-  const zoneCo2ChartData = pivotByZone(dailyZoneCo2, "avg_co2_ppm");
-  const zoneOccupancyChartData = pivotByZone(dailyZoneOccupancy, "avg_occupant_count");
-  const zoneRelativeHumidityChartData = pivotByZone(dailyZoneRelativeHumidity, "avg_relative_humidity_pct");
-  const zoneOperativeTemperatureChartData = pivotByZone(dailyZoneOperativeTemperature, "avg_operative_temperature_c");
-  const zoneHeatingSetpointChartData = pivotByZone(dailyZoneHeatingSetpoint, "avg_heating_setpoint_c");
-  const zoneCoolingSetpointChartData = pivotByZone(dailyZoneCoolingSetpoint, "avg_cooling_setpoint_c");
-
-  const energyCards = [
-    ["electricity_facility", "Facility Electricity", "kWh"],
-    ["heating_diesel", "Heating Diesel", "L"],
-    ["cooling_electricity", "Cooling Electricity", "kWh"],
-    ["interiorlights_electricity", "Interior Lights", "kWh"],
-    ["interiorequipment_electricity", "Interior Equipment", "kWh"],
-    ["pumps_electricity", "Pumps", "kWh"],
-    ["fans_electricity", "Fans", "kWh"],
-  ].filter(([key]) => energySummary[key]);
-
   return (
-    <div className="mx-auto min-h-screen p-8">
+    <div className="mx-auto min-h-screen max-w-7xl p-8">
       <div className="mb-4">
         <h1 className="mb-1">upat-nzc-energyplus</h1>
         <p className="text-muted-foreground">
@@ -132,257 +229,375 @@ function App() {
       </div>
       <Separator className="mb-6" />
 
-      <Card className="mb-6 bg-gray-100 ring-0 [&_input]:bg-white">
+      <Card className="mb-6 bg-gray-50 ring-0">
         <CardHeader>
-          <CardTitle className="text-xl font-semibold">Simulation Inputs</CardTitle>
+          <CardTitle className="text-xl font-semibold">
+            Room Simulations
+          </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="grid gap-6">
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-white px-4 py-3">
+            <div>
+              <div className="font-medium">Simulation scope</div>
+              <div className="text-sm text-muted-foreground">
+                Select the rooms to configure. Inputs are rendered from
+                `GET /rooms`.
+              </div>
+            </div>
+            <div className="text-sm text-muted-foreground">
+              Selected rooms: <strong>{selectedCount}</strong>
+            </div>
+          </div>
 
-        <div className="grid grid-cols-2 gap-4 mb-5">
-          <InputNumber
-            label="Heating setpoint"
-            suffix="°C"
-            value={formData.heating_setpoint}
-            onChange={(v) => handleSetpointChange("heating_setpoint", v)}
-            step={1}
-          />
-          <InputNumber
-            label="Cooling setpoint"
-            suffix="°C"
-            value={formData.cooling_setpoint}
-            onChange={(v) => handleSetpointChange("cooling_setpoint", v)}
-            step={1}
-          />
-        </div>
+          {roomsLoading && (
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Spinner className="size-4" />
+              Loading room metadata...
+            </div>
+          )}
 
-        <h3 className="text-xl font-semibold mb-3">Zone Occupancy</h3>
+          {roomsError && (
+            <Card className="text-destructive">
+              <CardContent>{roomsError}</CardContent>
+            </Card>
+          )}
 
-        <div className="grid grid-cols-4 gap-4 mb-4">
-          <InputNumber
-            label="Classroom Left"
-            value={formData.zone_occupancy.Classroom_Left}
-            onChange={(v) => handleOccupancyChange("Classroom_Left", v)}
-            minValue={1}
-            maxValue={25}
-            step={1}
-          />
-          <InputNumber
-            label="Classroom Right"
-            value={formData.zone_occupancy.Classroom_Right}
-            onChange={(v) => handleOccupancyChange("Classroom_Right", v)}
-            minValue={1}
-            maxValue={25}
-            step={1}
-          />
-          <InputNumber
-            label="Room 2 Small"
-            value={formData.zone_occupancy.Room2_Small}
-            onChange={(v) => handleOccupancyChange("Room2_Small", v)}
-            minValue={1}
-            maxValue={25}
-            step={1}
-          />
-          <InputNumber
-            label="Hallway Room 3"
-            value={formData.zone_occupancy.Hallway_Room3}
-            onChange={(v) => handleOccupancyChange("Hallway_Room3", v)}
-            minValue={1}
-            maxValue={25}
-            step={1}
-          />
-        </div>
+          {!roomsLoading && !roomsError && (
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {rooms.map((room) => {
+                const config = roomConfigs[room.id];
+                const isEnabled = Boolean(config?.enabled);
 
-        <Button
-          onClick={runSimulation}
-          disabled={loading}
-          size="lg"
-        >
-          {loading ? <><Spinner className="mr-2" /> Running...</> : "Run simulation"}
-        </Button>
+                return (
+                  <Card
+                    key={room.id}
+                    className={isEnabled ? "ring-2 ring-primary/30" : ""}
+                  >
+                    <CardHeader>
+                      <CardTitle className="flex items-center justify-between gap-3">
+                        <span>{room.label}</span>
+                        <label className="flex items-center gap-2 text-sm font-normal text-muted-foreground">
+                          <input
+                            type="checkbox"
+                            checked={isEnabled}
+                            onChange={() => toggleRoom(room.id)}
+                          />
+                          Include
+                        </label>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="grid gap-4">
+                      <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
+                        <span className="rounded-full border px-2 py-1">
+                          {room.thermostat_type === "dual_setpoint"
+                            ? "Heating + Cooling"
+                            : "Heating only"}
+                        </span>
+                        <span className="rounded-full border px-2 py-1">
+                          Zone: {room.zone_name}
+                        </span>
+                      </div>
 
+                      <div className="grid gap-2 rounded-lg border border-border/70 bg-muted/30 p-3">
+                        <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                          Static schedules
+                        </div>
+                        <div className="grid gap-1 text-xs">
+                          {Object.entries(room.static_schedules || {})
+                            .filter(([, value]) => Boolean(value))
+                            .map(([key, value]) => (
+                              <div
+                                key={key}
+                                className="flex items-center justify-between gap-3"
+                              >
+                                <span className="text-muted-foreground">
+                                  {scheduleLabels[key] || key}
+                                </span>
+                                <code className="rounded bg-background px-1.5 py-0.5 text-[11px]">
+                                  {value}
+                                </code>
+                              </div>
+                            ))}
+                        </div>
+                      </div>
+
+                      {room.supports.occupancy && (
+                        <InputNumber
+                          label="Occupancy"
+                          value={config?.occupancy}
+                          onChange={(value) =>
+                            updateRoomValue(room.id, "occupancy", value)
+                          }
+                          minValue={0}
+                          step={1}
+                          isDisabled={!isEnabled}
+                        />
+                      )}
+
+                      {room.supports.heating_setpoint && (
+                        <InputNumber
+                          label="Heating setpoint"
+                          suffix="°C"
+                          value={config?.heating_setpoint}
+                          onChange={(value) =>
+                            updateRoomValue(room.id, "heating_setpoint", value)
+                          }
+                          step={1}
+                          isDisabled={!isEnabled}
+                        />
+                      )}
+
+                      {room.supports.cooling_setpoint && (
+                        <InputNumber
+                          label="Cooling setpoint"
+                          suffix="°C"
+                          value={config?.cooling_setpoint}
+                          onChange={(value) =>
+                            updateRoomValue(room.id, "cooling_setpoint", value)
+                          }
+                          step={1}
+                          isDisabled={!isEnabled}
+                        />
+                      )}
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          )}
+
+          <div className="flex flex-wrap items-center gap-3">
+            <Button
+              onClick={handleRunSimulation}
+              disabled={
+                roomsLoading ||
+                !!roomsError ||
+                selectedCount === 0 ||
+                simulationLoading
+              }
+              size="lg"
+            >
+              {simulationLoading ? (
+                <>
+                  <Spinner className="mr-2 size-4" />
+                  Running simulations...
+                </>
+              ) : (
+                "Run simulations"
+              )}
+            </Button>
+            <p className="text-sm text-muted-foreground">
+              This submits the new room-based payload to `/simulate`.
+            </p>
+          </div>
+
+          {simulationError && (
+            <Card className="text-destructive">
+              <CardContent>{simulationError}</CardContent>
+            </Card>
+          )}
         </CardContent>
       </Card>
 
-      {simulationResult?.error && (
-        <Card className="mb-4 text-destructive">
-          <CardContent>{simulationResult.error}</CardContent>
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center justify-between gap-3">
+            <span>Planned Payload</span>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowPayload((prev) => !prev)}
+            >
+              {showPayload ? "Hide" : "Show"}
+            </Button>
+          </CardTitle>
+        </CardHeader>
+        {showPayload && (
+          <CardContent>
+            <pre className="overflow-x-auto rounded-lg bg-slate-950 p-4 text-xs text-slate-100">
+              {JSON.stringify(plannedPayload, null, 2)}
+            </pre>
+          </CardContent>
+        )}
+      </Card>
+
+      {simulationResult && (
+        <Card className="mt-6">
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between gap-3">
+              <span>Simulation Response</span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowResponseJson((prev) => !prev)}
+              >
+                {showResponseJson ? "Hide JSON" : "Show JSON"}
+              </Button>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-4">
+            <div className="grid gap-3 md:grid-cols-4">
+              <div>
+                <div className="text-sm text-muted-foreground">Status</div>
+                <div className="font-semibold">{simulationResult.status}</div>
+              </div>
+              <div>
+                <div className="text-sm text-muted-foreground">Requested</div>
+                <div className="font-semibold">
+                  {simulationResult.summary?.requested_rooms ?? 0}
+                </div>
+              </div>
+              <div>
+                <div className="text-sm text-muted-foreground">Successful</div>
+                <div className="font-semibold">
+                  {simulationResult.summary?.successful_rooms ?? 0}
+                </div>
+              </div>
+              <div>
+                <div className="text-sm text-muted-foreground">Failed</div>
+                <div className="font-semibold">
+                  {simulationResult.summary?.failed_rooms ?? 0}
+                </div>
+              </div>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {simulationResult.room_runs?.map((roomRun) => (
+                <Card key={roomRun.room_id} size="sm">
+                  <CardHeader>
+                    <CardTitle className="flex items-center justify-between gap-3">
+                      <span>{roomRun.room_label}</span>
+                      <div className="flex flex-wrap items-center justify-end gap-2 text-xs">
+                        <span
+                          className={
+                            roomRun.status === "success"
+                              ? "rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 font-medium text-emerald-700"
+                              : "rounded-full border border-destructive/30 bg-destructive/10 px-2 py-1 font-medium text-destructive"
+                          }
+                        >
+                          {roomRun.status}
+                        </span>
+                        <span className="rounded-full border px-2 py-1 text-muted-foreground">
+                          code {roomRun.execution?.returncode ?? "n/a"}
+                        </span>
+                      </div>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="grid gap-2">
+                    {roomRun.error && (
+                      <p className="text-sm text-destructive">{roomRun.error}</p>
+                    )}
+                    {roomRun.execution?.success === false && !roomRun.error && (
+                      <p className="text-sm text-muted-foreground">
+                        The backend accepted the room payload, but the
+                        EnergyPlus process failed during execution.
+                      </p>
+                    )}
+                    {roomRun.execution?.success && (() => {
+                      const summary = getRoomSummaryRows(roomRun);
+                      return (
+                        <div className="grid gap-2 text-sm">
+                          {summary.period && (
+                            <div className="rounded-md bg-muted/50 px-2 py-1">
+                              <span className="text-muted-foreground">Period: </span>
+                              <strong>{summary.period}</strong>
+                            </div>
+                          )}
+                          <div className="grid grid-cols-2 gap-2">
+                            <div className="rounded-md bg-muted/50 px-2 py-1">
+                              <div className="text-xs text-muted-foreground">
+                                Avg temp
+                              </div>
+                              <div className="font-semibold">
+                                {formatNumber(summary.avgTemp, 2)} °C
+                              </div>
+                            </div>
+                            <div className="rounded-md bg-muted/50 px-2 py-1">
+                              <div className="text-xs text-muted-foreground">
+                                Avg occupancy
+                              </div>
+                              <div className="font-semibold">
+                                {formatNumber(summary.avgOccupancy, 2)}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="rounded-md bg-muted/50 px-2 py-1">
+                            <div className="text-xs text-muted-foreground">
+                              Thermal discomfort
+                            </div>
+                            <div className="font-semibold">
+                              {formatNumber(summary.discomfortHours, 2)} h
+                            </div>
+                          </div>
+                          {summary.energyRows.length > 0 && (
+                            <div className="grid gap-1 rounded-md bg-muted/50 p-2">
+                              <div className="text-xs text-muted-foreground">
+                                Energy summary
+                              </div>
+                              {summary.energyRows.map((row) => (
+                                <div
+                                  key={row.label}
+                                  className="flex items-center justify-between gap-3 text-xs"
+                                >
+                                  <span className="text-muted-foreground">
+                                    {row.label}
+                                  </span>
+                                  <strong>{row.value}</strong>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })()}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {showResponseJson && (
+              <pre className="overflow-x-auto rounded-lg bg-slate-950 p-4 text-xs text-slate-100">
+                {JSON.stringify(simulationResult, null, 2)}
+              </pre>
+            )}
+          </CardContent>
         </Card>
       )}
 
-      {simulationResult && !simulationResult.error && (
-        <div style={{ display: "grid", gap: "1.5rem" }}>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-              gap: "1rem",
-            }}
-          >
-            <Card>
-              <CardContent>
-                <div className="text-sm text-muted-foreground">Status</div>
-                <div className="text-lg font-bold">{simulationResult.status}</div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent>
-                <div className="text-sm text-muted-foreground">Engine</div>
-                <div className="text-lg font-bold">{simulationResult.simulation_engine}</div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent>
-                <div className="text-sm text-muted-foreground">Run ID</div>
-                <div className="text-base font-bold break-all">{simulationResult.run_id}</div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent>
-                <div className="text-sm text-muted-foreground">Execution</div>
-                <div className="text-lg font-bold">
-                  {simulationResult.execution?.success ? "Successful" : "Failed"}
-                </div>
-              </CardContent>
-            </Card>
+      {simulationResult &&
+        (heatingDieselChart.data.length > 0 ||
+          facilityElectricityChart.data.length > 0 ||
+          meanAirTemperatureChart.data.length > 0) && (
+          <div className="mt-6 grid gap-6">
+            {heatingDieselChart.data.length > 0 && (
+              <MultiSeriesLineChart
+                title="Daily Heating Diesel by Room"
+                data={heatingDieselChart.data}
+                series={heatingDieselChart.series}
+                unit="kWh"
+                decimals={2}
+              />
+            )}
+            {facilityElectricityChart.data.length > 0 && (
+              <MultiSeriesLineChart
+                title="Daily Facility Electricity by Room"
+                data={facilityElectricityChart.data}
+                series={facilityElectricityChart.series}
+                unit="kWh"
+                decimals={2}
+              />
+            )}
+            {meanAirTemperatureChart.data.length > 0 && (
+              <MultiSeriesLineChart
+                title="Daily Mean Air Temperature by Room"
+                data={meanAirTemperatureChart.data}
+                series={meanAirTemperatureChart.series}
+                unit="°C"
+                decimals={2}
+              />
+            )}
           </div>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Simulation Period</CardTitle>
-            </CardHeader>
-            <CardContent className="grid gap-4">
-              <div>
-                <div className="text-sm text-muted-foreground">Date Range</div>
-                <div className="font-bold">
-                  {formatDateLabel(periodInfo?.start_date)} – {formatDateLabel(periodInfo?.end_date)}
-                </div>
-              </div>
-
-              {periodInfo ? (
-                <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4">
-                  <div>
-                    <div className="text-sm text-muted-foreground">Environment Name</div>
-                    <div className="font-bold">
-                      {getEnvironmentNameLabel(periodInfo.environment_period_name)}
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="text-sm text-muted-foreground">Environment Index</div>
-                    <div className="font-bold">{periodInfo.environment_period_index}</div>
-                  </div>
-
-                  <div>
-                    <div className="text-sm text-muted-foreground">Environment Type</div>
-                    <div className="font-bold">
-                      {getEnvironmentTypeLabel(periodInfo.environment_type)}
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="text-sm text-muted-foreground">Warmup Excluded</div>
-                    <div className="font-bold">
-                      {periodInfo.warmup_excluded ? "Yes" : "No"}
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <p>No period information available.</p>
-              )}
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Energy Summary</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-3">
-                {energyCards.map(([key, label, unit]) => (
-                  <Card key={key} size="sm">
-                    <CardContent>
-                      <div className="text-sm text-muted-foreground">{label}</div>
-                      <div className="text-lg font-bold">
-                        {energySummary[key].kwh.toFixed(2)} {unit}
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Zone Temperature Summary</CardTitle>
-            </CardHeader>
-            <CardContent>
-            <table style={{ width: "100%", borderCollapse: "collapse" }}>
-              <thead>
-                <tr>
-                  <th className="px-1.5 py-2.5 border-b border-border text-left">Zone</th>
-                  <th className="px-1.5 py-2.5 border-b border-border text-left">Avg (°C)</th>
-                  <th className="px-1.5 py-2.5 border-b border-border text-left">Min (°C)</th>
-                  <th className="px-1.5 py-2.5 border-b border-border text-left">Max (°C)</th>
-                </tr>
-              </thead>
-              <tbody>
-                {zoneTemps.map((zone) => (
-                  <tr key={zone.zone_name}>
-                    <td className="px-1.5 py-2.5 border-b border-border text-left">{getZoneLabel(zone.zone_name)}</td>
-                    <td className="px-1.5 py-2.5 border-b border-border text-left">{zone.avg_mean_air_temperature_c.toFixed(2)}</td>
-                    <td className="px-1.5 py-2.5 border-b border-border text-left">{zone.min_mean_air_temperature_c.toFixed(2)}</td>
-                    <td className="px-1.5 py-2.5 border-b border-border text-left">{zone.max_mean_air_temperature_c.toFixed(2)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Zone Occupancy Summary</CardTitle>
-            </CardHeader>
-            <CardContent>
-            <table style={{ width: "100%", borderCollapse: "collapse" }}>
-              <thead>
-                <tr>
-                  <th className="px-1.5 py-2.5 border-b border-border text-left">Zone</th>
-                  <th className="px-1.5 py-2.5 border-b border-border text-left">Avg</th>
-                  <th className="px-1.5 py-2.5 border-b border-border text-left">Min</th>
-                  <th className="px-1.5 py-2.5 border-b border-border text-left">Max</th>
-                </tr>
-              </thead>
-              <tbody>
-                {zoneOccupancy.map((zone) => (
-                  <tr key={zone.zone_name}>
-                    <td className="px-1.5 py-2.5 border-b border-border text-left">{getZoneLabel(zone.zone_name)}</td>
-                    <td className="px-1.5 py-2.5 border-b border-border text-left">{zone.avg_occupant_count.toFixed(2)}</td>
-                    <td className="px-1.5 py-2.5 border-b border-border text-left">{zone.min_occupant_count.toFixed(2)}</td>
-                    <td className="px-1.5 py-2.5 border-b border-border text-left">{zone.max_occupant_count.toFixed(2)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            </CardContent>
-          </Card>
-
-          <SingleLineChart title="Daily Heating Diesel" data={dailyHeatingDiesel} unit="L" />
-          <SingleLineChart title="Daily Facility Electricity" data={dailyElectricityFacility} />
-
-          <ZoneLineChart title="Daily Zone Mean Air Temperature" data={zoneTemperatureChartData} unit="°C" />
-          <ZoneLineChart title="Daily Zone CO₂ Concentration" data={zoneCo2ChartData} unit="ppm" decimals={0} />
-          {/* <ZoneLineChart title="Daily Zone Occupancy" data={zoneOccupancyChartData} unit="people" /> */}
-          <ZoneLineChart title="Daily Zone Relative Humidity" data={zoneRelativeHumidityChartData} unit="%" decimals={1} />
-          <ZoneLineChart title="Daily Zone Operative Temperature" data={zoneOperativeTemperatureChartData} unit="°C" />
-          {/* <ZoneLineChart title="Daily Zone Heating Setpoint" data={zoneHeatingSetpointChartData} unit="°C" /> */}
-          {/* <ZoneLineChart title="Daily Zone Cooling Setpoint" data={zoneCoolingSetpointChartData} unit="°C" /> */}
-        </div>
-      )}
+        )}
     </div>
   );
 }

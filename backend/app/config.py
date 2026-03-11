@@ -6,6 +6,7 @@ APP_DIR = BASE_DIR / "app"
 
 RESOURCES_DIR = BASE_DIR / "resources"
 IDF_DIR = RESOURCES_DIR / "idf"
+SCHOOL_22_IDF_DIR = IDF_DIR / "school_22"
 WEATHER_DIR = RESOURCES_DIR / "weather"
 
 SIMULATION_ROOT = BASE_DIR / "simulation_runs"

@@ -34,3 +34,50 @@ export const pivotByZone = (data, valueField) =>
       return acc;
     }, {})
   );
+
+export const slugifySeriesKey = (value) =>
+  String(value)
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "") || "series";
+
+export const buildRoomSeriesChart = (
+  roomRuns,
+  dailyKey,
+  valueField,
+  roomLabelField = "room_label"
+) => {
+  const rowsByDate = {};
+  const series = [];
+
+  roomRuns
+    .filter((roomRun) => roomRun?.execution?.success)
+    .forEach((roomRun) => {
+      const points = roomRun.results?.daily_timeseries?.[dailyKey] || [];
+
+      if (!points.length) {
+        return;
+      }
+
+      const roomLabel = roomRun[roomLabelField] || roomRun.room_id;
+      const seriesKey = slugifySeriesKey(roomLabel);
+
+      series.push({
+        key: seriesKey,
+        label: roomLabel,
+      });
+
+      points.forEach((point) => {
+        if (!rowsByDate[point.date]) {
+          rowsByDate[point.date] = { date: point.date };
+        }
+        rowsByDate[point.date][seriesKey] = point[valueField];
+      });
+    });
+
+  return {
+    data: Object.values(rowsByDate).sort((a, b) => a.date.localeCompare(b.date)),
+    series,
+  };
+};

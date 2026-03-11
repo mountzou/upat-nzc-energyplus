@@ -56,6 +56,20 @@ def extract_results(sql_path: str):
     ORDER BY d.KeyValue;
     """
 
+    thermal_comfort_query = """
+    SELECT d.KeyValue AS zone_name,
+        v.VariableValue AS not_comfortable_hours
+    FROM ReportVariableData v
+    JOIN ReportVariableDataDictionary d
+    ON v.ReportVariableDataDictionaryIndex = d.ReportVariableDataDictionaryIndex
+    JOIN Time t
+    ON v.TimeIndex = t.TimeIndex
+    WHERE d.VariableName = 'Zone Thermal Comfort ASHRAE 55 Simple Model Summer or Winter Clothes Not Comfortable Time'
+    AND t.EnvironmentPeriodIndex = 3
+    AND t.WarmupFlag = 0
+    ORDER BY d.KeyValue;
+    """
+
     energy_query = """
     SELECT d.VariableName AS variable_name,
         SUM(v.VariableValue) AS total_joules
@@ -281,6 +295,7 @@ def extract_results(sql_path: str):
 
     zone_occupancy = _fetch_all(str(sql_path), zone_occupancy_query)
     zone_temperatures = _fetch_all(str(sql_path), zone_temperature_query)
+    thermal_comfort_rows = _fetch_all(str(sql_path), thermal_comfort_query)
     energy_rows = _fetch_all(str(sql_path), energy_query)
 
     period_rows = _fetch_all(str(sql_path), period_query)
@@ -411,6 +426,14 @@ def extract_results(sql_path: str):
             "kwh": total_joules * JOULES_TO_KWH,
         }
 
+    thermal_comfort_summary = [
+        {
+            "zone_name": row["zone_name"],
+            "not_comfortable_hours": row["not_comfortable_hours"],
+        }
+        for row in thermal_comfort_rows
+    ]
+
     return {
         "period_info": {
             "environment_period_index": period_info["EnvironmentPeriodIndex"] if period_info else None,
@@ -422,6 +445,7 @@ def extract_results(sql_path: str):
         },
         "zone_occupancy_summary": zone_occupancy,
         "zone_temperature_summary": zone_temperatures,
+        "thermal_comfort_summary": thermal_comfort_summary,
         "energy_summary": energy_summary,
         "daily_timeseries": {
             "heating_diesel_daily": daily_heating_diesel,

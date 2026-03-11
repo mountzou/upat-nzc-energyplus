@@ -2,12 +2,12 @@ from eppy.modeleditor import IDF
 
 from app.config import ENERGYPLUS_IDD
 
-
+# Load the EnergyPlus IDF file
 def load_idf(idf_path: str):
     IDF.setiddname(str(ENERGYPLUS_IDD))
     return IDF(idf_path)
 
-
+# Inspect the IDF file
 def inspect_idf(idf_path: str):
     idf = load_idf(idf_path)
 
@@ -29,7 +29,7 @@ def inspect_idf(idf_path: str):
         "object_summary": object_summary,
     }
 
-
+# Inspect the thermostat object
 def inspect_thermostat(idf_path: str):
     idf = load_idf(idf_path)
 
@@ -45,7 +45,7 @@ def inspect_thermostat(idf_path: str):
         "cooling_schedule_name": thermostat.Cooling_Setpoint_Temperature_Schedule_Name,
     }
 
-
+# Inspect the schedule by name
 def inspect_schedule_by_name(idf_path: str, schedule_name: str):
     idf = load_idf(idf_path)
 
@@ -59,7 +59,7 @@ def inspect_schedule_by_name(idf_path: str, schedule_name: str):
 
     return {"error": f"Schedule '{schedule_name}' not found"}
 
-
+# Update the value of a schedule compact object
 def update_schedule_compact_value(
     idf_path: str,
     schedule_name: str,
@@ -119,33 +119,52 @@ def update_schedule_compact_value(
         "updated_field": fieldname,
     }
 
-
+# Apply the setpoint schedule updates to the IDF file
 def apply_setpoint_schedule_updates(
     idf_path: str,
     heating_setpoint: float,
     cooling_setpoint: float,
 ):
+    return apply_room_setpoint_updates(
+        idf_path=idf_path,
+        heating_schedule_name="Htg-SetP-Sch",
+        heating_setpoint=heating_setpoint,
+        cooling_schedule_name="Clg-SetP-Sch",
+        cooling_setpoint=cooling_setpoint,
+    )
+
+
+def apply_room_setpoint_updates(
+    idf_path: str,
+    heating_schedule_name: str,
+    heating_setpoint: float,
+    cooling_schedule_name: str | None = None,
+    cooling_setpoint: float | None = None,
+):
     heating_edit = update_schedule_compact_value(
         idf_path=idf_path,
-        schedule_name="Htg-SetP-Sch",
+        schedule_name=heating_schedule_name,
         target_for="For: WeekDays",
         target_until="Until: 14:00",
         new_value=heating_setpoint,
     )
 
-    cooling_edit = update_schedule_compact_value(
-        idf_path=idf_path,
-        schedule_name="Clg-SetP-Sch",
-        target_for="For: WeekDays",
-        target_until="Until: 14:00",
-        new_value=cooling_setpoint,
-    )
+    cooling_edit = None
+    if cooling_schedule_name is not None and cooling_setpoint is not None:
+        cooling_edit = update_schedule_compact_value(
+            idf_path=idf_path,
+            schedule_name=cooling_schedule_name,
+            target_for="For: WeekDays",
+            target_until="Until: 14:00",
+            new_value=cooling_setpoint,
+        )
 
     return {
         "heating_schedule_edit": heating_edit,
         "cooling_schedule_edit": cooling_edit,
     }
 
+# Inspect the people objects
 def inspect_people_objects(idf_path: str):
     idf = load_idf(idf_path)
 
@@ -173,6 +192,7 @@ def inspect_people_objects(idf_path: str):
         "people_objects": results,
     }
 
+# Apply the zone occupancy updates to the IDF file
 def apply_zone_occupancy_updates(idf_path: str, zone_occupancy: dict):
     idf = load_idf(idf_path)
 
@@ -203,3 +223,30 @@ def apply_zone_occupancy_updates(idf_path: str, zone_occupancy: dict):
         "updated_count": len(updates),
         "updates": updates,
     }
+
+
+def apply_people_object_occupancy_update(
+    idf_path: str,
+    people_object_name: str,
+    occupancy: int,
+):
+    idf = load_idf(idf_path)
+
+    people_objects = idf.idfobjects["PEOPLE"]
+
+    for obj in people_objects:
+        if obj.Name != people_object_name:
+            continue
+
+        old_value = obj.Number_of_People
+        obj.Number_of_People = occupancy
+        idf.saveas(idf_path)
+
+        return {
+            "people_object": obj.Name,
+            "zone_name": obj.Zone_or_ZoneList_or_Space_or_SpaceList_Name,
+            "old_value": old_value,
+            "new_value": occupancy,
+        }
+
+    raise ValueError(f"People object '{people_object_name}' not found")
