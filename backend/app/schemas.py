@@ -8,7 +8,13 @@ class RoomSimulationInput(BaseModel):
 
 
 class SimulationInput(BaseModel):
+    school_id: str
     rooms: list[RoomSimulationInput]
+
+
+class SchoolMetadata(BaseModel):
+    id: str
+    label: str
 
 
 class RoomSupports(BaseModel):
@@ -39,6 +45,7 @@ class RoomStaticSchedules(BaseModel):
 
 
 class RoomMetadata(BaseModel):
+    school_id: str
     id: str
     label: str
     idf_file: str

@@ -24,10 +24,12 @@ def _prepare_weather_file(run_dir):
     return base_weather, run_weather
 
 
-def _run_room_simulation(parent_run_dir, room_input, base_weather):
-    room = get_room_by_id(room_input.room_id)
+def _run_room_simulation(parent_run_dir, school_id, room_input, base_weather):
+    room = get_room_by_id(school_id, room_input.room_id)
     if room is None:
-        raise ValueError(f"Unknown room_id '{room_input.room_id}'")
+        raise ValueError(
+            f"Unknown room_id '{room_input.room_id}' for school_id '{school_id}'"
+        )
     if not room["idf_exists"]:
         raise FileNotFoundError(f"IDF file not found for room '{room_input.room_id}'")
 
@@ -135,11 +137,16 @@ def run_simulation(sim_input: SimulationInput):
     room_runs = []
     for room_input in sim_input.rooms:
         try:
-            room_runs.append(_run_room_simulation(run_dir, room_input, base_weather))
+            room_runs.append(
+                _run_room_simulation(
+                    run_dir, sim_input.school_id, room_input, base_weather
+                )
+            )
         except Exception as exc:
             room_runs.append(
                 {
                     "room_id": room_input.room_id,
+                    "room_label": room_input.room_id,
                     "status": "failed",
                     "inputs": room_input.model_dump(),
                     "error": str(exc),
@@ -168,6 +175,7 @@ def run_simulation(sim_input: SimulationInput):
         "run_id": run_id,
         "run_dir": str(run_dir),
         "inputs": input_data,
+        "school_id": sim_input.school_id,
         "summary": {
             "requested_rooms": len(sim_input.rooms),
             "successful_rooms": success_count,

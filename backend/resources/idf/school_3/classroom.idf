@@ -1,0 +1,1175 @@
+! Location:                Kalamata, Greece
+!
+! Run Period (Weather File): Full Annual Simulation, Kalamata
+!
+! Floor Area:              59.3 m2
+! Number of Stories:       1
+
+  Version,25.2;
+
+  Timestep,6;
+
+  Building,
+    Classroom,             !- Name
+    0.0,                     !- North Axis {deg}
+    City,                    !- Terrain
+    0.05,                    !- Loads Convergence Tolerance Value {W}
+    0.05,                    !- Temperature Convergence Tolerance Value {deltaC}
+    FullExterior,            !- Solar Distribution
+    30,                      !- Maximum Number of Warmup Days
+    6;                       !- Minimum Number of Warmup Days
+
+  HeatBalanceAlgorithm,ConductionTransferFunction;
+
+  SurfaceConvectionAlgorithm:Inside,TARP;
+
+  SurfaceConvectionAlgorithm:Outside,DOE-2;  
+
+SimulationControl,
+    Yes,   !- Do Zone Sizing Calculation
+    Yes,   !- Do System Sizing Calculation (can stay No if you don't need it)
+    No,    !- Do Plant Sizing Calculation
+    No,   !- Run Simulation for Sizing Periods
+    Yes,   !- Run Simulation for Weather File Run Periods
+    No,    !- Do HVAC Sizing Simulation for Sizing Periods
+    1;     !- Maximum Number of HVAC Sizing Simulation Passes
+
+RunPeriod,
+    RunPeriod1,              !- Name
+    1,                       !- Begin Month
+    1,                       !- Begin Day of Month
+    ,                        !- Begin Year
+    12,                      !- End Month
+    31,                      !- End Day of Month
+    ,                        !- End Year
+    Tuesday,                 !- Day of Week for Start Day
+    Yes,                     !- Use Weather File Holidays and Special Days
+    Yes,                     !- Use Weather File Daylight Saving Period
+    No,                      !- Apply Weekend Holiday Rule
+    Yes,                     !- Use Weather File Rain Indicators
+    Yes;                     !- Use Weather File Snow Indicators  
+
+! ================================
+!  Official single-day holidays
+! ================================
+RunPeriodControl:SpecialDays,
+    Ochi_Day,
+    10/28,                 !- Start Date (October 28)
+    1,                     !- Special Day Type
+    Holiday;               !- Duration (days)
+
+RunPeriodControl:SpecialDays,
+    Polytechnic_Uprising_Day,
+    11/17,                 !- Start Date (November 17)
+    1,                     !- Special Day Type
+    Holiday;               !- Duration (days)
+
+RunPeriodControl:SpecialDays,
+    Independence_Day,
+    03/25,                 !- Start Date (March 25)
+    1,                     !- Special Day Type
+    Holiday;               !- Duration (days)
+
+RunPeriodControl:SpecialDays,
+    Labour_Day,
+    05/01,                 !- Start Date (May 1)
+    1,                     !- Special Day Type
+    Holiday;               !- Duration (days)
+
+! ================================
+!  Christmas break: Dec 24 – Jan 6
+!   Split into two periods to avoid year boundary issues
+! ================================
+RunPeriodControl:SpecialDays,
+    Christmas_Break_Dec,
+    12/24,          ! Start Date
+    8,              ! Duration in days
+    Holiday;        ! Special Day Type
+
+RunPeriodControl:SpecialDays,
+    Christmas_Break_Jan,
+    01/01,                 !- Start Date (Jan 1)
+    6,                     ! Duration in days
+    Holiday;               ! Special Day Type
+
+! ================================
+!  Easter holidays: Apr 10 – Apr 23
+! ================================
+RunPeriodControl:SpecialDays,
+    Easter_Break,
+    04/10,                      !- Start Date (Apr 10)
+    14,
+    Holiday;                    !- 10..23 inclusive
+
+! ================================
+!  Summer break: Jun 16 – Sep 10
+! ================================
+RunPeriodControl:SpecialDays,
+    Summer_Break,
+    06/16,                      !- Start Date (Jun 16)
+    87,
+    Holiday;                    !- 16 Jun .. 10 Sep inclusive
+
+Site:Location,
+  Kalamata_Greece,          !- Name
+  37.02,                    !- Latitude {deg}
+  22.11,                    !- Longitude {deg}
+  2.00,                     !- Time Zone {hr}
+  8.0;                      !- Elevation {m}
+
+SizingPeriod:DesignDay,
+  KalamataSummerDesignDay,      !- Name
+  6,                            !- Month
+  10,                           !- Day of Month
+  SummerDesignDay,              !- Day Type
+  33.2,                         !- Maximum Dry-Bulb Temperature {C}
+  11.0,                         !- Daily Dry-Bulb Temperature Range {C}
+  DefaultMultipliers,           !- Dry-Bulb Temperature Range Modifier Type
+  ,                             !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+  Wetbulb,                      !- Humidity Condition Type
+  23.0,                         !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+  ,                             !- Humidity Condition Day Schedule Name
+  ,                             !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+  ,                             !- Enthalpy at Maximum Dry-Bulb {J/kg}
+  ,                             !- Daily Wet-Bulb Temperature Range {deltaC}
+  101325,                       !- Barometric Pressure {Pa}
+  3.0,                          !- Wind Speed {m/s}
+  0,                            !- Wind Direction {deg}
+  No,                           !- Rain Indicator
+  No,                           !- Snow Indicator
+  No,                           !- Daylight Saving Time Indicator
+  ASHRAEClearSky,               !- Solar Model Indicator
+  ,                             !- Beam Solar Day Schedule Name
+  ,                             !- Diffuse Solar Day Schedule Name
+  ,                             !- Ashrae Clear Sky Optical Depth for Beam Irradiance (taub)
+  ,                             !- Ashrae Clear Sky Optical Depth for Diffuse Irradiance (taud)
+  1;                            !- Sky Clearness
+
+SizingPeriod:DesignDay,
+  KalamataWinterDesignDay,      !- Name
+  1,                            !- Month
+  21,                           !- Day of Month
+  WinterDesignDay,              !- Day Type
+  1.2,                          !- Maximum Dry-Bulb Temperature {C}
+  0.0,                          !- Daily Dry-Bulb Temperature Range {C}
+  DefaultMultipliers,           !- Dry-Bulb Temperature Range Modifier Type
+  ,                             !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+  WetBulb,                      !- Humidity Condition Type
+  -1.5,                         !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+  ,                             !- Humidity Condition Day Schedule Name
+  ,                             !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+  ,                             !- Enthalpy at Maximum Dry-Bulb {J/kg}
+  ,                             !- Daily Wet-Bulb Temperature Range {deltaC}
+  101325,                       !- Barometric Pressure {Pa}
+  3.0,                          !- Wind Speed {m/s}
+  0,                            !- Wind Direction {deg}
+  No,                           !- Rain Indicator
+  No,                           !- Snow Indicator
+  No,                           !- Daylight Saving Time Indicator
+  ASHRAEClearSky,               !- Solar Model Indicator
+  ,                             !- Beam Solar Day Schedule Name
+  ,                             !- Diffuse Solar Day Schedule Name
+  ,                             !- Ashrae Clear Sky Optical Depth for Beam Irradiance (taub)
+  ,                             !- Ashrae Clear Sky Optical Depth for Diffuse Irradiance (taud)
+  0.9;                          !- Sky Clearness
+
+Sizing:Zone,
+  Classroom,              !- Zone or ZoneList Name
+  SupplyAirTemperature,       !- Zone Cooling Design Supply Air Temperature Input Method
+  14.0,                       !- Cooling Design Supply Air Temperature {C}
+  ,                           !- Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,       !- Zone Heating Design Supply Air Temperature Input Method
+  40.0,                       !- Heating Design Supply Air Temperature {C}
+  ,                           !- Heating Design Supply Air Temp Difference {deltaC}
+  0.009,                      !- Zone Cooling Design Supply Air Humidity Ratio {kgWater/kgDryAir}
+  0.004,                      !- Zone Heating Design Supply Air Humidity Ratio {kgWater/kgDryAir}
+  ,                           !- Design Specification Outdoor Air Object Name (if you have one)
+  ,                           !- Zone Heating Sizing Factor
+  ,                           !- Zone Cooling Sizing Factor
+  ;                           !- Cooling Design Air Flow Method etc. (use defaults)
+
+Sizing:Plant,
+    HW-Loop,
+    Heating,
+    82.0,
+    11.0;
+
+!- =========================================================
+!- MATERIALS
+!- =========================================================
+
+Material,
+    Ext_Plaster,                 !- Name
+    Rough,                       !- Roughness
+    0.02,                        !- Thickness {m}
+    0.87,                        !- Conductivity {W/m-K}
+    1800,                        !- Density {kg/m3}
+    840;                         !- Specific Heat {J/kg-K}
+
+Material,
+    Hollow_Clay_Brick,           !- Name
+    MediumRough,                 !- Roughness
+    0.22,                        !- Thickness {m}
+    0.40,                        !- Conductivity {W/m-K}
+    900,                         !- Density {kg/m3}
+    840;                         !- Specific Heat {J/kg-K}     
+
+Material,
+    Int_Plaster_1,               !- Name
+    Smooth,                      !- Roughness
+    0.018,                       !- Thickness {m}
+    0.80,                        !- Conductivity {W/m-K}
+    1700,                        !- Density {kg/m3}
+    840;                         !- Specific Heat {J/kg-K}
+
+Material,
+    Int_Brick,
+    MediumRough,            !- Roughness
+    0.11,                   !- Thickness {m}
+    0.50,                   !- Conductivity {W/m-K}
+    1700,                   !- Density {kg/m3}
+    840;                    !- Specific Heat {J/kg-K}
+
+Material,
+    Roof_RC_Slab_180mm,
+    MediumRough,
+    0.18,
+    1.75,
+    2400,
+    900;
+
+Material,
+    Int_Plaster,
+    Smooth,
+    0.018,
+    0.80,
+    1600,
+    840;
+
+Material,
+    Floor_Tile_10mm,
+    Smooth,
+    0.01,
+    1.00,
+    2000,
+    800;
+
+Material,
+    Floor_Screed_50mm,
+    MediumSmooth,
+    0.05,
+    1.40,
+    2000,
+    900;
+
+Material,
+    Floor_Concrete_120mm,
+    MediumRough,
+    0.12,
+    1.75,
+    2300,
+    900;
+
+Material:NoMass,
+    Door_Steel,         !- Name
+    Rough,                  !- Roughness
+    0.222,                  !- Thermal Resistance {m2-K/W}  (R=1/4.5)
+    0.90,                   !- Thermal Absorptance
+    0.70,                   !- Solar Absorptance
+    0.70;                   !- Visible Absorptance
+
+Material:NoMass,
+    Door_Wood,        !- Name
+    MediumSmooth,           !- Roughness
+    0.357,                  !- Thermal Resistance {m2-K/W}  (R=1/2.8)
+    0.90,                   !- Thermal Absorptance
+    0.70,                   !- Solar Absorptance
+    0.70;                   !- Visible Absorptance
+
+
+!- =========================================================
+!- WINDOWS
+!- =========================================================
+
+WindowMaterial:SimpleGlazingSystem,
+    Window_OldSingle,         !- Name
+    6.0,                      !- U-Factor {W/m2-K}  (Uw)
+    0.85,                     !- Solar Heat Gain Coefficient (g-value)
+    0.88;                     !- Visible Transmittance
+
+Construction,
+    WindowConst_OldSingle,
+    Window_OldSingle;
+
+!- =========================================================
+!- CONSTRUCTIONS (assemblies)
+!- =========================================================
+
+Construction,
+    Ext_Wall,             !- Name
+    Ext_Plaster,          !- Outside Layer
+    Hollow_Clay_Brick,    !- Layer 2
+    Int_Plaster_1;          !- Inside Layer
+
+Construction,
+    Int_Wall,
+    Int_Plaster,
+    Int_Brick,
+    Int_Plaster;
+
+Construction,
+    Roof_Construction,
+    Roof_RC_Slab_180mm,
+    Int_Plaster;
+
+Construction,
+    Floor_Construction,
+    Floor_Tile_10mm,
+    Floor_Screed_50mm,
+    Floor_Concrete_120mm;    
+
+Construction,
+    DoorConst_Steel,
+    Door_Steel;
+
+Construction,
+    DoorConst_Wood,
+    Door_Wood;
+
+!Room design
+Floor:Detailed,
+  Floor1,                    !- Name
+  Floor_Construction,        !- Construction Name
+  Classroom,          !- Zone Name
+  ,                          !- Space Name
+  Adiabatic,                 !- Outside Boundary Condition
+  ,                          !- Outside Boundary Condition Object
+  NoSun,                     !- Sun Exposure
+  NoWind,                    !- Wind Exposure
+  0.0,                       !- View Factor to Ground
+  4,                         !- Number of Vertices
+  0.0,0.0,0.0,              !- Vertex 1 {m}
+  0.0,7.78,0.0,             !- Vertex 2 {m}
+  7.85,7.78,0.0,             !- Vertex 3 {m}
+  7.85,0.0,0.0;              !- Vertex 4 {m}
+
+RoofCeiling:Detailed,
+  Roof1,                !- Name
+  Roof_Construction,            !- Construction Name
+  Classroom,        !- Zone Name
+  ,                         !- Space Name
+  Outdoors,                       !- Outside Boundary Condition
+  ,                   !- Outside Boundary Condition Object
+  SunExposed,                         !- Sun Exposure
+  WindExposed,                        !- Wind Exposure
+  1.0,                      !- View Factor to Ground
+  4,                        !- Number of Vertices
+  0.0,0.0,3.0,              !- Vertex 1 {m}
+  0.0,7.78,3.0,             !- Vertex 2 {m}
+  7.85,7.78,3.0,             !- Vertex 3 {m}
+  7.85,0.0,3.0;              !- Vertex 4 {m}
+
+!South Wall
+Wall:Detailed,
+  Wall1_South,                   !- Name
+  Ext_Wall,                      !- Construction Name
+  Classroom,               !- Zone Name
+  ,                              !- Space Name
+  Outdoors,                       !- Outside Boundary Condition
+  ,                   !- Outside Boundary Condition Object
+  SunExposed,                         !- Sun Exposure
+  WindExposed,                        !- Wind Exposure
+  0.5,                           !- View Factor to Ground
+  4,                             !- Number of Vertices
+  0,0.0,3.0,                    !- V1 upper-left (UL)
+  0,0.0,0.0,                    !- V2 lower-left (LL)
+  7.85,0.0,0.0,                  !- V3 lower-right (LR)
+  7.85,0.0,3.0;                  !- V4 upper-right (UR)
+
+!East Wall
+Wall:Detailed,
+  Wall1_East,                    !- Name
+  Ext_Wall,                      !- Construction Name
+  Classroom,               !- Zone Name
+  ,                              !- Space Name
+  Outdoors,                       !- Outside Boundary Condition
+  ,                   !- Outside Boundary Condition Object
+  SunExposed,                         !- Sun Exposure
+  WindExposed,                        !- Wind Exposure
+  0.5,                           !- View Factor to Ground
+  4,                             !- Number of Vertices
+  7.85,0.0,3.0,                  !- V1 upper-left
+  7.85,0.0,0.0,                  !- V2 lower-left
+  7.85,7.78,0.0,                 !- V3 lower-right
+  7.85,7.78,3.0;                 !- V4 upper-right
+
+!North wall
+Wall:Detailed,
+  Wall1_North,                   !- Name
+  Int_Wall,                      !- Construction Name
+  Classroom ,               !- Zone Name
+  ,                              !- Space Name
+  Adiabatic,                       !- Outside Boundary Condition
+  ,                   !- Outside Boundary Condition Object
+  NoSun,                    !- Sun Exposure
+  NoWind,                   !- Wind Exposure
+  0.5,                           !- View Factor to Ground
+  4,                             !- Number of Vertices
+  0,7.78,3.0,                    !- V1 upper-left (UL)
+  7.85,7.78,3.0,                  !- V2 upper-right (UR)
+  7.85,7.78,0.0,                  !- V3 lower-right (LR)
+  0,7.78,0.0;                    !- V4 lower-left (LL)
+
+!West wall
+Wall:Detailed,
+  Wall1_West,                    !- Name
+  Ext_Wall,                      !- Construction Name
+  Classroom,                     !- Zone Name
+  ,                              !- Space Name
+  Outdoors,                      !- Outside Boundary Condition
+  ,                              !- Outside Boundary Condition Object
+  SunExposed,                    !- Sun Exposure
+  WindExposed,                   !- Wind Exposure
+  0.5,                           !- View Factor to Ground
+  4,                             !- Number of Vertices
+  0,0.0,3.0,                     ! UL
+  0,0.0,0.0,                     ! LL
+  0,7.78,0.0,                    ! LR
+  0,7.78,3.0;                    ! UR
+
+!Door
+FenestrationSurface:Detailed,
+  Door_Ext,          !- Name
+  Door,                     !- Surface Type
+  DoorConst_Steel,              !- Construction Name
+  Wall1_West,              !- Building Surface Name
+  ,                     !- Outside Boundary Condition Object  << REQUIRED
+  0,                        !- View Factor to Ground
+  ,                         !- Frame and Divider Name
+  1,                        !- Multiplier
+  4,                        !- Number of Vertices
+  0.0, 5.8, 2.10,          !- Vertex 1
+  0.0, 5.8, 0.10,          !- Vertex 2
+  0.0, 6.8, 0.10,          !- Vertex 3
+  0.0, 6.8, 2.10;          !- Vertex 4
+
+FenestrationSurface:Detailed,
+  Window1,
+  Window,
+  WindowConst_OldSingle,
+  Wall1_West,
+  ,
+  ,
+  ,
+  1,
+  4,
+  0.0, 0.0, 2.2,   ! UL
+  0.0, 0.0, 0.8,    ! LL
+  0.0, 5.8, 0.8,    ! LR
+  0.0, 5.8,  2.2;   ! UR 
+
+FenestrationSurface:Detailed,
+  Window2,
+  Window,
+  WindowConst_OldSingle,
+  Wall1_East,
+  ,
+  ,
+  ,
+  1,
+  4,
+  7.85, 3.0, 1.45,
+  7.85, 5.0, 1.45,
+  7.85, 5.0, 2.65,
+  7.85, 3.0, 2.65;   
+
+Zone,
+  Classroom,                 !- Name
+  0,                       !- Direction of Relative North {deg}
+  0,                       !- X Origin {m}
+  0,                       !- Y Origin {m}
+  0,                       !- Z Origin {m}
+  1,                       !- Type
+  1,                       !- Multiplier
+  3;                       !- Ceiling Height {m}
+ 
+
+GlobalGeometryRules,
+  UpperLeftCorner,         !- Starting Vertex Position
+  CounterClockWise,        !- Vertex Entry Direction
+  World;                   !- Coordinate System
+
+ScheduleTypeLimits,
+  Any Number;              !- Name
+
+ScheduleTypeLimits,
+  Fraction,                !- Name
+  0.0,                     !- Lower Limit Value
+  1.0,                     !- Upper Limit Value
+  CONTINUOUS;              !- Numeric Type
+
+ScheduleTypeLimits,
+    Control Type,
+    0,
+    4,
+    DISCRETE;
+
+ScheduleTypeLimits,
+    Temperature,
+    -60,
+    200,
+    CONTINUOUS,
+    Temperature;
+
+ScheduleTypeLimits,
+    On/Off,
+    0,
+    1,
+    DISCRETE;
+
+ScheduleTypeLimits,
+    FlowRate,
+    0.0,
+    10,
+    CONTINUOUS;
+
+People,
+    Room People,                !- Name
+    Classroom,                    !- Zone or ZoneList Name  (change to your zone name)
+    OCCUPY-ROOM,                !- Number of People Schedule Name
+    People,                !- Number of People Calculation Method
+    20,                         !- Number of People (when schedule = 1.0)
+    ,                      !- People per Zone Floor Area {person/m2}
+    ,                           !- Zone Floor Area per Person {m2/person}
+    0.3,                        !- Fraction Radiant (example)
+    ,                           !- Sensible Heat Fraction
+    ActSchd;                    !- Activity Level Schedule Name
+
+Schedule:Compact,
+    OCCUPY-ROOM,
+    Fraction,
+
+    Through: 12/31,
+    For: Weekdays,
+      Until: 08:10, 0.0,
+      Until: 09:00, 1.0,
+      Until: 09:10, 0.0,
+      Until: 10:00, 1.0,
+      Until: 10:10, 0.0,
+      Until: 11:00, 1.0,
+      Until: 11:10, 0.0,
+      Until: 12:00, 1.0,
+      Until: 12:10, 0.0,
+      Until: 13:00, 1.0,
+      Until: 24:00, 0.0,
+    For: Weekends Holiday SummerDesignDay WinterDesignDay CustomDay1 CustomDay2, 
+      Until: 24:00, 0.0;
+
+Schedule:Compact,           !Lighting schedule
+    LIGHTS-1,
+    On/Off,
+
+    Through: 12/31,
+    For: WeekDays,
+      Until: 08:10, 0.0,
+      Until: 09:00, 1.0,
+      Until: 09:10, 0.0,
+      Until: 10:00, 1.0,
+      Until: 10:10, 0.0,
+      Until: 11:00, 1.0,
+      Until: 11:10, 0.0,
+      Until: 12:00, 1.0,
+      Until: 12:10, 0.0,
+      Until: 13:00, 1.0,
+      Until: 24:00, 0.0,
+    For: Weekends Holiday SummerDesignDay WinterDesignDay CustomDay1 CustomDay2, 
+      Until: 24:00, 0;
+
+Schedule:Compact,            ! HVAC availability schedule
+    Heat-Avail,
+    Fraction,
+
+    Through: 12/31,
+    For: Weekdays,
+      Until: 08:10, 0.0,
+      Until: 09:00, 1.0,
+      Until: 09:10, 0.0,
+      Until: 10:00, 1.0,
+      Until: 10:10, 0.0,
+      Until: 11:00, 1.0,
+      Until: 24:00, 0.0,
+    For: Weekends Holiday SummerDesignDay WinterDesignDay CustomDay1 CustomDay2, 
+      Until: 24:00, 0.0;
+
+Schedule:Compact,
+    Zone Control Type Sched,
+    Control Type,
+    Through: 12/31,
+    For: Weekdays,
+      Until: 08:00, 0,
+      Until: 14:00, 1,
+      Until: 24:00, 0,
+    For: WinterDesignDay SummerDesignDay,
+      Until: 24:00, 1,
+    For: Weekends Holiday CustomDay1 CustomDay2,
+      Until: 24:00, 0.0;
+
+Schedule:Compact,
+  INFIL-SCH,
+  Fraction,
+  Through: 12/31,
+  For: AllDays,
+    Until: 24:00, 1.0;
+
+Schedule:Compact,
+    Vent-Sch,
+    Fraction,
+    Through: 12/31,
+    For: Weekdays,
+      Until: 08:00, 0.0,
+      Until: 08:10, 1.0,
+      Until: 09:00, 0.0,
+      Until: 09:10, 1.0,
+      Until: 10:00, 0.0,
+      Until: 10:10, 1.0,
+      Until: 11:00, 0.0,
+      Until: 11:10, 1.0,
+      Until: 12:00, 0.0,
+      Until: 12:10, 1.0,
+      Until: 13:00, 0.0,
+      Until: 13:10, 1.0,
+      Until: 24:00, 0.0,
+    For: Weekends Holiday SummerDesignDay WinterDesignDay CustomDay1 CustomDay2,
+      Until: 24:00, 0.0;
+
+Schedule:Compact,            !Activity Level Schedule
+    ActSchd,
+    Any Number,
+
+    Through: 12/31,
+    For: Weekdays,
+      Until: 08:10, 0.0,
+      Until: 09:00, 108.0,
+      Until: 09:10, 0.0,
+      Until: 10:00, 108.0,
+      Until: 10:10, 0.0,
+      Until: 11:00, 108.0,
+      Until: 11:10, 0.0,
+      Until: 12:00, 108.0,
+      Until: 12:10, 0.0,
+      Until: 13:00, 108.0,
+      Until: 24:00, 0,
+    For: Weekends Holiday SummerDesignDay WinterDesignDay CustomDay1 CustomDay2,
+      Until: 24:00, 0;
+
+Schedule:Compact,            !heating setpoint schedule 
+    Htg-SetP-Sch,
+    Temperature,
+
+    Through: 12/31,
+    For: WeekDays,
+      Until: 08:00, 16,
+      Until: 13:00, 17,
+      Until: 24:00, 16,
+    For: WeekEnds Holiday SummerDesignDay WinterDesignDay CustomDay1 CustomDay2,
+      Until: 24:00, 16;        
+
+Schedule:Constant,
+  Outdoor_CO2_Level,      !- Name
+  Any Number,             !- Schedule Type Limits Name
+  420.0;                  !- Value (ppm, typical background)
+
+
+ZoneAirContaminantBalance,
+  Yes,                    !- Carbon Dioxide Concentration
+  Outdoor_CO2_Level;      !- Outdoor Carbon Dioxide Schedule Name
+
+EnvironmentalImpactFactors,
+  1.0,   !- District Heating Efficiency
+  3.0,   !- District Cooling COP
+  1.0,   !- Steam Conversion Efficiency
+  0.0;   !- Total Carbon Equivalent Emission Factor From Pollutants
+
+FuelFactors,
+  Electricity,        !- Fuel Type
+  ,                   !- Source Energy Factor
+  ,                   !- Source Energy Schedule Name
+  66.4,               !- CO2 Emission Factor {kg/MJ}
+  ,                   !- CO2 Emission Factor Schedule Name
+  0.0,                !- CO Emission Factor {kg/MJ}
+  ,                   !- CO Emission Factor Schedule Name
+  0.0,                !- CH4 Emission Factor {kg/MJ}
+  ,                   !- CH4 Emission Factor Schedule Name
+  0.0,                !- NOx Emission Factor {kg/MJ}
+  ,                   !- NOx Emission Factor Schedule Name
+  0.0,                !- N2O Emission Factor {kg/MJ}
+  ,                   !- N2O Emission Factor Schedule Name
+  0.0,                !- SO2 Emission Factor {kg/MJ}
+  ,                   !- SO2 Emission Factor Schedule Name
+  0.0,                !- PM Emission Factor {kg/MJ}
+  ,                   !- PM Emission Factor Schedule Name
+  0.0,                !- PM10 Emission Factor {kg/MJ}
+  ,                   !- PM10 Emission Factor Schedule Name
+  0.0,                !- PM2.5 Emission Factor {kg/MJ}
+  ,                   !- PM2.5 Emission Factor Schedule Name
+  0.0,                !- NH3 Emission Factor {kg/MJ}
+  ,                   !- NH3 Emission Factor Schedule Name
+  0.0,                !- NMVOC Emission Factor {kg/MJ}
+  ;                   !- NMVOC Emission Factor Schedule Name
+
+FuelFactors,
+  Diesel,
+  ,
+  ,
+  90.8,             !- CO2 Emission Factor {kg/MJ}
+  ,
+  0.0,
+  ,
+  0.0,
+  ,
+  0.0,
+  ,
+  0.0,
+  ,
+  0.0,
+  ,
+  0.0,
+  ,
+  0.0,
+  ,
+  0.0,
+  ,
+  0.0,
+  ,
+  0.0,
+  ;
+
+ZoneControl:Thermostat,
+    Classroom Thermostat,                 !- Name
+    Classroom,                            !- Which zone it controls
+    Zone Control Type Sched,            !- Thermostat mode schedule (on/off)
+    ThermostatSetpoint:SingleHeating,    !- Type of thermostat
+    HtgSP-Control;                     !- Name of dual setpoint object
+
+ThermostatSetpoint:SingleHeating,
+    HtgSP-Control,                 !- Name
+    Htg-SetP-Sch;                  !- Setpoint Temperature Schedule Name
+
+Lights,
+    Classroom Lights,   !- Name
+    Classroom,          !- Zone or ZoneList Name
+    LIGHTS-1,                    !- Schedule Name
+    Watts/Area,                  !- Design Level Calculation Method
+    ,                            !- Lighting Level {W}
+    10.0,                        !- Watts per Zone Floor Area {W/m2}
+    ,                            !- Watts per Person {W/person}
+    0.0,                         !- Return Air Fraction
+    0.6,                         !- Fraction Radiant
+    0.2,                         !- Fraction Visible
+    1.0,                         !- Fraction Replaceable
+    General;                     !- End-Use Subcategory
+
+ZoneInfiltration:DesignFlowRate,
+    Infiltration Classroom, !- Name
+    Classroom,              !- Zone or ZoneList Name
+    INFIL-SCH,                       !- Schedule Name
+    AirChanges/Hour,                 !- Design Flow Rate Calculation Method
+    ,                                !- Design Flow Rate {m3/s}
+    ,                                !- Flow per Zone Floor Area {m3/s-m2}
+    ,                                !- Flow per Exterior Surface Area {m3/s-m2}
+    0.9,                             !- Air Changes per Hour {1/hr}
+    0.606,                  !- Constant Term Coefficient
+    0.03636,                !- Temperature Term Coefficient
+    0.1177,                 !- Velocity Term Coefficient
+    0.0;                    !- Velocity Squared Term Coefficient
+
+ZoneVentilation:DesignFlowRate,
+    Vent_Classroom,     !- Name
+    Classroom,          !- Zone Name
+    Vent-Sch,                    !- Schedule Name
+    Flow/Person,                 !- Design Flow Rate Calculation Method
+    ,                            !- Design Flow Rate {m3/s}
+    ,                            !- Flow Rate per Floor Area {m3/s-m2}
+    0.010,                       !- Flow Rate per Person {m3/s-person}  (10 L/s-person)
+    ,                            !- Air Changes per Hour {1/hr}
+    ,                            !- Ventilation Air Temperature Schedule Name
+    ,                            !- Ventilation Air Temperature Difference Schedule Name
+    ,                            !- Ventilation Air Flow Rate Fraction Schedule Name (optional)
+    0.0,                         !- Ventilation Air Fan Pressure Rise {Pa}  (0 = no fan power)
+    0.0,                         !- Ventilation Air Fan Total Efficiency
+    ,                            !- Constant Term Coefficient
+    ,                            !- Temperature Term Coefficient
+    ,                            !- Velocity Term Coefficient
+    ;                            !- Velocity Squared Term Coefficient   
+
+
+Schedule:Compact,
+    HW-Heating-Schedule,
+    Fraction,
+    Through: 12/31,
+    For: AllDays,
+      Until: 24:00, 1.0;
+      
+PlantEquipmentOperationSchemes,
+    HW-Loop-Operation,              !- Name
+    PlantEquipmentOperation:HeatingLoad,  !- Control Scheme 1 Object Type
+    HW-Heating-Operation,           !- Control Scheme 1 Name
+    HW-Heating-Schedule;            !- Control Scheme 1 Schedule Name
+
+PlantEquipmentOperation:HeatingLoad,
+    HW-Heating-Operation,           !- Name
+    0, 1e9,                         !- Load Range 1 Lower/Upper Limit {W}
+    HW-Boiler-EquipmentList;        !- Range 1 Equipment List Name
+
+PlantEquipmentList,
+    HW-Boiler-EquipmentList,
+    Boiler:HotWater,
+    HW-Boiler;
+
+
+
+Pipe:Adiabatic,
+    HW-Supply Outlet Pipe,
+    HW-SupplyPipeInlet,       !- Inlet Node Name
+    HW-SupplyOutlet;          !- Outlet Node Name
+
+Pipe:Adiabatic,
+    HW-Demand Inlet Pipe,
+    HW-Loop-DemandInlet,  !- Inlet Node Name
+    HW-Rad-Inlet;         !- Outlet Node Name
+
+Pipe:Adiabatic,
+    HW-Demand Outlet Pipe,
+    HW-Rad-Outlet,            !- Inlet Node Name
+    HW-Loop-DemandOutlet;     !- Outlet Node Name
+
+SetpointManager:Scheduled,
+    HW-Loop-SetpointManager,
+    Temperature,
+    HW-Setpoint-Schedule,
+    HW-SupplyOutlet;
+
+Schedule:Compact,
+    HW-Setpoint-Schedule,
+    Temperature,
+    Through: 12/31,
+    For: AllDays,
+      Until: 24:00, 60.0;
+
+Boiler:HotWater,                    ! Provides hot water for radiators. Automatically sizes capacity
+    HW-Boiler,                      !- Name
+    Diesel,                         !- Fuel Type
+    16500,                          !- Nominal Capacity {W} (Increased to 18kW to drive fuel use)
+    0.65,                           !- Nominal Thermal Efficiency
+    LeavingBoiler,                  !- Efficiency Curve Temperature Evaluation Variable
+    ,                               !- Normalized Boiler Efficiency Curve Name
+    0.0005,                         !- Design Water Flow Rate {m3/s} (Doubled flow)
+    0.05,                           !- Minimum Part Load Ratio
+    1.0,                            !- Maximum Part Load Ratio
+    0.9,                            !- Optimum Part Load Ratio
+    HW-Boiler-Inlet,                !- Boiler Water Inlet Node Name
+    HW-Boiler-Outlet,               !- Boiler Water Outlet Node Name
+    90.0,                           !- Water Outlet Upper Temperature Limit {C} (Higher temp = More fuel)
+    ConstantFlow,                   !- Boiler Flow Mode
+    15.0,                           !- On Cycle Parasitic Electric Load {W}
+    1.0;                            !- Sizing Factor
+
+Pump:ConstantSpeed,           ! Moves water through the heating loop. Without it, water does not circulate → no heating 
+    HW-Pump,                  !- Name
+    HW-SupplyInlet,           !- Inlet Node Name
+    HW-SupplyPumpOutlet,      !- Outlet Node Name
+    0.0005,                   !- Rated Flow Rate {m3/s} (Matched to Boiler)
+    40000,                    !- Rated Pump Head {Pa}
+    80,                       !- Rated Power Consumption {W}
+    0.8,                      !- Motor Efficiency
+    0.15,                     !- Fraction of Motor Inefficiencies to Fluid Stream
+    INTERMITTENT;             !- Pump Control Type
+
+ZoneHVAC:Baseboard:Convective:Water,
+    Zone Radiator,                        !- Name
+    Heat-Avail,                           !- Availability Schedule Name
+    HW-Rad-Inlet,                         !- Inlet Node Name (from plant)
+    HW-Rad-Outlet,                        !- Outlet Node Name (back to plant)
+    HeatingDesignCapacity,                !- Heating Design Capacity Method
+    16500,                                !- Heating Design Capacity {W} (Increased)
+    ,                                     !- Heating Design Capacity Per Floor Area {W/m2}
+    ,                                     !- Fraction of Autosized Heating Design Capacity
+    950,                                  !- U-Factor Times Area Value {W/K} (Very high UA to pull 5.5 GJ)
+    0.0005,                               !- Maximum Water Flow Rate {m3/s}
+    0.001;                                !- Convergence Tolerance
+
+PlantLoop,                                ! The “container” for all heating components:  pump, boiler, radiator, pipes, connectors, temperature control.
+  HW-Loop,                                !- Plant Loop Name
+  Water,                                  !- Fluid Type
+  ,                                       !- User Defined Fluid Type
+  HW-Loop-Operation,                      !- Plant Equipment Operation Scheme List Name
+  HW-SupplyOutlet,                        !- Loop Temperature Setpoint Schedule Name
+  90.0,                                   !- Maximum Loop Temperature {C}
+  10.0,                                   !- Minimum Loop Temperature {C}
+  0.0005,                                 !- Maximum Loop Flow Rate {m3/s}
+  0.0,                                    !- Minimum Loop Flow Rate {m3/s}
+  0.25,                                   !- Plant Loop Volume {m3} (150 Liters for higher thermal mass)
+  HW-SupplyInlet,                         !- Plant Side Inlet Node Name
+  HW-SupplyOutlet,                        !- Plant Side Outlet Node Name
+  HW-Loop-Supply Branches,                !- Plant Side Branch List Name
+  HW-Loop-Supply Connectors,              !- Plant Side Connector List Name
+  HW-Loop-DemandInlet,                    !- Demand Side Inlet Node Name
+  HW-Loop-DemandOutlet,                   !- Demand Side Outlet Node Name
+  HW-Loop-Demand Branches,                !- Demand Side Branch List Name
+  ,                                       !- Demand Side Connector List Name
+  Optimal;                                !- Load Distribution Scheme
+
+!Supply Side
+BranchList,                   ! Lists all components on the supply side. 
+    HW-Loop-Supply Branches,
+    HW-Supply Inlet Branch,
+    HW-Boiler Branch,
+    HW-Supply Outlet Branch;
+
+Branch,                        ! Water enters at HW-SupplyInlet
+    HW-Supply Inlet Branch,    !- Name
+    ,                          !- Pressure Drop Curve Name
+    Pump:ConstantSpeed,        !- Component 1 Object Type
+    HW-Pump,                   !- Component 1 Name (Pump pushes water into the boiler)
+    HW-SupplyInlet,            !- Component 1 Inlet Node Name
+    HW-SupplyPumpOutlet;       !- Component 1 Outlet Node Name
+  
+
+Branch,                        ! Boiler heats the water
+    HW-Boiler Branch,          !- Name
+    ,                          !- Pressure Drop Curve Name
+    Boiler:HotWater,           !- Component 1 Object Type
+    HW-Boiler,                 !- Component 1 Name
+    HW-Boiler-Inlet,           !- Component 1 Inlet Node Name
+    HW-Boiler-Outlet;          !- Component 1 Outlet Node Name
+
+Branch,                        ! Hot water exits at HW-SupplyOutlet
+    HW-Supply Outlet Branch,   !- Name
+    ,                          !- Pressure Drop Curve Name
+    Pipe:Adiabatic,            !- Component 1 Object Type
+    HW-Supply Outlet Pipe,     !- Component 1 Name
+    HW-SupplyPipeInlet,        !- Component 1 Inlet Node Name
+    HW-SupplyOutlet;           !- Component 1 Outlet Node Name
+
+!Connectors allow the loop to branch correctly.
+Connector:Splitter,            !Splitter divides the flow. 
+    HW-Supply Splitter,
+    HW-Supply Inlet Branch,    !- Inlet Branch Name
+    HW-Boiler Branch;          !- Outlet Branch 1 Name
+
+Connector:Mixer,               !Mixer recombines the loop flow.
+    HW-Supply Mixer,
+    HW-Supply Outlet Branch,   !- Outlet Branch Name
+    HW-Boiler Branch;          !- Inlet Branch 1 Name
+
+ConnectorList,
+    HW-Loop-Supply Connectors,
+    Connector:Splitter,
+    HW-Supply Splitter,
+    Connector:Mixer,
+    HW-Supply Mixer;
+
+!Demand Side
+BranchList,                        ! Lists all components on the demand side.
+    HW-Loop-Demand Branches,
+    HW-Demand Branch;
+
+Branch,
+    HW-Demand Branch,              !- Name
+    ,                              !- Pressure Drop Curve Name
+
+    Pipe:Adiabatic,                !- Component 1 Object Type
+    HW-Demand Inlet Pipe,          !- Component 1 Name
+    HW-Loop-DemandInlet,           !- Component 1 Inlet Node Name
+    HW-Rad-Inlet,                  !- Component 1 Outlet Node Name
+
+    ZoneHVAC:Baseboard:Convective:Water,  !- Component 2 Object Type
+    Zone Radiator,                 !- Component 2 Name
+    HW-Rad-Inlet,                  !- Component 2 Inlet Node Name
+    HW-Rad-Outlet,                 !- Component 2 Outlet Node Name
+
+    Pipe:Adiabatic,                !- Component 3 Object Type
+    HW-Demand Outlet Pipe,         !- Component 3 Name
+    HW-Rad-Outlet,                 !- Component 3 Inlet Node Name
+    HW-Loop-DemandOutlet;          !- Component 3 Outlet Node Name
+
+ZoneHVAC:EquipmentList,
+  Classroom Equipment,                 !- Name
+  SequentialLoad,                          !- Load Distribution Scheme
+
+  ZoneHVAC:Baseboard:Convective:Water,     !- Zone Equipment 1 Object Type
+  Zone Radiator,                           !- Zone Equipment 1 Name
+  1,                                       !- Cooling Sequence
+  1,                                       !- Heating or No-Load Sequence
+  ,                                       !- Sequential Cooling Fraction Schedule Name
+  ;                                       !- Sequential Heating Fraction Schedule Name
+
+NodeList,
+  Classroom Inlet Nodes,
+  Classroom Inlet Node;
+
+ZoneHVAC:EquipmentConnections,
+  Classroom,                 !- Zone Name
+  Classroom Equipment,       !- Zone Conditioning Equipment List Name
+  Classroom Inlet Nodes,     !- Zone Air Inlet Node or NodeList Name
+  ,                          !- Zone Air Exhaust Node or NodeList Name
+  Classroom Air Node,        !- Zone Air Node Name   <-- THIS was missing
+  Classroom Return Node;     !- Zone Return Air Node Name
+
+Output:VariableDictionary,Regular;
+
+Output:Surfaces:Drawing,DXF;
+
+Output:Constructions,Constructions;
+
+Output:Variable,
+  Classroom,
+  Zone Air CO2 Concentration,
+  Timestep;
+
+Output:Variable,
+  Classroom,
+  Zone Generic Air Contaminant Concentration,
+  Timestep;
+
+OutputControl:Table:Style,
+  TabAndHTML;
+
+Output:Table:SummaryReports,
+    AllSummary;                  !- Report Name 1
+
+Output:Meter,
+    Electricity:Facility,          !- Name
+    Timestep;                      !- Reporting Frequency
+
+Output:Meter,
+    Gas:Facility,                !- Name
+    Timestep;                      !- Reporting Frequency
+
+Output:Meter,
+    Heating:Diesel,         !- Name
+    Timestep;
+
+Output:Meter,
+    Cooling:Electricity,         !- Name
+    Timestep;
+
+Output:Meter,
+    InteriorLights:Electricity,  !- Name
+    Timestep;
+
+Output:Meter,
+    InteriorEquipment:Electricity,
+    Timestep;
+
+Output:Meter,
+  Carbon Equivalent:Facility,
+  Timestep;
+
+Output:Meter,
+  CarbonEquivalentEmissions:Carbon Equivalent,
+  Timestep;
+
+Output:Meter,
+  CO2:Facility,
+  RunPeriod;
+
+Output:Meter,
+  DieselEmissions:CO2,
+  RunPeriod;
+
+Output:Meter,
+  ElectricityEmissions:CO2,
+  RunPeriod;
+
+Output:Meter,
+  Fans:Electricity,
+  Timestep;
+
+Output:Variable,
+    Classroom,                   !- Key Value
+    Zone Mean Air Temperature,       !- Variable Name
+    Timestep;                          !- Reporting Frequency
+
+Output:Variable,
+    Classroom,
+    Zone Operative Temperature,
+    Timestep;
+
+Output:Variable,
+    Classroom,
+    Zone Air Relative Humidity,
+    Timestep;
+
+Output:Variable,
+    Classroom,
+    Zone Mean Radiant Temperature,
+    Timestep;
+
+Output:Variable,
+    Classroom,
+    Zone Total Internal Total Heating Rate,
+    Timestep;
+
+Output:Variable,
+    Classroom,
+    Zone Infiltration Air Change Rate,
+    Timestep;
+
+Output:Variable,
+    HW-Boiler,                  !- Boiler name
+    Boiler Heating Rate,
+    Timestep;
+
+Output:Variable,
+    HW-Boiler,
+    Boiler Heating Energy,
+    Timestep;
+
+Output:Variable,
+    HW-Pump,
+    Pump Electricity Rate,
+    Timestep;
+
+Output:Variable,
+    HW-Pump,
+    Pump Electricity Energy,
+    Timestep;
+
+Output:Variable,
+    Zone Radiator,
+    Baseboard Total Heating Rate,
+    Timestep;
+
+Output:Variable,
+    Zone Radiator,
+    Baseboard Total Heating Energy,
+    Timestep;
+
+Output:Variable,
+    Classroom,
+    Zone People Occupant Count,
+    Timestep;
+
+Output:Variable,
+    Classroom,
+    Zone Thermal Comfort ASHRAE 55 Simple Model Summer or Winter Clothes Not Comfortable Time,
+    RunPeriod;
+
+Output:Variable,
+    Classroom,
+    Zone People Total Heating Rate,
+    Timestep;
+
+Output:Variable,
+    Classroom,
+    Zone Electric Equipment Total Heating Rate,
+    Timestep;
+
+Output:Variable,
+    Classroom,
+    Zone Lights Total Heating Rate,
+    Timestep;
+
+Output:SQLite,
+    SimpleAndTabular;

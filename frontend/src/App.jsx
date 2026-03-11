@@ -80,6 +80,10 @@ const getRoomSummaryRows = (roomRun) => {
 
 function App() {
   const [backendStatus, setBackendStatus] = useState("Checking backend...");
+  const [schools, setSchools] = useState([]);
+  const [selectedSchoolId, setSelectedSchoolId] = useState("");
+  const [schoolsLoading, setSchoolsLoading] = useState(true);
+  const [schoolsError, setSchoolsError] = useState(null);
   const [rooms, setRooms] = useState([]);
   const [roomConfigs, setRoomConfigs] = useState({});
   const [roomsLoading, setRoomsLoading] = useState(true);
@@ -98,12 +102,45 @@ function App() {
   }, []);
 
   useEffect(() => {
+    const loadSchools = async () => {
+      setSchoolsLoading(true);
+      setSchoolsError(null);
+
+      try {
+        const res = await fetch(`${API_BASE_URL}/schools`);
+        if (!res.ok) {
+          throw new Error(`Failed to load schools (${res.status})`);
+        }
+
+        const data = await res.json();
+        setSchools(data);
+        setSelectedSchoolId((prev) => prev || data[0]?.id || "");
+      } catch (error) {
+        setSchoolsError(error.message);
+      } finally {
+        setSchoolsLoading(false);
+      }
+    };
+
+    loadSchools();
+  }, []);
+
+  useEffect(() => {
+    if (!selectedSchoolId) {
+      setRooms([]);
+      setRoomConfigs({});
+      setRoomsLoading(false);
+      return;
+    }
+
     const loadRooms = async () => {
       setRoomsLoading(true);
       setRoomsError(null);
 
       try {
-        const res = await fetch(`${API_BASE_URL}/rooms`);
+        const res = await fetch(
+          `${API_BASE_URL}/rooms?school_id=${selectedSchoolId}`
+        );
         if (!res.ok) {
           throw new Error(`Failed to load rooms (${res.status})`);
         }
@@ -119,7 +156,7 @@ function App() {
     };
 
     loadRooms();
-  }, []);
+  }, [selectedSchoolId]);
 
   const toggleRoom = (roomId) => {
     setRoomConfigs((prev) => ({
@@ -165,6 +202,7 @@ function App() {
     });
 
   const plannedPayload = {
+    school_id: selectedSchoolId,
     rooms: selectedRooms,
   };
 
@@ -240,8 +278,7 @@ function App() {
             <div>
               <div className="font-medium">Simulation scope</div>
               <div className="text-sm text-muted-foreground">
-                Select the rooms to configure. Inputs are rendered from
-                `GET /rooms`.
+                Select one school, then choose the rooms to configure.
               </div>
             </div>
             <div className="text-sm text-muted-foreground">
@@ -249,7 +286,42 @@ function App() {
             </div>
           </div>
 
-          {roomsLoading && (
+          <div className="rounded-lg border border-border bg-white px-4 py-3">
+            <label className="grid gap-2 text-sm">
+              <span className="font-medium">School</span>
+              <select
+                className="h-10 rounded-md border border-input bg-background px-3"
+                value={selectedSchoolId}
+                onChange={(event) => {
+                  setSelectedSchoolId(event.target.value);
+                  setSimulationResult(null);
+                  setSimulationError(null);
+                }}
+                disabled={schoolsLoading || !!schoolsError}
+              >
+                {schools.map((school) => (
+                  <option key={school.id} value={school.id}>
+                    {school.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+
+          {schoolsLoading && (
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Spinner className="size-4" />
+              Loading school list...
+            </div>
+          )}
+
+          {schoolsError && (
+            <Card className="text-destructive">
+              <CardContent>{schoolsError}</CardContent>
+            </Card>
+          )}
+
+          {roomsLoading && !schoolsError && (
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Spinner className="size-4" />
               Loading room metadata...
@@ -370,8 +442,11 @@ function App() {
             <Button
               onClick={handleRunSimulation}
               disabled={
+                schoolsLoading ||
+                !!schoolsError ||
                 roomsLoading ||
                 !!roomsError ||
+                !selectedSchoolId ||
                 selectedCount === 0 ||
                 simulationLoading
               }
@@ -387,7 +462,7 @@ function App() {
               )}
             </Button>
             <p className="text-sm text-muted-foreground">
-              This submits the new room-based payload to `/simulate`.
+              This submits the selected school and room payload to `/simulate`.
             </p>
           </div>
 
