@@ -1,15 +1,29 @@
 import { useEffect, useState } from "react";
 
 import MultiSeriesLineChart from "@/components/MultiSeriesLineChart";
+import authData from "@/data/auth.json";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 import { InputNumber } from "@/components/ui/input-number";
 import { Separator } from "@/components/ui/separator";
 import { Spinner } from "@/components/ui/spinner";
 import { buildRoomSeriesChart } from "@/utils/chartHelpers";
+import { DoorOpenIcon, LogOutIcon, PlayIcon } from "lucide-react";
 
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+const SESSION_AUTH_KEY = "upat_auth";
+const SESSION_SCHOOL_KEY = "upat_school_id";
 
 const buildInitialRoomConfigs = (rooms) =>
   Object.fromEntries(
@@ -52,6 +66,18 @@ const resultEnergyLabels = {
 const formatNumber = (value, digits = 1) =>
   typeof value === "number" ? value.toFixed(digits) : "n/a";
 
+const getStoredAuthState = () => {
+  if (typeof window === "undefined") {
+    return { isAuthenticated: false, schoolId: "", username: "" };
+  }
+
+  const isAuthenticated = window.sessionStorage.getItem(SESSION_AUTH_KEY) === "true";
+  const schoolId = window.sessionStorage.getItem(SESSION_SCHOOL_KEY) || "";
+  const username = schoolId || "";
+
+  return { isAuthenticated, schoolId, username };
+};
+
 const getRoomSummaryRows = (roomRun) => {
   const results = roomRun.results || {};
   const periodInfo = results.period_info || {};
@@ -79,9 +105,15 @@ const getRoomSummaryRows = (roomRun) => {
 };
 
 function App() {
+  const storedAuth = getStoredAuthState();
+  const [isAuthenticated, setIsAuthenticated] = useState(storedAuth.isAuthenticated);
+  const [authSchoolId, setAuthSchoolId] = useState(storedAuth.schoolId);
+  const [loginUsername, setLoginUsername] = useState(storedAuth.username);
+  const [loginPassword, setLoginPassword] = useState("");
+  const [loginError, setLoginError] = useState(null);
   const [backendStatus, setBackendStatus] = useState("Checking backend...");
   const [schools, setSchools] = useState([]);
-  const [selectedSchoolId, setSelectedSchoolId] = useState("");
+  const [selectedSchoolId, setSelectedSchoolId] = useState(storedAuth.schoolId);
   const [schoolsLoading, setSchoolsLoading] = useState(true);
   const [schoolsError, setSchoolsError] = useState(null);
   const [rooms, setRooms] = useState([]);
@@ -91,7 +123,6 @@ function App() {
   const [simulationLoading, setSimulationLoading] = useState(false);
   const [simulationResult, setSimulationResult] = useState(null);
   const [simulationError, setSimulationError] = useState(null);
-  const [showPayload, setShowPayload] = useState(false);
   const [showResponseJson, setShowResponseJson] = useState(false);
 
   useEffect(() => {
@@ -102,6 +133,19 @@ function App() {
   }, []);
 
   useEffect(() => {
+    document.title = isAuthenticated
+      ? "Simulations — SchoolHeroZ Digital Twin"
+      : "Login — SchoolHeroZ Digital Twin";
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setSchools([]);
+      setSelectedSchoolId("");
+      setSchoolsLoading(false);
+      return;
+    }
+
     const loadSchools = async () => {
       setSchoolsLoading(true);
       setSchoolsError(null);
@@ -114,7 +158,7 @@ function App() {
 
         const data = await res.json();
         setSchools(data);
-        setSelectedSchoolId((prev) => prev || data[0]?.id || "");
+        setSelectedSchoolId(authSchoolId || data[0]?.id || "");
       } catch (error) {
         setSchoolsError(error.message);
       } finally {
@@ -123,9 +167,16 @@ function App() {
     };
 
     loadSchools();
-  }, []);
+  }, [authSchoolId, isAuthenticated]);
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      setRooms([]);
+      setRoomConfigs({});
+      setRoomsLoading(false);
+      return;
+    }
+
     if (!selectedSchoolId) {
       setRooms([]);
       setRoomConfigs({});
@@ -156,7 +207,7 @@ function App() {
     };
 
     loadRooms();
-  }, [selectedSchoolId]);
+  }, [isAuthenticated, selectedSchoolId]);
 
   const toggleRoom = (roomId) => {
     setRoomConfigs((prev) => ({
@@ -257,55 +308,165 @@ function App() {
     }
   };
 
-  return (
-    <div className="mx-auto min-h-screen max-w-7xl p-8">
-      <div className="mb-4">
-        <h1 className="mb-1">upat-nzc-energyplus</h1>
-        <p className="text-muted-foreground">
-          Backend status: <strong>{backendStatus}</strong>
-        </p>
-      </div>
-      <Separator className="mb-6" />
+  const handleLogin = (event) => {
+    event.preventDefault();
+    setLoginError(null);
 
-      <Card className="mb-6 bg-gray-50 ring-0">
-        <CardHeader>
-          <CardTitle className="text-xl font-semibold">
-            Room Simulations
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="grid gap-6">
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-white px-4 py-3">
-            <div>
-              <div className="font-medium">Simulation scope</div>
-              <div className="text-sm text-muted-foreground">
-                Select one school, then choose the rooms to configure.
-              </div>
-            </div>
-            <div className="text-sm text-muted-foreground">
-              Selected rooms: <strong>{selectedCount}</strong>
+    const matchedUser = authData.users.find(
+      (user) =>
+        user.username === loginUsername.trim() &&
+        user.password === loginPassword &&
+        user.username === `school_${user.school_id.split("_")[1]}`
+    );
+
+    if (!matchedUser) {
+      setLoginError("Invalid username or password.");
+      return;
+    }
+
+    window.sessionStorage.setItem(SESSION_AUTH_KEY, "true");
+    window.sessionStorage.setItem(SESSION_SCHOOL_KEY, matchedUser.school_id);
+    setIsAuthenticated(true);
+    setAuthSchoolId(matchedUser.school_id);
+    setSelectedSchoolId(matchedUser.school_id);
+    setLoginPassword("");
+  };
+
+  const handleLogout = () => {
+    window.sessionStorage.removeItem(SESSION_AUTH_KEY);
+    window.sessionStorage.removeItem(SESSION_SCHOOL_KEY);
+    setIsAuthenticated(false);
+    setAuthSchoolId("");
+    setSelectedSchoolId("");
+    setSchools([]);
+    setRooms([]);
+    setRoomConfigs({});
+    setSimulationResult(null);
+    setSimulationError(null);
+    setLoginUsername("");
+    setLoginPassword("");
+    setLoginError(null);
+  };
+
+  const lockedSchool = schools.find((school) => school.id === authSchoolId);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="flex min-h-screen flex-col">
+        <div className="mx-auto flex w-full max-w-md flex-1 items-center p-8">
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle>Login</CardTitle>
+            </CardHeader>
+            <CardContent className="grid gap-4">
+              <form className="grid gap-4" onSubmit={handleLogin}>
+                <label className="grid gap-2 text-sm">
+                  <span className="font-medium">Username</span>
+                  <input
+                    className="h-10 rounded-md border border-input bg-background px-3"
+                    type="text"
+                    value={loginUsername}
+                    onChange={(event) => setLoginUsername(event.target.value)}
+                    placeholder="school_22"
+                  />
+                </label>
+                <label className="grid gap-2 text-sm">
+                  <span className="font-medium">Password</span>
+                  <input
+                    className="h-10 rounded-md border border-input bg-background px-3"
+                    type="password"
+                    value={loginPassword}
+                    onChange={(event) => setLoginPassword(event.target.value)}
+                    placeholder="1234"
+                  />
+                </label>
+                <Button type="submit" size="lg">
+                  Login
+                </Button>
+              </form>
+              {loginError && <p className="text-sm text-destructive">{loginError}</p>}
+              <p className="text-sm text-muted-foreground">
+                Use `school_X` as username and `1234` as password.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+        <footer className="mt-auto">
+          <Separator />
+          <div className="grid gap-1 px-8 py-4 text-center text-xs text-muted-foreground">
+            <div>Digital Twin — SchoolHeroZ Project</div>
+            <div>Designed and developed by University of Patras</div>
+          </div>
+        </footer>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex min-h-screen flex-col">
+      <div className="mx-auto w-full max-w-7xl flex-1 p-8">
+        <div className="mb-4 flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <div className="mb-1 flex flex-wrap items-center gap-3">
+              <h1>upat-nzc-energyplus</h1>
+              <span
+                className={
+                  backendStatus === "ok"
+                    ? "rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-emerald-700"
+                    : "rounded-full border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground"
+                }
+              >
+                Backend {backendStatus}
+              </span>
             </div>
           </div>
+          <div className="flex items-center gap-3">
+            <div className="rounded-full border px-3 py-1 text-sm text-muted-foreground">
+              {lockedSchool?.label || authSchoolId}
+            </div>
+            <Button variant="outline" onClick={handleLogout}>
+              <LogOutIcon className="mr-2 size-4" />
+              Logout
+            </Button>
+          </div>
+        </div>
+        <Separator className="mb-6" />
 
-          <div className="rounded-lg border border-border bg-white px-4 py-3">
-            <label className="grid gap-2 text-sm">
-              <span className="font-medium">School</span>
-              <select
-                className="h-10 rounded-md border border-input bg-background px-3"
-                value={selectedSchoolId}
-                onChange={(event) => {
-                  setSelectedSchoolId(event.target.value);
-                  setSimulationResult(null);
-                  setSimulationError(null);
-                }}
-                disabled={schoolsLoading || !!schoolsError}
-              >
-                {schools.map((school) => (
-                  <option key={school.id} value={school.id}>
-                    {school.label}
-                  </option>
-                ))}
-              </select>
-            </label>
+        <Card className="mb-6 bg-gray-50 ring-0">
+          <CardHeader>
+            <CardTitle className="text-xl font-semibold">School Simulations</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-6">
+          <div className="grid gap-3 lg:grid-cols-[1fr_280px]">
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-white px-4 py-3">
+              <div>
+                <div className="font-medium">Simulation scope</div>
+                <div className="text-sm text-muted-foreground">
+                  Choose the rooms to configure.
+                </div>
+              </div>
+              <div className="text-sm text-muted-foreground">
+                Selected rooms: <strong>{selectedCount}</strong>
+              </div>
+            </div>
+
+            <div className="rounded-lg border border-border bg-white px-4 py-3">
+              <label className="grid gap-2 text-sm">
+                <span className="font-medium">School</span>
+                <select
+                  className="h-10 cursor-not-allowed rounded-md border border-border bg-muted/60 px-3 text-muted-foreground opacity-100"
+                  value={selectedSchoolId}
+                  onChange={() => {}}
+                  disabled
+                >
+                  {selectedSchoolId && (
+                    <option value={selectedSchoolId}>
+                      {lockedSchool?.label || selectedSchoolId}
+                    </option>
+                  )}
+                </select>
+              </label>
+            </div>
           </div>
 
           {schoolsLoading && (
@@ -347,7 +508,10 @@ function App() {
                   >
                     <CardHeader>
                       <CardTitle className="flex items-center justify-between gap-3">
-                        <span>{room.label}</span>
+                        <span className="flex items-center gap-2">
+                          <DoorOpenIcon className="size-4 text-muted-foreground" />
+                          {room.label}
+                        </span>
                         <label className="flex items-center gap-2 text-sm font-normal text-muted-foreground">
                           <input
                             type="checkbox"
@@ -360,38 +524,65 @@ function App() {
                     </CardHeader>
                     <CardContent className="grid gap-4">
                       <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
-                        <span className="rounded-full border px-2 py-1">
-                          {room.thermostat_type === "dual_setpoint"
-                            ? "Heating + Cooling"
-                            : "Heating only"}
-                        </span>
+                        {room.supports.heating_setpoint && (
+                          <span className="rounded-full border border-rose-200 bg-rose-50 px-2 py-1 text-rose-700">
+                            Heating
+                          </span>
+                        )}
+                        {room.supports.cooling_setpoint && (
+                          <span className="rounded-full border border-sky-200 bg-sky-50 px-2 py-1 text-sky-700">
+                            Cooling
+                          </span>
+                        )}
                         <span className="rounded-full border px-2 py-1">
                           Zone: {room.zone_name}
                         </span>
                       </div>
 
-                      <div className="grid gap-2 rounded-lg border border-border/70 bg-muted/30 p-3">
-                        <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                          Static schedules
+                      <Drawer>
+                        <div className="grid gap-2 rounded-lg border border-border/70 bg-muted/30 p-3">
+                          <div className="flex items-center justify-between gap-3">
+                            <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                              Static schedules
+                            </div>
+                            <DrawerTrigger asChild>
+                              <Button variant="outline" size="sm">
+                                Show
+                              </Button>
+                            </DrawerTrigger>
+                          </div>
                         </div>
-                        <div className="grid gap-1 text-xs">
-                          {Object.entries(room.static_schedules || {})
-                            .filter(([, value]) => Boolean(value))
-                            .map(([key, value]) => (
-                              <div
-                                key={key}
-                                className="flex items-center justify-between gap-3"
-                              >
-                                <span className="text-muted-foreground">
-                                  {scheduleLabels[key] || key}
-                                </span>
-                                <code className="rounded bg-background px-1.5 py-0.5 text-[11px]">
-                                  {value}
-                                </code>
-                              </div>
-                            ))}
-                        </div>
-                      </div>
+                        <DrawerContent className="mx-auto w-full max-w-2xl">
+                          <DrawerHeader>
+                            <div>
+                              <DrawerTitle>{room.label} schedules</DrawerTitle>
+                              <DrawerDescription>
+                                Built-in schedules used by this room model.
+                              </DrawerDescription>
+                            </div>
+                            <DrawerClose />
+                          </DrawerHeader>
+                          <DrawerBody>
+                            <div className="grid gap-2 text-sm">
+                              {Object.entries(room.static_schedules || {})
+                                .filter(([, value]) => Boolean(value))
+                                .map(([key, value]) => (
+                                  <div
+                                    key={key}
+                                    className="flex items-center justify-between gap-3 rounded-md border bg-muted/30 px-3 py-2"
+                                  >
+                                    <span className="text-muted-foreground">
+                                      {scheduleLabels[key] || key}
+                                    </span>
+                                    <code className="rounded bg-background px-1.5 py-0.5 text-xs">
+                                      {value}
+                                    </code>
+                                  </div>
+                                ))}
+                            </div>
+                          </DrawerBody>
+                        </DrawerContent>
+                      </Drawer>
 
                       {room.supports.occupancy && (
                         <InputNumber
@@ -458,59 +649,37 @@ function App() {
                   Running simulations...
                 </>
               ) : (
-                "Run simulations"
+                <>
+                  <PlayIcon className="mr-2 size-4" />
+                  Run simulations
+                </>
               )}
             </Button>
-            <p className="text-sm text-muted-foreground">
-              This submits the selected school and room payload to `/simulate`.
-            </p>
           </div>
 
-          {simulationError && (
-            <Card className="text-destructive">
-              <CardContent>{simulationError}</CardContent>
-            </Card>
-          )}
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between gap-3">
-            <span>Planned Payload</span>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowPayload((prev) => !prev)}
-            >
-              {showPayload ? "Hide" : "Show"}
-            </Button>
-          </CardTitle>
-        </CardHeader>
-        {showPayload && (
-          <CardContent>
-            <pre className="overflow-x-auto rounded-lg bg-slate-950 p-4 text-xs text-slate-100">
-              {JSON.stringify(plannedPayload, null, 2)}
-            </pre>
+            {simulationError && (
+              <Card className="text-destructive">
+                <CardContent>{simulationError}</CardContent>
+              </Card>
+            )}
           </CardContent>
-        )}
-      </Card>
+        </Card>
 
-      {simulationResult && (
-        <Card className="mt-6">
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between gap-3">
-              <span>Simulation Response</span>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowResponseJson((prev) => !prev)}
-              >
-                {showResponseJson ? "Hide JSON" : "Show JSON"}
-              </Button>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="grid gap-4">
+        {simulationResult && (
+          <Card className="mt-6">
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between gap-3">
+                <span>Simulation Response</span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowResponseJson((prev) => !prev)}
+                >
+                  {showResponseJson ? "Hide JSON" : "Show JSON"}
+                </Button>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="grid gap-4">
             <div className="grid gap-3 md:grid-cols-4">
               <div>
                 <div className="text-sm text-muted-foreground">Status</div>
@@ -630,49 +799,58 @@ function App() {
               ))}
             </div>
 
-            {showResponseJson && (
-              <pre className="overflow-x-auto rounded-lg bg-slate-950 p-4 text-xs text-slate-100">
-                {JSON.stringify(simulationResult, null, 2)}
-              </pre>
-            )}
-          </CardContent>
-        </Card>
-      )}
-
-      {simulationResult &&
-        (heatingDieselChart.data.length > 0 ||
-          facilityElectricityChart.data.length > 0 ||
-          meanAirTemperatureChart.data.length > 0) && (
-          <div className="mt-6 grid gap-6">
-            {heatingDieselChart.data.length > 0 && (
-              <MultiSeriesLineChart
-                title="Daily Heating Diesel by Room"
-                data={heatingDieselChart.data}
-                series={heatingDieselChart.series}
-                unit="kWh"
-                decimals={2}
-              />
-            )}
-            {facilityElectricityChart.data.length > 0 && (
-              <MultiSeriesLineChart
-                title="Daily Facility Electricity by Room"
-                data={facilityElectricityChart.data}
-                series={facilityElectricityChart.series}
-                unit="kWh"
-                decimals={2}
-              />
-            )}
-            {meanAirTemperatureChart.data.length > 0 && (
-              <MultiSeriesLineChart
-                title="Daily Mean Air Temperature by Room"
-                data={meanAirTemperatureChart.data}
-                series={meanAirTemperatureChart.series}
-                unit="°C"
-                decimals={2}
-              />
-            )}
-          </div>
+              {showResponseJson && (
+                <pre className="overflow-x-auto rounded-lg bg-slate-950 p-4 text-xs text-slate-100">
+                  {JSON.stringify(simulationResult, null, 2)}
+                </pre>
+              )}
+            </CardContent>
+          </Card>
         )}
+
+        {simulationResult &&
+          (heatingDieselChart.data.length > 0 ||
+            facilityElectricityChart.data.length > 0 ||
+            meanAirTemperatureChart.data.length > 0) && (
+            <div className="mt-6 grid gap-6">
+              {heatingDieselChart.data.length > 0 && (
+                <MultiSeriesLineChart
+                  title="Daily Heating Diesel by Room"
+                  data={heatingDieselChart.data}
+                  series={heatingDieselChart.series}
+                  unit="kWh"
+                  decimals={2}
+                />
+              )}
+              {facilityElectricityChart.data.length > 0 && (
+                <MultiSeriesLineChart
+                  title="Daily Facility Electricity by Room"
+                  data={facilityElectricityChart.data}
+                  series={facilityElectricityChart.series}
+                  unit="kWh"
+                  decimals={2}
+                />
+              )}
+              {meanAirTemperatureChart.data.length > 0 && (
+                <MultiSeriesLineChart
+                  title="Daily Mean Air Temperature by Room"
+                  data={meanAirTemperatureChart.data}
+                  series={meanAirTemperatureChart.series}
+                  unit="°C"
+                  decimals={2}
+                />
+              )}
+            </div>
+          )}
+      </div>
+
+      <footer className="mt-auto">
+        <Separator />
+        <div className="grid gap-1 px-8 py-4 text-center text-xs text-muted-foreground">
+          <div>Digital Twin — SchoolHeroZ Project</div>
+          <div>Designed and developed by University of Patras</div>
+        </div>
+      </footer>
     </div>
   );
 }
