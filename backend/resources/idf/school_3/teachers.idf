@@ -1,0 +1,1311 @@
+! Location:                Kalamata, Greece
+!
+! Run Period (Weather File): Full Annual Simulation, Kalamata
+!
+! Floor Area:              59.3 m2
+! Number of Stories:       1
+
+  Version,25.2;
+
+  Timestep,6;
+
+  Building,
+    Teachers,                !- Name
+    0.0,                     !- North Axis {deg}
+    City,                    !- Terrain
+    0.05,                    !- Loads Convergence Tolerance Value {W}
+    0.05,                    !- Temperature Convergence Tolerance Value {deltaC}
+    FullExterior,            !- Solar Distribution
+    30,                      !- Maximum Number of Warmup Days
+    6;                       !- Minimum Number of Warmup Days
+
+  HeatBalanceAlgorithm,ConductionTransferFunction;
+
+  SurfaceConvectionAlgorithm:Inside,TARP;
+
+  SurfaceConvectionAlgorithm:Outside,DOE-2;  
+
+SimulationControl,
+    Yes,   !- Do Zone Sizing Calculation
+    Yes,    !- Do System Sizing Calculation (can stay No if you don't need it)
+    No,    !- Do Plant Sizing Calculation
+    Yes,   !- Run Simulation for Sizing Periods
+    Yes,   !- Run Simulation for Weather File Run Periods
+    No,    !- Do HVAC Sizing Simulation for Sizing Periods
+    1;     !- Maximum Number of HVAC Sizing Simulation Passes
+
+RunPeriod,
+    RunPeriod1,              !- Name
+    1,                       !- Begin Month
+    1,                       !- Begin Day of Month
+    ,                        !- Begin Year
+    12,                      !- End Month
+    31,                      !- End Day of Month
+    ,                        !- End Year
+    Tuesday,                 !- Day of Week for Start Day
+    Yes,                     !- Use Weather File Holidays and Special Days
+    Yes,                     !- Use Weather File Daylight Saving Period
+    No,                      !- Apply Weekend Holiday Rule
+    Yes,                     !- Use Weather File Rain Indicators
+    Yes;                     !- Use Weather File Snow Indicators  
+
+! ================================
+!  Official single-day holidays
+! ================================
+RunPeriodControl:SpecialDays,
+    Ochi_Day,
+    10/28,                 !- Start Date (October 28)
+    1,                     !- Special Day Type
+    Holiday;               !- Duration (days)
+
+RunPeriodControl:SpecialDays,
+    Polytechnic_Uprising_Day,
+    11/17,                 !- Start Date (November 17)
+    1,                     !- Special Day Type
+    Holiday;               !- Duration (days)
+
+RunPeriodControl:SpecialDays,
+    Independence_Day,
+    03/25,                 !- Start Date (March 25)
+    1,                     !- Special Day Type
+    Holiday;               !- Duration (days)
+
+RunPeriodControl:SpecialDays,
+    Labour_Day,
+    05/01,                 !- Start Date (May 1)
+    1,                     !- Special Day Type
+    Holiday;               !- Duration (days)
+
+! ================================
+!  Christmas break: Dec 24 – Jan 6
+!   Split into two periods to avoid year boundary issues
+! ================================
+RunPeriodControl:SpecialDays,
+    Christmas_Break_Dec,
+    12/24,          ! Start Date
+    8,              ! Duration in days
+    Holiday;        ! Special Day Type
+
+RunPeriodControl:SpecialDays,
+    Christmas_Break_Jan,
+    01/01,                 !- Start Date (Jan 1)
+    6,                     ! Duration in days
+    Holiday;               ! Special Day Type
+
+! ================================
+!  Easter holidays: Apr 10 – Apr 23
+! ================================
+RunPeriodControl:SpecialDays,
+    Easter_Break,
+    04/10,                      !- Start Date (Apr 10)
+    14,
+    Holiday;                    !- 10..23 inclusive
+
+! ================================
+!  Summer break: Jun 16 – Sep 10
+! ================================
+RunPeriodControl:SpecialDays,
+    Summer_Break,
+    06/16,                      !- Start Date (Jun 16)
+    87,
+    Holiday;                    !- 16 Jun .. 10 Sep inclusive
+
+Site:Location,
+  Kalamata_Greece,          !- Name
+  37.02,                    !- Latitude {deg}
+  22.11,                    !- Longitude {deg}
+  2.00,                     !- Time Zone {hr}
+  8.0;                      !- Elevation {m}
+
+SizingPeriod:DesignDay,
+  KalamataSummerDesignDay,      !- Name
+  6,                            !- Month
+  10,                           !- Day of Month
+  SummerDesignDay,              !- Day Type
+  33.2,                         !- Maximum Dry-Bulb Temperature {C}
+  11.0,                         !- Daily Dry-Bulb Temperature Range {C}
+  DefaultMultipliers,           !- Dry-Bulb Temperature Range Modifier Type
+  ,                             !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+  Wetbulb,                      !- Humidity Condition Type
+  23.0,                         !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+  ,                             !- Humidity Condition Day Schedule Name
+  ,                             !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+  ,                             !- Enthalpy at Maximum Dry-Bulb {J/kg}
+  ,                             !- Daily Wet-Bulb Temperature Range {deltaC}
+  101325,                       !- Barometric Pressure {Pa}
+  3.0,                          !- Wind Speed {m/s}
+  0,                            !- Wind Direction {deg}
+  No,                           !- Rain Indicator
+  No,                           !- Snow Indicator
+  No,                           !- Daylight Saving Time Indicator
+  ASHRAEClearSky,               !- Solar Model Indicator
+  ,                             !- Beam Solar Day Schedule Name
+  ,                             !- Diffuse Solar Day Schedule Name
+  ,                             !- Ashrae Clear Sky Optical Depth for Beam Irradiance (taub)
+  ,                             !- Ashrae Clear Sky Optical Depth for Diffuse Irradiance (taud)
+  1;                            !- Sky Clearness
+
+SizingPeriod:DesignDay,
+  KalamataWinterDesignDay,      !- Name
+  1,                            !- Month
+  21,                           !- Day of Month
+  WinterDesignDay,              !- Day Type
+  1.2,                          !- Maximum Dry-Bulb Temperature {C}
+  0.0,                          !- Daily Dry-Bulb Temperature Range {C}
+  DefaultMultipliers,           !- Dry-Bulb Temperature Range Modifier Type
+  ,                             !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+  WetBulb,                      !- Humidity Condition Type
+  -1.5,                         !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+  ,                             !- Humidity Condition Day Schedule Name
+  ,                             !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+  ,                             !- Enthalpy at Maximum Dry-Bulb {J/kg}
+  ,                             !- Daily Wet-Bulb Temperature Range {deltaC}
+  101325,                       !- Barometric Pressure {Pa}
+  3.0,                          !- Wind Speed {m/s}
+  0,                            !- Wind Direction {deg}
+  No,                           !- Rain Indicator
+  No,                           !- Snow Indicator
+  No,                           !- Daylight Saving Time Indicator
+  ASHRAEClearSky,               !- Solar Model Indicator
+  ,                             !- Beam Solar Day Schedule Name
+  ,                             !- Diffuse Solar Day Schedule Name
+  ,                             !- Ashrae Clear Sky Optical Depth for Beam Irradiance (taub)
+  ,                             !- Ashrae Clear Sky Optical Depth for Diffuse Irradiance (taud)
+  0.9;                          !- Sky Clearness
+
+Sizing:Zone,
+  Teachers_Office,                     !- Zone or ZoneList Name
+  SupplyAirTemperature,       !- Zone Cooling Design Supply Air Temperature Input Method
+  14.0,                       !- Cooling Design Supply Air Temperature {C}
+  ,                           !- Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,       !- Zone Heating Design Supply Air Temperature Input Method
+  40.0,                       !- Heating Design Supply Air Temperature {C}
+  ,                           !- Heating Design Supply Air Temp Difference {deltaC}
+  0.009,                      !- Zone Cooling Design Supply Air Humidity Ratio {kgWater/kgDryAir}
+  0.004,                      !- Zone Heating Design Supply Air Humidity Ratio {kgWater/kgDryAir}
+  ,                           !- Design Specification Outdoor Air Object Name (if you have one)
+  ,                           !- Zone Heating Sizing Factor
+  ,                           !- Zone Cooling Sizing Factor
+  ;                           !- Cooling Design Air Flow Method etc. (use defaults)
+
+Sizing:Plant,
+    HW-Loop,
+    Heating,
+    82.0,
+    11.0;
+
+Sizing:System,
+  Haier_AirLoop,                 !- AirLoop Name
+  Sensible,                      !- Type of Load to Size On
+  autosize,                      !- Design Outdoor Air Flow Rate {m3/s}
+  0.3,                           !- Minimum System Air Flow Ratio
+  4.5,                           !- Preheat Design Temperature {C}
+  0.008,                         !- Preheat Design Humidity Ratio {kgWater/kgDryAir}
+  11.0,                          !- Precool Design Temperature {C}
+  0.008,                         !- Precool Design Humidity Ratio {kgWater/kgDryAir}
+  12.8,                          !- Central Cooling Design Supply Air Temperature {C}
+  16.7,                          !- Central Heating Design Supply Air Temperature {C}
+  NonCoincident,                 !- Sizing Option
+  No,                            !- 100% Outdoor Air in Cooling
+  No,                            !- 100% Outdoor Air in Heating
+  0.0085,                        !- Central Cooling Design Supply Air Humidity Ratio {kgWater/kgDryAir}
+  0.0080,                        !- Central Heating Design Supply Air Humidity Ratio {kgWater/kgDryAir}
+  DesignDay,                     !- Cooling Supply Air Flow Rate Method
+  0.333,                         !- Cooling Supply Air Flow Rate {m3/s}
+  ,                              !- Cooling Supply Air Flow Rate Per Floor Area {m3/s-m2}
+  ,                              !- Cooling Fraction of Autosized Cooling Supply Air Flow Rate {-}
+  ,                              !- Cooling Supply Air Flow Rate Per Unit Cooling Capacity {m3/s-W}
+  DesignDay,                     !- Heating Supply Air Flow Rate Method
+  0.0,                           !- Heating Supply Air Flow Rate {m3/s}  (since you don't want air heating)
+  ,                              !- Heating Supply Air Flow Rate Per Floor Area {m3/s-m2}
+  ,                              !- Heating Fraction of Autosized Heating Supply Air Flow Rate {-}
+  ,                              !- Heating Fraction of Autosized Cooling Supply Air Flow Rate {-}
+  ,                              !- Heating Supply Air Flow Rate Per Unit Heating Capacity {m3/s-W}
+  ZoneSum,                       !- System Outdoor Air Method
+  0.5,                           !- Zone Maximum Outdoor Air Fraction
+  CoolingDesignCapacity,         !- Cooling Design Capacity Method
+  autosize,                      !- Cooling Design Capacity {W}
+  ,                              !- Cooling Design Capacity Per Floor Area {W/m2}
+  ,                              !- Fraction of Autosized Cooling Design Capacity {-}
+  HeatingDesignCapacity,         !- Heating Design Capacity Method
+  0.0,                           !- Heating Design Capacity {W} (disabled)
+  ,                              !- Heating Design Capacity Per Floor Area {W/m2}
+  ,                              !- Fraction of Autosized Heating Design Capacity {-}
+  ,                              !- Central Cooling Capacity Control Method
+  ,                              !- Occupant Diversity
+  ;                              !- Heating Coil Sizing Method  
+
+!- =========================================================
+!- MATERIALS
+!- =========================================================
+
+Material,
+    Ext_Plaster,                 !- Name
+    Rough,                       !- Roughness
+    0.02,                        !- Thickness {m}
+    0.87,                        !- Conductivity {W/m-K}
+    1800,                        !- Density {kg/m3}
+    840;                         !- Specific Heat {J/kg-K}
+
+Material,
+    Hollow_Clay_Brick,           !- Name
+    MediumRough,                 !- Roughness
+    0.22,                        !- Thickness {m}
+    0.40,                        !- Conductivity {W/m-K}
+    900,                         !- Density {kg/m3}
+    840;                         !- Specific Heat {J/kg-K}     
+
+Material,
+    Int_Plaster_1,               !- Name
+    Smooth,                      !- Roughness
+    0.018,                       !- Thickness {m}
+    0.80,                        !- Conductivity {W/m-K}
+    1700,                        !- Density {kg/m3}
+    840;                         !- Specific Heat {J/kg-K}
+
+Material,
+    Int_Brick,
+    MediumRough,            !- Roughness
+    0.11,                   !- Thickness {m}
+    0.50,                   !- Conductivity {W/m-K}
+    1700,                   !- Density {kg/m3}
+    840;                    !- Specific Heat {J/kg-K}
+
+Material,
+    Roof_RC_Slab_180mm,
+    MediumRough,
+    0.18,
+    1.75,
+    2400,
+    900;
+
+Material,
+    Int_Plaster,
+    Smooth,
+    0.018,
+    0.80,
+    1600,
+    840;
+
+Material,
+    Floor_Tile_10mm,
+    Smooth,
+    0.01,
+    1.00,
+    2000,
+    800;
+
+Material,
+    Floor_Screed_50mm,
+    MediumSmooth,
+    0.05,
+    1.40,
+    2000,
+    900;
+
+Material,
+    Floor_Concrete_120mm,
+    MediumRough,
+    0.12,
+    1.75,
+    2300,
+    900;
+
+Material:NoMass,
+    Door_Steel,         !- Name
+    Rough,                  !- Roughness
+    0.222,                  !- Thermal Resistance {m2-K/W}  (R=1/4.5)
+    0.90,                   !- Thermal Absorptance
+    0.70,                   !- Solar Absorptance
+    0.70;                   !- Visible Absorptance
+
+Material:NoMass,
+    Door_Wood,        !- Name
+    MediumSmooth,           !- Roughness
+    0.357,                  !- Thermal Resistance {m2-K/W}  (R=1/2.8)
+    0.90,                   !- Thermal Absorptance
+    0.70,                   !- Solar Absorptance
+    0.70;                   !- Visible Absorptance
+
+
+!- =========================================================
+!- WINDOWS
+!- =========================================================
+
+WindowMaterial:SimpleGlazingSystem,
+    Window_OldSingle,         !- Name
+    6.0,                      !- U-Factor {W/m2-K}  (Uw)
+    0.85,                     !- Solar Heat Gain Coefficient (g-value)
+    0.88;                     !- Visible Transmittance
+
+Construction,
+    WindowConst_OldSingle,
+    Window_OldSingle;
+
+!- =========================================================
+!- CONSTRUCTIONS (assemblies)
+!- =========================================================
+
+Construction,
+    Ext_Wall,             !- Name
+    Ext_Plaster,          !- Outside Layer
+    Hollow_Clay_Brick,    !- Layer 2
+    Int_Plaster_1;          !- Inside Layer
+
+Construction,
+    Int_Wall,
+    Int_Plaster,
+    Int_Brick,
+    Int_Plaster;
+
+Construction,
+    Roof_Construction,
+    Roof_RC_Slab_180mm,
+    Int_Plaster;
+
+Construction,
+    Floor_Construction,
+    Floor_Tile_10mm,
+    Floor_Screed_50mm,
+    Floor_Concrete_120mm;    
+
+Construction,
+    DoorConst_Steel,
+    Door_Steel;
+
+Construction,
+    DoorConst_Wood,
+    Door_Wood;
+
+!- =========================================================
+!- ZONES (Ceiling Height = 3m, Ground floor)
+!- =========================================================
+
+Zone,
+  Teachers_Office,         !- Name
+  0,                       !- Direction of Relative North {deg}
+  0, 0, 0,                 !- X Origin, Y Origin, Z Origin {m}
+  1,                       !- Type
+  1,                       !- Multiplier
+  3;                       !- Ceiling Height {m}
+
+!- =========================================================
+!- Teachers_Office
+!- =========================================================
+
+Floor:Detailed,
+  Floor2,                    !- Name
+  Floor_Construction,        !- Construction Name
+  Teachers_Office,           !- Zone Name
+  ,                          !- Space Name
+  Ground,                    !- Outside Boundary Condition
+  ,                          !- Outside Boundary Condition Object
+  NoSun,                     !- Sun Exposure
+  NoWind,                    !- Wind Exposure
+  0.0,                       !- View Factor to Ground
+  4,                         !- Number of Vertices
+  0.0,0.0,0.0,               !- Vertex 1 {m}
+  0.0,4.53,0.0,              !- Vertex 2 {m}
+  7.9,4.53,0.0,              !- Vertex 3 {m}
+  7.9,0.0,0.0;               !- Vertex 4 {m}
+
+
+RoofCeiling:Detailed,
+  Roof2,                    !- Name
+  Roof_Construction,            !- Construction Name
+  Teachers_Office,          !- Zone Name
+  ,                         !- Space Name
+  Adiabatic,                !- Outside Boundary Condition
+  ,                         !- Outside Boundary Condition Object
+  NoSun,                    !- Sun Exposure
+  NoWind,                   !- Wind Exposure
+  1.0,                      !- View Factor to Ground
+  4,                        !- Number of Vertices
+  0.0,0.0,3.0,               !- Vertex 1 {m}
+  0.0,4.53,3.0,              !- Vertex 2 {m}
+  7.9,4.53,3.0,             !- Vertex 3 {m}
+  7.9,0.0,3.0;              !- Vertex 4 {m}
+
+!South Wall
+Wall:Detailed,
+  Wall2_South1,                  !- Name
+  Int_Wall,                      !- Construction Name
+  Teachers_Office,               !- Zone Name
+  ,                              !- Space Name
+  Outdoors,                      !- Outside Boundary Condition
+  ,                              !- Outside Boundary Condition Object
+  NoSun,                         !- Sun Exposure
+  NoWind,                        !- Wind Exposure
+  0.5,                           !- View Factor to Ground
+  4,                             !- Number of Vertices
+  0.0,0.0,3.0,                   !- V1 upper-left (UL)
+  0.0,0.0,0.0,                   !- V2 lower-left (LL)
+  3.0,0.0,0.0,                   !- V3 lower-right (LR)
+  3.0,0.0,3.0;                   !- V4 upper-right (UR)
+
+Wall:Detailed,
+  Wall2_South2,                  !- Name
+  Int_Wall,                      !- Construction Name
+  Teachers_Office,               !- Zone Name
+  ,                              !- Space Name
+  Adiabatic,                     !- Outside Boundary Condition
+  ,                              !- Outside Boundary Condition Object
+  NoSun,                         !- Sun Exposure
+  NoWind,                        !- Wind Exposure
+  0.5,                           !- View Factor to Ground
+  4,                             !- Number of Vertices
+  3.0,0.0,3.0,                   !- V1 upper-left (UL)
+  3.0,0.0,0.0,                   !- V2 lower-left (LL)
+  7.95,0.0,0.0,                  !- V3 lower-right (LR)
+  7.95,0.0,3.0;                  !- V4 upper-right (UR)
+
+!East Wall
+Wall:Detailed,
+  Wall2_East,                    !- Name
+  Ext_Wall,                      !- Construction Name
+  Teachers_Office,               !- Zone Name
+  ,                              !- Space Name
+  Adiabatic,                     !- Outside Boundary Condition
+  ,                              !- Outside Boundary Condition Object
+  NoSun,                         !- Sun Exposure
+  NoWind,                        !- Wind Exposure
+  0.5,                           !- View Factor to Ground
+  4,                             !- Number of Vertices
+  7.95,0.0,3.0,                  !- V1 upper-left
+  7.95,0.0,0.0,                  !- V2 lower-left
+  7.95,4.53,0.0,                 !- V3 lower-right
+  7.95,4.53,3.0;                 !- V4 upper-right
+
+!North wall 1
+Wall:Detailed,
+  Wall2_North,                   !- Name
+  Ext_Wall,                      !- Construction Name
+  Teachers_Office,               !- Zone Name
+  ,                              !- Space Name
+  Outdoors,                      !- Outside Boundary Condition
+  ,                              !- Outside Boundary Condition Object
+  SunExposed,                    !- Sun Exposure
+  WindExposed,                   !- Wind Exposure
+  0.5,                           !- View Factor to Ground
+  4,                             !- Number of Vertices
+  0.0,4.53,3.0,                  !- V1 upper-left (UL)
+  7.9,4.53,3.0,                  !- V2 upper-right (UR)
+  7.9,4.53,0.0,                  !- V3 lower-right (LR)
+  0.0,4.53,0.0;                  !- V4 lower-left (LL)
+
+!West wall
+Wall:Detailed,
+  Wall2_West,                    !- Name
+  Ext_Wall,                      !- Construction Name
+  Teachers_Office,               !- Zone Name
+  ,                              !- Space Name
+  Outdoors,                      !- Outside Boundary Condition
+  ,                              !- Outside Boundary Condition Object
+  SunExposed,                    !- Sun Exposure
+  WindExposed,                   !- Wind Exposure
+  0.5,                           !- View Factor to Ground
+  4,                             !- Number of Vertices
+  0.0,4.53,3.0,                  !- V1 upper-left (UL)
+  0.0,4.53,0.0,                  !- V2 upper-right (UR)
+  0.0,0.0,0.0,                   !- V3 lower-right (LR)
+  0.0,0.0,3.0;                   !- V4 lower-left (LL)
+
+FenestrationSurface:Detailed,
+  Win_TO,
+  Window,
+  WindowConst_OldSingle,
+  Wall2_West,
+  ,
+  ,
+  ,
+  1,
+  4,
+  0.0, 0.0, 1.75,   ! V1
+  0.0, 4.0, 1.75,   ! V2 (old V4)
+  0.0, 4.0, 0.8,    ! V3 (old V3)
+  0.0, 0.0, 0.8;    ! V4 (old V2)
+
+FenestrationSurface:Detailed,
+  Door_To_to_H,
+  Door,
+  DoorConst_Steel,
+  Wall2_South1,
+  Door_H_to_TO,
+  ,
+  ,
+  1,
+  4,
+  1.8, 3.2, 2.20,
+  1.8, 3.2, 0.00,
+  2.7, 3.2, 0.00,
+  2.7, 3.2, 2.20;
+
+GlobalGeometryRules,
+  UpperLeftCorner,         !- Starting Vertex Position
+  CounterClockWise,        !- Vertex Entry Direction
+  World;                   !- Coordinate System
+
+ScheduleTypeLimits,
+  Any Number;              !- Name
+
+ScheduleTypeLimits,
+  Fraction,                !- Name
+  0.0,                     !- Lower Limit Value
+  1.0,                     !- Upper Limit Value
+  CONTINUOUS;              !- Numeric Type
+
+ScheduleTypeLimits,
+    Control Type,
+    0,
+    4,
+    DISCRETE;
+
+ScheduleTypeLimits,
+    Temperature,
+    -60,
+    200,
+    CONTINUOUS,
+    Temperature;
+
+ScheduleTypeLimits,
+    On/Off,
+    0,
+    1,
+    DISCRETE;
+
+ScheduleTypeLimits,
+    FlowRate,
+    0.0,
+    10,
+    CONTINUOUS;
+
+!Teachers_Office
+People,
+    Room1 People,               !- Name
+    Teachers_Office,            !- Zone or ZoneList Name  (change to your zone name)
+    OCCUPY-ROOM1,               !- Number of People Schedule Name
+    People,                !- Number of People Calculation Method
+    20,                         !- Number of People (when schedule = 1.0)
+    ,                      !- People per Zone Floor Area {person/m2}
+    ,                           !- Zone Floor Area per Person {m2/person}
+    0.3,                        !- Fraction Radiant (example)
+    ,                           !- Sensible Heat Fraction
+    ActSchd,                    !- Activity Level Schedule Name
+    3.82E-8,                    !- Carbon Dioxide Generation Rate {m3/s-W}
+    Yes,                        !- Enable ASHRAE 55 Comfort Warnings
+    EnclosureAveraged,          !- Mean Radiant Temperature Calculation Type
+    ClothingInsulationSchedule; !- Clothing Insulation Calculation Method
+
+Schedule:Compact,
+    OCCUPY-ROOM1,
+    Fraction,
+
+    Through: 12/31,
+    For: Weekdays,
+      Until: 09:00, 0.0,
+      Until: 09:10, 1.0,
+      Until: 10:00, 0.1,
+      Until: 10:10, 1.0,
+      Until: 11:00, 0.1,
+      Until: 11:10, 1.0,
+      Until: 12:00, 0.1,
+      Until: 12:10, 1.0,
+      Until: 13:00, 0.1,
+      Until: 24:00, 0.0,
+    For: Weekends Holiday SummerDesignDay WinterDesignDay CustomDay1 CustomDay2, 
+      Until: 24:00, 0.0;
+
+Schedule:Compact,           !Lighting schedule
+    LIGHTS-1,
+    On/Off,
+
+    Through: 12/31,
+    For: WeekDays,
+      Until: 09:00, 0,
+      Until: 13:00, 1,
+      Until: 24:00, 0,
+    For: Weekends Holiday SummerDesignDay WinterDesignDay CustomDay1 CustomDay2, 
+      Until: 24:00, 0;
+
+Lights,
+    Teachers_Office Lights,      !- Name
+    Teachers_Office,             !- Zone or ZoneList Name
+    LIGHTS-1,                    !- Schedule Name
+    Watts/Area,                  !- Design Level Calculation Method
+    ,                            !- Lighting Level {W}
+    10.0,                        !- Watts per Zone Floor Area {W/m2}
+    ,                            !- Watts per Person {W/person}
+    0.0,                         !- Return Air Fraction
+    0.6,                         !- Fraction Radiant
+    0.2,                         !- Fraction Visible
+    1.0,                         !- Fraction Replaceable
+    General;                     !- End-Use Subcategory
+
+ZoneInfiltration:DesignFlowRate,
+    Infiltration Teachers_Office,     !- Name
+    Teachers_Office,                 !- Zone or ZoneList Name
+    INFIL-SCH,                       !- Schedule Name
+    AirChanges/Hour,                 !- Design Flow Rate Calculation Method
+    ,                                !- Design Flow Rate {m3/s}
+    ,                                !- Flow per Zone Floor Area {m3/s-m2}
+    ,                                !- Flow per Exterior Surface Area {m3/s-m2}
+    0.9,
+    1.0, 0.0, 0.0, 0.0;          
+
+Schedule:Compact,
+  INFIL-SCH,
+  Fraction,
+  Through: 12/31,
+  For: AllDays,
+    Until: 24:00, 1.0;
+
+ZoneVentilation:DesignFlowRate,
+    Vent_Teachers_Office,        !- Name
+    Teachers_Office,             !- Zone Name
+    Vent-Sch1,                   !- Schedule Name
+    Flow/Person,                 !- Design Flow Rate Calculation Method
+    ,                            !- Design Flow Rate {m3/s}
+    ,                            !- Flow Rate per Floor Area {m3/s-m2}
+    0.010,                       !- Flow Rate per Person {m3/s-person}  (10 L/s-person)
+    ,                            !- Air Changes per Hour {1/hr}
+    ,                            !- Ventilation Air Temperature Schedule Name
+    ,                            !- Ventilation Air Temperature Difference Schedule Name
+    ,                            !- Ventilation Air Flow Rate Fraction Schedule Name (optional)
+    0.0,                         !- Ventilation Air Fan Pressure Rise {Pa}  (0 = no fan power)
+    0.0,                         !- Ventilation Air Fan Total Efficiency
+    ,                            !- Constant Term Coefficient
+    ,                            !- Temperature Term Coefficient
+    ,                            !- Velocity Term Coefficient
+    ;                            !- Velocity Squared Term Coefficient
+
+Schedule:Compact,
+    Vent-Sch1,
+    Fraction,
+    Through: 12/31,
+    For: Weekdays,
+      Until: 09:10, 0.0,
+      Until: 09:15, 1.0,
+      Until: 13:10, 0.0,
+      Until: 13:15, 1.0,
+      Until: 24:00, 0.0,
+    For: Weekends Holiday SummerDesignDay WinterDesignDay CustomDay1 CustomDay2,
+      Until: 24:00, 0.0;
+
+Schedule:Compact,            !Activity Level Schedule
+    ActSchd,
+    Any Number,
+
+    Through: 12/31,
+    For: Weekdays,
+      Until: 09:00, 0,
+      Until: 13:00, 117.24,
+      Until: 24:00, 0,
+    For: Weekends Holiday SummerDesignDay WinterDesignDay CustomDay1 CustomDay2,
+      Until: 24:00, 0;
+
+ZoneAirContaminantBalance,
+  Yes,                    !- Carbon Dioxide Concentration
+  Outdoor_CO2_Level;      !- Outdoor Carbon Dioxide Schedule Name
+  
+Schedule:Constant,
+  Outdoor_CO2_Level,      !- Name
+  Any Number,             !- Schedule Type Limits Name
+  420.0;                  !- Value (ppm, typical background)
+
+Schedule:Compact,            ! HVAC availability schedule
+    HVAC-Avail,
+    Fraction,
+
+    Through: 12/31,
+    For: Weekdays,
+      Until: 08:10, 0.0,
+      Until: 09:00, 1.0,
+      Until: 09:10, 0.0,
+      Until: 10:00, 1.0,
+      Until: 24:00, 0.0,
+    For: Weekends Holiday SummerDesignDay WinterDesignDay CRstomDay1 CRstomDay2, 
+      Until: 24:00, 0.0;
+
+Schedule:Compact,
+  FanOpModeCycling,
+  Any Number,
+  Through: 12/31,
+  For: AllDays,
+    Until: 24:00, 0;     !Cycling fan: Fan runs only when the coil (cooling/heating) is actively providing load.
+
+Schedule:Compact,
+    Zone Control Type Sched2,
+    Control Type,
+    Through: 12/31,
+    For: Weekdays,
+      Until: 08:00, 0,
+      Until: 13:00, 4,
+      Until: 24:00, 0,
+    For: WinterDesignDay SummerDesignDay,
+      Until: 24:00, 4,
+    For: Weekends Holiday CRstomDay1 CRstomDay2,
+      Until: 24:00, 0.0;
+
+Schedule:Compact,            !heating setpoint schedule 
+    Htg-SetP-Sch,
+    Temperature,
+
+    Through: 12/31,
+    For: WeekDays,
+      Until: 08:00, 16,
+      Until: 13:00, 17,
+      Until: 24:00, 16,
+    For: WeekEnds Holiday SummerDesignDay WinterDesignDay CRstomDay1 CRstomDay2,
+      Until: 24:00, 16;
+
+Schedule:Compact,            !cooling setpoint schedule
+    Clg-SetP-Sch,
+    Temperature,
+
+    Through: 12/31,
+    For: WeekDays,
+      Until: 08:00, 30,
+      Until: 13:00, 23,
+      Until: 24:00, 30,
+    For: WeekEnds Holiday SummerDesignDay WinterDesignDay CRstomDay1 CRstomDay2,
+      Until: 24:00, 30;
+
+ZoneControl:Thermostat,
+    Teachers_Office Thermostat,                 !- Name
+    Teachers_Office,                            !- Which zone it controls
+    Zone Control Type Sched2,                   !- Thermostat mode schedule (on/off)
+    ThermostatSetpoint:DualSetpoint,
+    DualSP-Control;                             !- Name of dual setpoint object      
+
+ThermostatSetpoint:DualSetpoint,
+    DualSP-Control,                             !- Name
+    Htg-SetP-Sch,                               !- Heating setpoint schedule (you already have)
+    Clg-SetP-Sch;                               !- Cooling schedule from section 2
+
+ZoneHVAC:Baseboard:Convective:Water,
+    Radiator_TO,                          !- Name
+    HVAC-Avail,                           !- Availability Schedule Name
+    HW-Rad-Inlet,                         !- Inlet Node Name (from plant)
+    HW-Rad-Outlet,                        !- Outlet Node Name (back to plant)
+    HeatingDesignCapacity,                !- Heating Design Capacity Method
+    5000,                                !- Heating Design Capacity {W}
+    ,                                     !- Heating Design Capacity Per Floor Area {W/m2}
+    ,                                     !- Fraction of Autosized Heating Design Capacity
+    600,                                  !- U-Factor Times Area Value {W/K}
+    0.0001,                              !- Maximum Water Flow Rate {m3/s}
+    0.001;                                !- Convergence Tolerance    
+
+Schedule:Compact,
+    HW-Heating-Schedule,
+    Fraction,
+    Through: 12/31,
+    For: AllDays,
+      Until: 24:00, 1.0;
+      
+PlantEquipmentOperationSchemes,
+    HW-Loop-Operation,              !- Name
+    PlantEquipmentOperation:HeatingLoad,  !- Control Scheme 1 Object Type
+    HW-Heating-Operation,           !- Control Scheme 1 Name
+    HW-Heating-Schedule;            !- Control Scheme 1 Schedule Name
+
+PlantEquipmentOperation:HeatingLoad,
+    HW-Heating-Operation,           !- Name
+    0, 1e9,                         !- Load Range 1 Lower/Upper Limit {W}
+    HW-Boiler-EquipmentList;        !- Range 1 Equipment List Name
+
+PlantEquipmentList,
+    HW-Boiler-EquipmentList,
+    Boiler:HotWater,
+    HW-Boiler;
+
+PlantLoop,                                ! The “container” for all heating components:  pump, boiler, radiator, pipes, connectors, temperature control.
+  HW-Loop,                                !- Name
+  Water,                                  !- Fluid Type
+  ,                                       !- User Defined Fluid Type
+  HW-Loop-Operation,                      !- Plant Equipment Operation Scheme List Name
+  HW-SupplyOutlet,                        !- Loop Temperature Setpoint Node Name  <<< FIX (must NOT be blank)
+  70.0,                                   !- Maximum Loop Temperature {C}
+  10.0,                                   !- Minimum Loop Temperature {C}
+  0.0001,                                 !- Maximum Loop Flow Rate {m3/s}
+  0.0,                                    !- Minimum Loop Flow Rate {m3/s}
+  0.07,                                   !- Plant Loop Volume {m3}
+  HW-SupplyInlet,                         !- Plant Side Inlet Node Name
+  HW-SupplyOutlet,                        !- Plant Side Outlet Node Name
+  HW-Loop-Supply Branches,                !- Plant Side Branch List Name
+  HW-Loop-Supply Connectors,              !- Plant Side Connector List Name
+  HW-Loop-DemandInlet,                    !- Demand Side Inlet Node Name
+  HW-Loop-DemandOutlet,                   !- Demand Side Outlet Node Name
+  HW-Loop-Demand Branches,                !- Demand Side Branch List Name
+  ,                                       !- Demand Side Connector List Name
+  Optimal;                                !- Load Distribution Scheme
+
+Pipe:Adiabatic,
+    HW-Supply Outlet Pipe,
+    HW-SupplyPipeInlet,       !- Inlet Node Name
+    HW-SupplyOutlet;          !- Outlet Node Name
+
+Pipe:Adiabatic,
+    HW-Demand Inlet Pipe,
+    HW-Loop-DemandInlet,  !- Inlet Node Name
+    HW-Rad-Inlet;         !- Outlet Node Name
+
+Pipe:Adiabatic,
+    HW-Demand Outlet Pipe,
+    HW-Rad-Outlet,            !- Inlet Node Name
+    HW-Loop-DemandOutlet;     !- Outlet Node Name
+
+Pump:ConstantSpeed,           ! Moves water through the heating loop. Without it, water does not circulate → no heating 
+    HW-Pump,                  !- Name
+    HW-SupplyInlet,           !- Inlet Node Name
+    HW-SupplyPumpOutlet,      !- Outlet Node Name
+    0.0001,                   !- Rated Flow Rate {m3/s} (Synchronized with Boiler)
+    10000,                    !- Rated Pump Head {Pa} (Lowered)
+    40,                       !- Rated Power Consumption {W} (Scaled for 20kW)
+    0.85,                     !- Motor Efficiency
+    0.15,                     !- Fraction of Motor Inefficiencies to Fluid Stream
+    INTERMITTENT;             !- Pump Control Type
+
+SetpointManager:Scheduled,
+    HW-Loop-SetpointManager,
+    Temperature,
+    HW-Setpoint-Schedule,
+    HW-SupplyOutlet;
+
+Schedule:Compact,
+    HW-Setpoint-Schedule,
+    Temperature,
+    Through: 12/31,
+    For: AllDays,
+      Until: 24:00, 80.0;
+
+Boiler:HotWater,                   ! Provides hot water for radiators. Automatically sizes capacity
+    HW-Boiler,                     !- Name
+    Diesel,                        !- Fuel Type
+    5000,                          !- Nominal Capacity {W} (Downsized to reduce cycling waste)
+    0.65,                          !- Nominal Thermal Efficiency
+    LeavingBoiler,                 !- Efficiency Curve Temperature Evaluation Variable
+    ,                              !- Normalized Boiler Efficiency Curve Name
+    0.0001,                        !- Design Water Flow Rate {m3/s} (Lowered to match 2.5GJ goal)
+    0.1,                           !- Minimum Part Load Ratio (Allows the boiler to "simmer" at low loads)
+    1.1,                           !- Maximum Part Load Ratio
+    0.9,                           !- Optimum Part Load Ratio
+    HW-Boiler-Inlet,               !- Boiler Water Inlet Node Name
+    HW-Boiler-Outlet,              !- Boiler Water Outlet Node Name
+    65.0,                          !- Water Outlet Upper Temperature Limit {C} (Lowered to 65C)
+    ConstantFlow,                  !- Boiler Flow Mode
+    5.0,                           !- On Cycle Parasitic Electric Load {W} (Tuned down)
+    1.0;                           !- Sizing Factor
+
+!Supply Side
+BranchList,                   ! Lists all components on the supply side. 
+    HW-Loop-Supply Branches,
+    HW-Supply Inlet Branch,
+    HW-Boiler Branch,
+    HW-Supply Outlet Branch;
+
+Branch,                        ! Water enters at HW-SupplyInlet
+    HW-Supply Inlet Branch,    !- Name
+    ,                          !- Pressure Drop Curve Name
+    Pump:ConstantSpeed,        !- Component 1 Object Type
+    HW-Pump,                   !- Component 1 Name (Pump pushes water into the boiler)
+    HW-SupplyInlet,            !- Component 1 Inlet Node Name
+    HW-SupplyPumpOutlet;       !- Component 1 Outlet Node Name
+
+Branch,                        ! Boiler heats the water
+    HW-Boiler Branch,          !- Name
+    ,                          !- Pressure Drop Curve Name
+    Boiler:HotWater,           !- Component 1 Object Type
+    HW-Boiler,                 !- Component 1 Name
+    HW-Boiler-Inlet,           !- Component 1 Inlet Node Name
+    HW-Boiler-Outlet;          !- Component 1 Outlet Node Name
+
+Branch,                        ! Hot water exits at HW-SupplyOutlet
+    HW-Supply Outlet Branch,   !- Name
+    ,                          !- Pressure Drop Curve Name
+    Pipe:Adiabatic,            !- Component 1 Object Type
+    HW-Supply Outlet Pipe,     !- Component 1 Name
+    HW-SupplyPipeInlet,        !- Component 1 Inlet Node Name
+    HW-SupplyOutlet;           !- Component 1 Outlet Node Name
+
+!Connectors allow the loop to branch correctly.
+Connector:Splitter,            !Splitter divides the flow. 
+    HW-Supply Splitter,
+    HW-Supply Inlet Branch,    !- Inlet Branch Name
+    HW-Boiler Branch;          !- Outlet Branch 1 Name
+
+Connector:Mixer,               !Mixer recombines the loop flow.
+    HW-Supply Mixer,
+    HW-Supply Outlet Branch,   !- Outlet Branch Name
+    HW-Boiler Branch;          !- Inlet Branch 1 Name
+
+ConnectorList,
+    HW-Loop-Supply Connectors,
+    Connector:Splitter,
+    HW-Supply Splitter,
+    Connector:Mixer,
+    HW-Supply Mixer;
+
+!Demand Side
+BranchList,                        ! Lists all components on the demand side.
+    HW-Loop-Demand Branches,
+    HW-Demand Branch;
+
+Branch,
+    HW-Demand Branch,                     !- Name
+    ,                                     !- Pressure Drop Curve Name
+
+    Pipe:Adiabatic,                       !- Component 1 Object Type
+    HW-Demand Inlet Pipe,                 !- Component 1 Name
+    HW-Loop-DemandInlet,                  !- Component 1 Inlet Node Name
+    HW-Rad-Inlet,                         !- Component 1 Outlet Node Name
+
+    ZoneHVAC:Baseboard:Convective:Water,  !- Component 2 Object Type
+    Radiator_TO,                          !- Component 2 Name
+    HW-Rad-Inlet,                         !- Component 2 Inlet Node Name
+    HW-Rad-Outlet,                        !- Component 2 Outlet Node Name
+
+    Pipe:Adiabatic,                       !- Component 3 Object Type
+    HW-Demand Outlet Pipe,                !- Component 3 Name
+    HW-Rad-Outlet,                        !- Component 3 Inlet Node Name
+    HW-Loop-DemandOutlet;                 !- Component 3 Outlet Node Name
+
+!============================================================
+! AC Unit
+!============================================================
+
+Fan:OnOff,
+  Haier_Cab_Fan,
+  HVAC-Avail,                  !- Availability Schedule Name
+  0.70,                        !- Fan Total Efficiency
+  600,                         !- Pressure Rise {Pa}
+  0.333,                       !- Maximum Flow Rate {m3/s}
+  0.90,                        !- Motor Efficiency
+  1.0,                         !- Motor In Airstream Fraction
+  Haier_Supply_Inlet,          !- Air Inlet Node Name
+  CabAC_After_Fan_Node;        !- Air Outlet Node Name
+
+Coil:Cooling:DX:SingleSpeed,
+  Haier_Cab_DX_Cool,                !- Name
+  HVAC-Avail,                       !- Availability Schedule Name
+  7200,                             !- Gross Rated Total Cooling Capacity {W}
+  0.76,                             !- Gross Rated Sensible Heat Ratio
+  3.23,                             !- Gross Rated Cooling COP {W/W}
+  0.40,                             !- Rated Air Flow Rate {m3/s}
+  0.0,                              !- 2017 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
+  0.0,                              !- 2023 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
+  CabAC_After_Fan_Node,             !- Air Inlet Node Name
+  CabAC_After_CoolCoil_Node,        !- Air Outlet Node Name
+  Haier_CoolCapFT,                  !- Total Cooling Capacity Function of Temperature Curve Name
+  Haier_CoolCapFF,                  !- Total Cooling Capacity Function of Flow Fraction Curve Name
+  Haier_CoolEIRFT,                  !- Energy Input Ratio Function of Temperature Curve Name
+  Haier_CoolEIRFF,                  !- Energy Input Ratio Function of Flow Fraction Curve Name
+  Haier_CoolPLF;                    !- Part Load Fraction Correlation Curve Name
+
+AirLoopHVAC:UnitarySystem,
+  Haier_UnitarySystem,                 !- Name
+  Load,                                !- Control Type
+  Teachers_Office,                       !- Controlling Zone or Thermostat Location
+  None,                                !- Dehumidification Control Type
+  HVAC-Avail,                          !- Availability Schedule Name
+  Haier_Supply_Inlet,                  !- Air Inlet Node Name
+  Haier_Supply_Outlet,                 !- Air Outlet Node Name
+  Fan:OnOff,                           !- Supply Fan Object Type
+  Haier_Cab_Fan,                       !- Supply Fan Name
+  BlowThrough,                         !- Fan Placement
+  ,                                    !- Supply Air Fan Operating Mode Schedule Name
+  ,                                    !- Heating Coil Object Type   (blank = no air heating)
+  ,                                    !- Heating Coil Name
+  ,                                    !- DX Heating Coil Sizing Ratio
+  Coil:Cooling:DX:SingleSpeed,         !- Cooling Coil Object Type
+  Haier_Cab_DX_Cool,                   !- Cooling Coil Name
+  No,                                  !- Use DOAS DX Cooling Coil
+  ,                                    !- Minimum Supply Air Temperature {C}
+  SensibleOnlyLoadControl,             !- Latent Load Control
+  ,                                    !- Supplemental Heating Coil Object Type
+  ,                                    !- Supplemental Heating Coil Name
+
+  SupplyAirFlowRate,                   !- Cooling Supply Air Flow Rate Method
+  0.333,                               !- Cooling Supply Air Flow Rate {m3/s}
+  ,                                    !- Cooling Supply Air Flow Rate Per Floor Area {m3/s-m2}
+  ,                                    !- Cooling Fraction of Autosized Cooling Supply Air Flow Rate
+  ,                                    !- Cooling Supply Air Flow Rate Per Unit of Capacity {m3/s-W}
+
+  SupplyAirFlowRate,                   !- Heating Supply Air Flow Rate Method
+  0.0,                                 !- Heating Supply Air Flow Rate {m3/s}   (heating disabled)
+  ,                                    !- Heating Supply Air Flow Rate Per Floor Area {m3/s-m2}
+  ,                                    !- Heating Fraction of Autosized Heating Supply Air Flow Rate
+  ,                                    !- Heating Supply Air Flow Rate Per Unit of Capacity {m3/s-W}
+
+  SupplyAirFlowRate,                   !- No Load Supply Air Flow Rate Method
+  0.0,                                 !- No Load Supply Air Flow Rate {m3/s}   (fan off at no-load)
+  ,                                    !- No Load Supply Air Flow Rate Per Floor Area {m3/s-m2}
+  ,                                    !- No Load Fraction of Autosized Cooling Supply Air Flow Rate
+  ,                                    !- No Load Fraction of Autosized Heating Supply Air Flow Rate
+  ,                                    !- No Load Supply Air Flow Rate Per Unit of Capacity during Cooling Operation {m3/s-W}
+  ,                                    !- No Load Supply Air Flow Rate Per Unit of Capacity during Heating Operation {m3/s-W}
+
+  ,                                    !- Maximum Supply Air Temperature {C}
+  ,                                    !- Maximum Outdoor Dry-Bulb Temperature for Supplemental Heater Operation {C}
+  ,                                    !- Outdoor Dry-Bulb Temperature Sensor Node Name
+  ,                                    !- Ancillary On-Cycle Electric Power {W}
+  ,                                    !- Ancillary Off-Cycle Electric Power {W}
+  ,                                    !- Design Heat Recovery Water Flow Rate {m3/s}
+  ,                                    !- Maximum Temperature for Heat Recovery {C}
+  ,                                    !- Heat Recovery Water Inlet Node Name
+  ,                                    !- Heat Recovery Water Outlet Node Name
+  ,                                    !- Design Specification Multispeed Object Type
+  ;                                    !- Design Specification Multispeed Object Name
+
+
+AvailabilityManagerAssignmentList,
+  Haier_AvailMgrList,
+  AvailabilityManager:Scheduled,
+  Haier_AvailMgr;
+
+AvailabilityManager:Scheduled,
+  Haier_AvailMgr,
+  HVAC-Avail;
+
+BranchList,
+  Haier_Supply_BranchList,
+  Haier_Supply_Branch;
+
+Branch,
+  Haier_Supply_Branch,
+  ,
+  AirLoopHVAC:UnitarySystem,
+  Haier_UnitarySystem,
+  Haier_Supply_Inlet,
+  Haier_Supply_Outlet;
+
+NodeList,
+  Haier_DemandInletNodes,
+  Haier_Zone_SupplyNode;
+
+NodeList,
+  Haier_SupplyOutletNodes,
+  Haier_Supply_Outlet;
+
+AirLoopHVAC,
+  Haier_AirLoop,               !- Name
+  ,                            !- Controller List Name
+  Haier_AvailMgrList,          !- Availability Manager List Name
+  autosize,                    !- Design Supply Air Flow Rate {m3/s}
+  Haier_Supply_BranchList,     !- Branch List Name
+  ,                            !- Connector List Name  <<<< BLANK in this method
+  Haier_Supply_Inlet,          !- Supply Side Inlet Node Name
+  Haier_Demand_Outlet,         !- Demand Side Outlet Node Name
+  Haier_DemandInletNodes,      !- Demand Side Inlet Node Names
+  Haier_SupplyOutletNodes;     !- Supply Side Outlet Node Names
+
+AirLoopHVAC:ZoneSplitter,
+  Haier_ZoneSplitter,
+  Haier_Supply_Outlet,         !- Inlet Node Name (from supply side)
+  Haier_Zone_SupplyNode;       !- Outlet 1 Node Name (to zone terminal)
+
+AirLoopHVAC:ZoneMixer,
+  Haier_ZoneMixer,
+  Haier_Demand_Outlet,         !- Outlet Node Name (back to AirLoop demand outlet)
+  Haier_Zone_ReturnNode;       !- Inlet 1 Node Name (from zone return)
+
+AirLoopHVAC:SupplyPath,
+  Haier_SupplyPath,            !- Name
+  Haier_Supply_Outlet,         !- Supply Air Path Inlet Node Name
+  AirLoopHVAC:ZoneSplitter,    !- Component 1 Object Type
+  Haier_ZoneSplitter;          !- Component 1 Name
+
+AirLoopHVAC:ReturnPath,
+  Haier_ReturnPath,            !- Name
+  Haier_Demand_Outlet,         !- Return Air Path Outlet Node Name
+  AirLoopHVAC:ZoneMixer,       !- Component 1 Object Type
+  Haier_ZoneMixer;             !- Component 1 Name
+
+AirTerminal:SingleDuct:ConstantVolume:NoReheat,
+  Haier_Terminal,
+  HVAC-Avail,
+  Haier_Zone_SupplyNode,
+  TO_Air_Inlet,
+  0.333;
+
+ZoneHVAC:AirDistributionUnit,
+  Haier_ADU,
+  TO_Air_Inlet,
+  AirTerminal:SingleDuct:ConstantVolume:NoReheat,
+  Haier_Terminal;
+
+ZoneHVAC:EquipmentList,
+  TO_EquipList,                 !- Name
+  SequentialLoad,                          !- Load Distribution Scheme
+
+  ZoneHVAC:Baseboard:Convective:Water,     !- Zone Equipment 1 Object Type
+  Radiator_TO,                           !- Zone Equipment 1 Name
+  2,                                       !- Cooling Sequence
+  1,                                       !- Heating or No-Load Sequence
+  ,                                       !- Sequential Cooling Fraction Schedule Name
+  ,                                       !- Sequential Heating Fraction Schedule Name
+
+  ZoneHVAC:AirDistributionUnit,            !- Zone Equipment 2 Object Type
+  Haier_ADU,                                !- Zone Equipment 2 Name
+  1,                                       !- Cooling Sequence
+  2,                                       !- Heating or No-Load Sequence
+  ,                                       !- Sequential Cooling Fraction Schedule Name
+  ;                                       !- Sequential Heating Fraction Schedule Name
+
+ZoneHVAC:EquipmentConnections,
+  Teachers_Office,                 !- Zone Name
+  TO_EquipList,       !- Zone Conditioning Equipment List Name
+  TO_Air_Inlet,       !- Zone Air Inlet Node (or NodeList) Name
+  ,                              !- Zone Air Exhaust Node (or NodeList) Name
+  TO Air Node,        !- Zone Air Node Name
+  Haier_Zone_ReturnNode;         !- Zone Return Air Node Name
+
+! ============================================================
+! ZoneHVAC Equipment Connections (MUST match equipment lists)
+! ============================================================
+
+SetpointManager:SingleZone:Reheat,
+  Haier_SAT_SPM,               !- Name
+  Temperature,                 !- Control Variable
+  12.8,                        !- Minimum Supply Air Temperature {C}
+  40.0,                        !- Maximum Supply Air Temperature {C}
+  Teachers_Office,             !- Control Zone Name
+  TO Air Node,                 !- Zone Node Name
+  TO_Air_Inlet,                !- Zone Inlet Node Name
+  Haier_Supply_Outlet;         !- Setpoint Node or NodeList Name
+
+Curve:Biquadratic,
+  Haier_CoolCapFT,
+  0.942587793, 0.009543347, 0.000683770,
+  -0.011042676, 0.000005249, -0.000009720,
+  12.77778, 23.88889, 18.33333, 46.11111,
+  , , Temperature, Temperature, Dimensionless;
+
+Curve:Quadratic,
+  Haier_CoolCapFF,
+  0.8, 0.2, 0.0,
+  0.5, 1.5,
+  , , Dimensionless, Dimensionless;
+
+Curve:Biquadratic,
+  Haier_CoolEIRFT,
+  0.342414409, 0.034885008, -0.000623700,
+  0.004977216, 0.000437951, -0.000728028,
+  12.77778, 23.88889, 18.33333, 46.11111,
+  , , Temperature, Temperature, Dimensionless;
+
+Curve:Quadratic,
+  Haier_CoolEIRFF,
+  1.1552, -0.1808, 0.0256,
+  0.5, 1.5,
+  , , Dimensionless, Dimensionless;
+
+Curve:Quadratic,
+  Haier_CoolPLF,
+  0.85, 0.15, 0.0,
+  0.0, 1.0,
+  , , Dimensionless, Dimensionless;
+
+Curve:Biquadratic,
+  Haier_HeatCapFT,
+  0.758746, 0.027626, 0.000148716,
+  0.0000034992, -0.000103, -0.000004,
+  16.66667, 22.22222, -8.33333, 8.33333,
+  , , Temperature, Temperature, Dimensionless;
+
+Curve:Quadratic,
+  Haier_HeatCapFF,
+  0.8, 0.2, 0.0,
+  0.5, 1.5,
+  , , Dimensionless, Dimensionless;
+
+Curve:Biquadratic,
+  Haier_HeatEIRFT,
+  1.19248, -0.0300438, 0.00103745,
+  0.003500, -0.000404, 0.000023,
+  16.66667, 22.22222, -8.33333, 8.33333,
+  , , Temperature, Temperature, Dimensionless;
+
+Curve:Quadratic,
+  Haier_HeatEIRFF,
+  1.3824, -0.4336, 0.0512,
+  0.5, 1.5,
+  , , Dimensionless, Dimensionless;
+
+Curve:Quadratic,
+  Haier_HeatPLF,
+  0.85, 0.15, 0.0,
+  0.0, 1.0,
+  , , Dimensionless, Dimensionless;
+
+! ============================================================
+! OUTPUT SETTINGS
+! ============================================================
+
+Output:VariableDictionary,Regular;
+Output:Surfaces:Drawing,DXF;
+Output:Constructions,Constructions;
+
+OutputControl:Table:Style,
+  TabAndHTML;
+
+Output:Table:SummaryReports,
+  AllSummary;
+
+Output:SQLite,
+  SimpleAndTabular;
+
+
+! ============================================================
+! METERS
+! ============================================================
+
+Output:Meter, Electricity:Facility, Timestep;
+Output:Meter, Gas:Facility, Timestep;
+Output:Meter, Heating:Diesel, Timestep;
+Output:Meter, Cooling:Electricity, Timestep;
+Output:Meter, InteriorLights:Electricity, Timestep;
+Output:Meter, InteriorEquipment:Electricity, Timestep;
+Output:Meter, Fans:Electricity, Timestep;
+Output:Meter, Pumps:Electricity, Timestep;
+
+Output:Meter, Carbon Equivalent:Facility, Timestep;
+Output:Meter, CarbonEquivalentEmissions:Carbon Equivalent, Timestep;
+
+Output:Meter, CO2:Facility, RunPeriod;
+Output:Meter, DieselEmissions:CO2, RunPeriod;
+Output:Meter, ElectricityEmissions:CO2, RunPeriod;
+
+! ================= TEACHERS OFFICE =================
+
+Output:Variable, Teachers_Office, Zone Mean Air Temperature, Timestep;
+Output:Variable, Teachers_Office, Zone Operative Temperature, Timestep;
+Output:Variable, Teachers_Office, Zone Mean Radiant Temperature, Timestep;
+Output:Variable, Teachers_Office, Zone Air Relative Humidity, Timestep;
+Output:Variable, Teachers_Office, Zone Air CO2 Concentration, Timestep;
+Output:Variable, Teachers_Office, Zone Generic Air Contaminant Concentration, Timestep;
+
+Output:Variable, Teachers_Office, Zone Total Internal Total Heating Rate, Timestep;
+
+Output:Variable, Teachers_Office, Zone Infiltration Air Change Rate, Timestep;
+Output:Variable, Teachers_Office, Zone Infiltration Volume Flow Rate, Timestep;
+Output:Variable, Teachers_Office, Zone Mechanical Ventilation Mass Flow Rate, Timestep;
+
+Output:Variable, Teachers_Office, Zone Cooling Setpoint Not Met Time, Timestep;
+Output:Variable, Teachers_Office, Zone Heating Setpoint Not Met Time, Timestep;
+
+Output:Variable, Teachers_Office, Zone Thermostat Heating Setpoint Temperature, Timestep;
+Output:Variable, Teachers_Office, Zone Thermostat Cooling Setpoint Temperature, Timestep;
+
+Output:Variable, Teachers_Office, Zone People Occupant Count, Timestep;
+Output:Variable, Teachers_Office, Zone People Total Heating Rate, Timestep;
+Output:Variable, Teachers_Office, Zone Electric Equipment Total Heating Rate, Timestep;
+Output:Variable, Teachers_Office, Zone Lights Total Heating Rate, Timestep;
+
+Output:Variable, Teachers_Office, Daylighting Reference Point Illuminance, Hourly;
+Output:Variable, Teachers_Office, Lights Electric Power, Hourly;
+
+Output:Variable,
+  Teachers_Office,
+  Zone Thermal Comfort ASHRAE 55 Simple Model Summer or Winter Clothes Not Comfortable Time,
+  RunPeriod;
+

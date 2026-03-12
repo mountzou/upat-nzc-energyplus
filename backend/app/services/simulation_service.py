@@ -33,10 +33,9 @@ def _run_room_simulation(parent_run_dir, school_id, room_input, base_weather):
     if not room["idf_exists"]:
         raise FileNotFoundError(f"IDF file not found for room '{room_input.room_id}'")
 
-    if room_input.cooling_setpoint is not None and not room["supports"]["cooling_setpoint"]:
-        raise ValueError(
-            f"Room '{room_input.room_id}' does not support cooling_setpoint"
-        )
+    effective_cooling_setpoint = room_input.cooling_setpoint
+    if not room["supports"]["cooling_setpoint"]:
+        effective_cooling_setpoint = None
 
     room_dir = parent_run_dir / room_input.room_id
     room_dir.mkdir(parents=True, exist_ok=True)
@@ -55,7 +54,7 @@ def _run_room_simulation(parent_run_dir, school_id, room_input, base_weather):
         heating_schedule_name=room["heating_schedule_name"],
         heating_setpoint=room_input.heating_setpoint,
         cooling_schedule_name=room["cooling_schedule_name"],
-        cooling_setpoint=room_input.cooling_setpoint,
+        cooling_setpoint=effective_cooling_setpoint,
     )
 
     occupancy_edit = apply_people_object_occupancy_update(
@@ -71,6 +70,7 @@ def _run_room_simulation(parent_run_dir, school_id, room_input, base_weather):
     )
 
     room_input_data = room_input.model_dump()
+    applied_input_data = {**room_input_data, "cooling_setpoint": effective_cooling_setpoint}
 
     with open(room_dir / "preprocess_summary.json", "w", encoding="utf-8") as f:
         json.dump(
@@ -79,7 +79,7 @@ def _run_room_simulation(parent_run_dir, school_id, room_input, base_weather):
                 "room": room,
                 "source_model": room["idf_file"],
                 "prepared_model": prepared_idf.name,
-                "applied_inputs": room_input_data,
+                "applied_inputs": applied_input_data,
                 "schedule_edits": schedule_edits,
                 "occupancy_edit": occupancy_edit,
             },
@@ -102,7 +102,7 @@ def _run_room_simulation(parent_run_dir, school_id, room_input, base_weather):
         "status": "success" if energyplus_result["success"] else "failed",
         "room_dir": str(room_dir),
         "room": room,
-        "inputs": room_input_data,
+        "inputs": applied_input_data,
         "files": {
             "base_idf": base_idf,
             "base_weather": str(base_weather),

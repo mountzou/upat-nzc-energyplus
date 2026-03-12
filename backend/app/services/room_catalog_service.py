@@ -1,508 +1,51 @@
-from app.config import IDF_DIR
+import json
+from functools import lru_cache
+from pathlib import Path
+
+from pydantic import TypeAdapter
+
+from app.config import CATALOG_DIR, IDF_DIR
+from app.schemas import RoomCatalogEntry, SchoolCatalogEntry
 
 
-SCHOOL_CATALOG = [
-    {"id": "school_22", "label": "School 22"},
-    {"id": "school_10", "label": "School 10"},
-    {"id": "school_3", "label": "School 3"},
-    {"id": "school_7", "label": "School 7"},
-]
+_SCHOOL_CATALOG_ADAPTER = TypeAdapter(list[SchoolCatalogEntry])
+_ROOM_CATALOG_ADAPTER = TypeAdapter(list[RoomCatalogEntry])
 
 
-ROOM_CATALOG_BY_SCHOOL = {
-    "school_22": [
-        {
-            "id": "classroom",
-            "label": "Classroom",
-            "idf_file": "classroom.idf",
-            "zone_name": "Classroom",
-            "people_object_name": "Room People",
-            "occupancy_schedule_name": "OCCUPY-ROOM",
-            "thermostat_type": "single_heating",
-            "heating_schedule_name": "Htg-SetP-Sch",
-            "cooling_schedule_name": None,
-            "supports": {
-                "occupancy": True,
-                "heating_setpoint": True,
-                "cooling_setpoint": False,
-            },
-            "defaults": {
-                "occupancy": 20,
-                "heating_setpoint": 17,
-                "cooling_setpoint": None,
-            },
-            "static_schedules": {
-                "occupancy": "OCCUPY-ROOM",
-                "lighting": "LIGHTS-1",
-                "heating_availability": "Heat-Avail",
-                "thermostat_control": "Zone Control Type Sched",
-                "ventilation": "Vent-Sch",
-                "activity": "ActSchd",
-                "heating_setpoint": "Htg-SetP-Sch",
-                "outdoor_co2": "Outdoor_CO2_Level",
-            },
-        },
-        {
-            "id": "eventhall",
-            "label": "Event Hall",
-            "idf_file": "eventhall.idf",
-            "zone_name": "Event_Hall",
-            "people_object_name": "Room People",
-            "occupancy_schedule_name": "OCCUPY-ROOM",
-            "thermostat_type": "single_heating",
-            "heating_schedule_name": "Htg-SetP-Sch",
-            "cooling_schedule_name": None,
-            "supports": {
-                "occupancy": True,
-                "heating_setpoint": True,
-                "cooling_setpoint": False,
-            },
-            "defaults": {
-                "occupancy": 250,
-                "heating_setpoint": 24,
-                "cooling_setpoint": None,
-            },
-            "static_schedules": {
-                "occupancy": "OCCUPY-ROOM",
-                "lighting": "LIGHTS-1",
-                "equipment": "EQUIP-Event",
-                "heating_availability": "Heat-Avail",
-                "thermostat_control": "Zone Control Type Sched",
-                "ventilation": "Vent-Sch",
-                "activity": "ActSchd",
-                "heating_setpoint": "Htg-SetP-Sch",
-                "outdoor_co2": "Outdoor_CO2_Level",
-            },
-        },
-        {
-            "id": "library",
-            "label": "Library",
-            "idf_file": "library.idf",
-            "zone_name": "library",
-            "people_object_name": "Room People",
-            "occupancy_schedule_name": "OCCUPY-ROOM",
-            "thermostat_type": "single_heating",
-            "heating_schedule_name": "Htg-SetP-Sch",
-            "cooling_schedule_name": None,
-            "supports": {
-                "occupancy": True,
-                "heating_setpoint": True,
-                "cooling_setpoint": False,
-            },
-            "defaults": {
-                "occupancy": 20,
-                "heating_setpoint": 17,
-                "cooling_setpoint": None,
-            },
-            "static_schedules": {
-                "occupancy": "OCCUPY-ROOM",
-                "lighting": "LIGHTS-1",
-                "heating_availability": "Heat-Avail",
-                "thermostat_control": "Zone Control Type Sched",
-                "ventilation": "Vent-Sch",
-                "activity": "ActSchd",
-                "heating_setpoint": "Htg-SetP-Sch",
-                "outdoor_co2": "Outdoor_CO2_Level",
-            },
-        },
-        {
-            "id": "pcroom",
-            "label": "PC Room",
-            "idf_file": "pcroom.idf",
-            "zone_name": "PC Room",
-            "people_object_name": "Room People",
-            "occupancy_schedule_name": "OCCUPY-ROOM",
-            "thermostat_type": "single_heating",
-            "heating_schedule_name": "Htg-SetP-Sch",
-            "cooling_schedule_name": None,
-            "supports": {
-                "occupancy": True,
-                "heating_setpoint": True,
-                "cooling_setpoint": False,
-            },
-            "defaults": {
-                "occupancy": 20,
-                "heating_setpoint": 17,
-                "cooling_setpoint": None,
-            },
-            "static_schedules": {
-                "occupancy": "OCCUPY-ROOM",
-                "lighting": "LIGHTS-1",
-                "equipment": "EQUIP-1",
-                "heating_availability": "Heat-Avail",
-                "thermostat_control": "Zone Control Type Sched",
-                "ventilation": "Vent-Sch",
-                "activity": "ActSchd",
-                "heating_setpoint": "Htg-SetP-Sch",
-                "outdoor_co2": "Outdoor_CO2_Level",
-            },
-        },
-        {
-            "id": "principal",
-            "label": "Principal Office",
-            "idf_file": "principal.idf",
-            "zone_name": "Principal_Office",
-            "people_object_name": "Room2 People",
-            "occupancy_schedule_name": "OCCUPY-ROOM2",
-            "thermostat_type": "single_heating",
-            "heating_schedule_name": "Htg-SetP-Sch",
-            "cooling_schedule_name": None,
-            "supports": {
-                "occupancy": True,
-                "heating_setpoint": True,
-                "cooling_setpoint": False,
-            },
-            "defaults": {
-                "occupancy": 1,
-                "heating_setpoint": 17,
-                "cooling_setpoint": None,
-            },
-            "static_schedules": {
-                "occupancy": "OCCUPY-ROOM2",
-                "lighting": "LIGHTS-2",
-                "equipment": "EQUIP-1",
-                "heating_availability": "Heat-Avail",
-                "thermostat_control": "Zone Control Type Sched1",
-                "secondary_thermostat_control": "Zone Control Type Sched2",
-                "ventilation": "Vent-Sch2",
-                "activity": "ActSchd",
-                "heating_setpoint": "Htg-SetP-Sch",
-                "outdoor_co2": "Outdoor_CO2_Level",
-            },
-        },
-        {
-            "id": "teachers",
-            "label": "Teachers Office",
-            "idf_file": "teachers.idf",
-            "zone_name": "Teachers_Office",
-            "people_object_name": "Room1 People",
-            "occupancy_schedule_name": "OCCUPY-ROOM1",
-            "thermostat_type": "dual_setpoint",
-            "heating_schedule_name": "Htg-SetP-Sch",
-            "cooling_schedule_name": "Clg-SetP-Sch",
-            "supports": {
-                "occupancy": True,
-                "heating_setpoint": True,
-                "cooling_setpoint": True,
-            },
-            "defaults": {
-                "occupancy": 20,
-                "heating_setpoint": 17,
-                "cooling_setpoint": 22,
-            },
-            "static_schedules": {
-                "occupancy": "OCCUPY-ROOM1",
-                "lighting": "LIGHTS-1",
-                "hvac_availability": "HVAC-Avail",
-                "thermostat_control": "Zone Control Type Sched2",
-                "ventilation": "Vent-Sch1",
-                "activity": "ActSchd",
-                "heating_setpoint": "Htg-SetP-Sch",
-                "cooling_setpoint": "Clg-SetP-Sch",
-                "outdoor_co2": "Outdoor_CO2_Level",
-            },
-        },
-    ],
-    "school_10": [
-        {
-            "id": "classroom",
-            "label": "Classroom",
-            "idf_file": "classroom.idf",
-            "zone_name": "Classroom",
-            "people_object_name": "Room People",
-            "occupancy_schedule_name": "OCCUPY-ROOM",
-            "thermostat_type": "single_heating",
-            "heating_schedule_name": "Htg-SetP-Sch",
-            "cooling_schedule_name": None,
-            "supports": {"occupancy": True, "heating_setpoint": True, "cooling_setpoint": False},
-            "defaults": {"occupancy": 25, "heating_setpoint": 17, "cooling_setpoint": None},
-            "static_schedules": {
-                "occupancy": "OCCUPY-ROOM",
-                "lighting": "LIGHTS-1",
-                "hvac_availability": "HVAC-Avail",
-                "thermostat_control": "Zone Control Type Sched",
-                "ventilation": "Vent-Sch",
-                "activity": "ActSchd",
-                "heating_setpoint": "Htg-SetP-Sch",
-                "outdoor_co2": "Outdoor_CO2_Level",
-            },
-        },
-        {
-            "id": "computerclassroom",
-            "label": "Computer Classroom",
-            "idf_file": "computerclassroom-baseline.idf",
-            "zone_name": "Computer_Classroom",
-            "people_object_name": "Room People",
-            "occupancy_schedule_name": "OCCUPY-ROOM",
-            "thermostat_type": "dual_setpoint",
-            "heating_schedule_name": "Htg-SetP-Sch",
-            "cooling_schedule_name": "Clg-SetP-Sch",
-            "supports": {"occupancy": True, "heating_setpoint": True, "cooling_setpoint": True},
-            "defaults": {"occupancy": 25, "heating_setpoint": 17, "cooling_setpoint": 22},
-            "static_schedules": {
-                "occupancy": "OCCUPY-ROOM",
-                "lighting": "LIGHTS-1",
-                "equipment": "EQUIP-1",
-                "heating_availability": "Heat-Avail",
-                "hvac_availability": "HVAC-Avail",
-                "thermostat_control": "Zone Control Type Sched",
-                "ventilation": "Vent-Sch",
-                "activity": "ActSchd",
-                "heating_setpoint": "Htg-SetP-Sch",
-                "cooling_setpoint": "Clg-SetP-Sch",
-                "outdoor_co2": "Outdoor_CO2_Level",
-            },
-        },
-        {
-            "id": "eventhall",
-            "label": "Event Hall",
-            "idf_file": "eventhall.idf",
-            "zone_name": "Event_Hall",
-            "people_object_name": "Room People",
-            "occupancy_schedule_name": "OCCUPY-ROOM",
-            "thermostat_type": "dual_setpoint",
-            "heating_schedule_name": "Htg-SetP-Sch",
-            "cooling_schedule_name": "Clg-SetP-Sch",
-            "supports": {"occupancy": True, "heating_setpoint": True, "cooling_setpoint": True},
-            "defaults": {"occupancy": 250, "heating_setpoint": 24, "cooling_setpoint": 22},
-            "static_schedules": {
-                "occupancy": "OCCUPY-ROOM",
-                "lighting": "LIGHTS-1",
-                "equipment": "EQUIP-Event",
-                "hvac_availability": "HVAC-Avail",
-                "thermostat_control": "Zone Control Type Sched",
-                "ventilation": "Vent-Sch",
-                "activity": "ActSchd",
-                "heating_setpoint": "Htg-SetP-Sch",
-                "cooling_setpoint": "Clg-SetP-Sch",
-                "outdoor_co2": "Outdoor_CO2_Level",
-            },
-        },
-        {
-            "id": "lab",
-            "label": "Lab",
-            "idf_file": "lab.idf",
-            "zone_name": "Lab",
-            "people_object_name": "Room People",
-            "occupancy_schedule_name": "OCCUPY-ROOM",
-            "thermostat_type": "single_heating",
-            "heating_schedule_name": "Htg-SetP-Sch",
-            "cooling_schedule_name": None,
-            "supports": {"occupancy": True, "heating_setpoint": True, "cooling_setpoint": False},
-            "defaults": {"occupancy": 30, "heating_setpoint": 17, "cooling_setpoint": None},
-            "static_schedules": {
-                "occupancy": "OCCUPY-ROOM",
-                "lighting": "LIGHTS-1",
-                "hvac_availability": "HVAC-Avail",
-                "thermostat_control": "Zone Control Type Sched",
-                "ventilation": "Vent-Sch",
-                "activity": "ActSchd",
-                "heating_setpoint": "Htg-SetP-Sch",
-                "outdoor_co2": "Outdoor_CO2_Level",
-            },
-        },
-        {
-            "id": "library",
-            "label": "Library",
-            "idf_file": "library.idf",
-            "zone_name": "Library",
-            "people_object_name": "Room People",
-            "occupancy_schedule_name": "OCCUPY-ROOM",
-            "thermostat_type": "dual_setpoint",
-            "heating_schedule_name": "Htg-SetP-Sch",
-            "cooling_schedule_name": "Clg-SetP-Sch",
-            "supports": {"occupancy": True, "heating_setpoint": True, "cooling_setpoint": True},
-            "defaults": {"occupancy": 20, "heating_setpoint": 17, "cooling_setpoint": 22},
-            "static_schedules": {
-                "occupancy": "OCCUPY-ROOM",
-                "lighting": "LIGHTS-1",
-                "heating_availability": "Heat-Avail",
-                "hvac_availability": "HVAC-Avail",
-                "thermostat_control": "Zone Control Type Sched",
-                "ventilation": "Vent-Sch",
-                "activity": "ActSchd",
-                "heating_setpoint": "Htg-SetP-Sch",
-                "cooling_setpoint": "Clg-SetP-Sch",
-                "outdoor_co2": "Outdoor_CO2_Level",
-            },
-        },
-    ],
-    "school_3": [
-        {
-            "id": "classroom",
-            "label": "Classroom",
-            "idf_file": "classroom.idf",
-            "zone_name": "Classroom",
-            "people_object_name": "Room People",
-            "occupancy_schedule_name": "OCCUPY-ROOM",
-            "thermostat_type": "single_heating",
-            "heating_schedule_name": "Htg-SetP-Sch",
-            "cooling_schedule_name": None,
-            "supports": {"occupancy": True, "heating_setpoint": True, "cooling_setpoint": False},
-            "defaults": {"occupancy": 20, "heating_setpoint": 17, "cooling_setpoint": None},
-            "static_schedules": {
-                "occupancy": "OCCUPY-ROOM",
-                "lighting": "LIGHTS-1",
-                "heating_availability": "Heat-Avail",
-                "thermostat_control": "Zone Control Type Sched",
-                "ventilation": "Vent-Sch",
-                "activity": "ActSchd",
-                "heating_setpoint": "Htg-SetP-Sch",
-                "outdoor_co2": "Outdoor_CO2_Level",
-            },
-        },
-        {
-            "id": "eventhall",
-            "label": "Event Hall",
-            "idf_file": "eventhall.idf",
-            "zone_name": "Event_Hall",
-            "people_object_name": "Room People",
-            "occupancy_schedule_name": "OCCUPY-ROOM",
-            "thermostat_type": "single_heating",
-            "heating_schedule_name": "Htg-SetP-Sch",
-            "cooling_schedule_name": None,
-            "supports": {"occupancy": True, "heating_setpoint": True, "cooling_setpoint": False},
-            "defaults": {"occupancy": 250, "heating_setpoint": 24, "cooling_setpoint": None},
-            "static_schedules": {
-                "occupancy": "OCCUPY-ROOM",
-                "lighting": "LIGHTS-1",
-                "equipment": "EQUIP-Event",
-                "heating_availability": "Heat-Avail",
-                "thermostat_control": "Zone Control Type Sched",
-                "ventilation": "Vent-Sch",
-                "activity": "ActSchd",
-                "heating_setpoint": "Htg-SetP-Sch",
-                "outdoor_co2": "Outdoor_CO2_Level",
-            },
-        },
-        {
-            "id": "pcroom",
-            "label": "PC Room",
-            "idf_file": "pcroom.idf",
-            "zone_name": "Computer Classroom",
-            "people_object_name": "Room People",
-            "occupancy_schedule_name": "OCCUPY-ROOM",
-            "thermostat_type": "single_heating",
-            "heating_schedule_name": "Htg-SetP-Sch",
-            "cooling_schedule_name": None,
-            "supports": {"occupancy": True, "heating_setpoint": True, "cooling_setpoint": False},
-            "defaults": {"occupancy": 20, "heating_setpoint": 17, "cooling_setpoint": None},
-            "static_schedules": {
-                "occupancy": "OCCUPY-ROOM",
-                "lighting": "LIGHTS-1",
-                "equipment": "EQUIP-1",
-                "heating_availability": "Heat-Avail",
-                "thermostat_control": "Zone Control Type Sched",
-                "ventilation": "Vent-Sch",
-                "activity": "ActSchd",
-                "heating_setpoint": "Htg-SetP-Sch",
-                "outdoor_co2": "Outdoor_CO2_Level",
-            },
-        },
-    ],
-    "school_7": [
-        {
-            "id": "classroom",
-            "label": "Classroom",
-            "idf_file": "classroom.idf",
-            "zone_name": "Classroom",
-            "people_object_name": "Room People",
-            "occupancy_schedule_name": "OCCUPY-ROOM",
-            "thermostat_type": "single_heating",
-            "heating_schedule_name": "Htg-SetP-Sch",
-            "cooling_schedule_name": None,
-            "supports": {"occupancy": True, "heating_setpoint": True, "cooling_setpoint": False},
-            "defaults": {"occupancy": 20, "heating_setpoint": 17, "cooling_setpoint": None},
-            "static_schedules": {
-                "occupancy": "OCCUPY-ROOM",
-                "lighting": "LIGHTS-1",
-                "heating_availability": "Heat-Avail",
-                "thermostat_control": "Zone Control Type Sched",
-                "ventilation": "Vent-Sch",
-                "activity": "ActSchd",
-                "heating_setpoint": "Htg-SetP-Sch",
-                "outdoor_co2": "Outdoor_CO2_Level",
-            },
-        },
-        {
-            "id": "eventhall",
-            "label": "Event Hall",
-            "idf_file": "eventhall.idf",
-            "zone_name": "Event_Hall",
-            "people_object_name": "Room People",
-            "occupancy_schedule_name": "OCCUPY-ROOM",
-            "thermostat_type": "single_heating",
-            "heating_schedule_name": "Htg-SetP-Sch",
-            "cooling_schedule_name": None,
-            "supports": {"occupancy": True, "heating_setpoint": True, "cooling_setpoint": False},
-            "defaults": {"occupancy": 250, "heating_setpoint": 24, "cooling_setpoint": None},
-            "static_schedules": {
-                "occupancy": "OCCUPY-ROOM",
-                "lighting": "LIGHTS-1",
-                "equipment": "EQUIP-Event",
-                "heating_availability": "Heat-Avail",
-                "thermostat_control": "Zone Control Type Sched",
-                "ventilation": "Vent-Sch",
-                "activity": "ActSchd",
-                "heating_setpoint": "Htg-SetP-Sch",
-                "outdoor_co2": "Outdoor_CO2_Level",
-            },
-        },
-        {
-            "id": "library",
-            "label": "Library",
-            "idf_file": "library.idf",
-            "zone_name": "Library",
-            "people_object_name": "Room People",
-            "occupancy_schedule_name": "OCCUPY-ROOM",
-            "thermostat_type": "single_heating",
-            "heating_schedule_name": "Htg-SetP-Sch",
-            "cooling_schedule_name": None,
-            "supports": {"occupancy": True, "heating_setpoint": True, "cooling_setpoint": False},
-            "defaults": {"occupancy": 20, "heating_setpoint": 17, "cooling_setpoint": None},
-            "static_schedules": {
-                "occupancy": "OCCUPY-ROOM",
-                "lighting": "LIGHTS-1",
-                "heating_availability": "Heat-Avail",
-                "thermostat_control": "Zone Control Type Sched",
-                "ventilation": "Vent-Sch",
-                "activity": "ActSchd",
-                "heating_setpoint": "Htg-SetP-Sch",
-                "outdoor_co2": "Outdoor_CO2_Level",
-            },
-        },
-        {
-            "id": "pcroom",
-            "label": "PC Room",
-            "idf_file": "pcroom.idf",
-            "zone_name": "Computer Classroom",
-            "people_object_name": "Room People",
-            "occupancy_schedule_name": "OCCUPY-ROOM",
-            "thermostat_type": "single_heating",
-            "heating_schedule_name": "Htg-SetP-Sch",
-            "cooling_schedule_name": None,
-            "supports": {"occupancy": True, "heating_setpoint": True, "cooling_setpoint": False},
-            "defaults": {"occupancy": 20, "heating_setpoint": 17, "cooling_setpoint": None},
-            "static_schedules": {
-                "occupancy": "OCCUPY-ROOM",
-                "lighting": "LIGHTS-1",
-                "equipment": "EQUIP-1",
-                "heating_availability": "Heat-Avail",
-                "thermostat_control": "Zone Control Type Sched",
-                "ventilation": "Vent-Sch",
-                "activity": "ActSchd",
-                "heating_setpoint": "Htg-SetP-Sch",
-                "outdoor_co2": "Outdoor_CO2_Level",
-            },
-        },
-    ],
-}
+def _load_json(path: Path):
+    try:
+        with path.open("r", encoding="utf-8") as handle:
+            return json.load(handle)
+    except FileNotFoundError as exc:
+        raise FileNotFoundError(f"Catalog file not found: {path}") from exc
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"Invalid JSON in catalog file {path}: {exc}") from exc
 
 
-def _enrich_room(school_id: str, room: dict):
-    idf_path = IDF_DIR / school_id / room["idf_file"]
+@lru_cache(maxsize=1)
+def _load_school_catalog():
+    return _SCHOOL_CATALOG_ADAPTER.validate_python(
+        _load_json(CATALOG_DIR / "schools.json")
+    )
+
+
+def _ensure_known_school(school_id: str):
+    if school_id not in {school.id for school in _load_school_catalog()}:
+        raise ValueError(f"Unknown school_id '{school_id}'")
+
+
+@lru_cache(maxsize=None)
+def _load_room_catalog_for_school(school_id: str):
+    _ensure_known_school(school_id)
+    rooms_path = CATALOG_DIR / school_id / "rooms.json"
+    return _ROOM_CATALOG_ADAPTER.validate_python(_load_json(rooms_path))
+
+
+def _enrich_room(school_id: str, room: RoomCatalogEntry | dict):
+    room_data = room.model_dump() if isinstance(room, RoomCatalogEntry) else dict(room)
+    idf_path = IDF_DIR / school_id / room_data["idf_file"]
     return {
-        **room,
+        **room_data,
         "school_id": school_id,
         "idf_path": str(idf_path),
         "idf_exists": idf_path.exists(),
@@ -510,22 +53,24 @@ def _enrich_room(school_id: str, room: dict):
 
 
 def list_schools():
-    return SCHOOL_CATALOG
+    return [school.model_dump() for school in _load_school_catalog()]
 
 
 def list_rooms(school_id: str):
-    if school_id not in ROOM_CATALOG_BY_SCHOOL:
-        raise ValueError(f"Unknown school_id '{school_id}'")
-
-    return [_enrich_room(school_id, room) for room in ROOM_CATALOG_BY_SCHOOL[school_id]]
+    return [
+        _enrich_room(school_id, room)
+        for room in _load_room_catalog_for_school(school_id)
+    ]
 
 
 def get_room_by_id(school_id: str, room_id: str):
-    if school_id not in ROOM_CATALOG_BY_SCHOOL:
+    try:
+        rooms = _load_room_catalog_for_school(school_id)
+    except ValueError:
         return None
 
-    for room in ROOM_CATALOG_BY_SCHOOL[school_id]:
-        if room["id"] == room_id:
+    for room in rooms:
+        if room.id == room_id:
             return _enrich_room(school_id, room)
 
     return None
