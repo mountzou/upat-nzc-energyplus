@@ -3,7 +3,7 @@ import subprocess
 
 from app.config import ENERGYPLUS_EXE
 
-
+# Executes an EnergyPlus simulation using the specified IDF file, weather file, and output directory.
 def execute_energyplus(idf_path: str, weather_path: str, output_dir: str):
     idf_path = Path(idf_path)
     weather_path = Path(weather_path)

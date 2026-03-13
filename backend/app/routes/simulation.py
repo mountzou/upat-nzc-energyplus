@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Query
 
 from app.schemas import RoomMetadata, SchoolMetadata, SimulationInput
-from app.services.room_catalog_service import list_rooms, list_schools
-from app.services.simulation_service import run_simulation
+from app.services.service_room_catalog import list_rooms, list_schools
+from app.services.service_simulation import run_simulation
 
 router = APIRouter()
 

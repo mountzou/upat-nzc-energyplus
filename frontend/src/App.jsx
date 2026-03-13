@@ -5,7 +5,6 @@ import AppFooter from "@/components/layout/AppFooter";
 import AppHeader from "@/components/layout/AppHeader";
 import RoomCard from "@/components/simulation/RoomCard";
 import SimulationCharts from "@/components/simulation/SimulationCharts";
-import SimulationScopePanel from "@/components/simulation/SimulationScopePanel";
 import SimulationResponse from "@/components/simulation/SimulationResponse";
 import useAuthSession from "@/hooks/useAuthSession";
 import useSchoolRooms from "@/hooks/useSchoolRooms";
@@ -18,6 +17,26 @@ import { PlayIcon } from "lucide-react";
 
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+const DIESEL_GJ_PER_LITER = 0.0386;
+const GJ_TO_KWH = 277.7777777778;
+const DIESEL_KWH_PER_LITER = DIESEL_GJ_PER_LITER * GJ_TO_KWH;
+
+const convertChartDataKwhToDieselLiters = (chart) => ({
+  ...chart,
+  data: chart.data.map((row) => {
+    const nextRow = { ...row };
+
+    chart.series.forEach((item) => {
+      const value = row[item.key];
+      if (typeof value === "number" && Number.isFinite(value)) {
+        nextRow[item.key] = value / DIESEL_KWH_PER_LITER;
+      }
+    });
+
+    return nextRow;
+  }),
+});
+
 function App() {
   const {
     isAuthenticated,
@@ -51,7 +70,6 @@ function App() {
   const [simulationLoading, setSimulationLoading] = useState(false);
   const [simulationResult, setSimulationResult] = useState(null);
   const [simulationError, setSimulationError] = useState(null);
-  const [showResponseJson, setShowResponseJson] = useState(false);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/health`)
@@ -96,10 +114,12 @@ function App() {
 
   const selectedCount = selectedRooms.length;
   const heatingDieselChart = simulationResult
-    ? buildRoomSeriesChart(
+    ? convertChartDataKwhToDieselLiters(
+        buildRoomSeriesChart(
         simulationResult.room_runs || [],
         "heating_diesel_daily",
         "kwh"
+      )
       )
     : { data: [], series: [] };
   const facilityElectricityChart = simulationResult
@@ -136,7 +156,6 @@ function App() {
         throw new Error(data.detail || `Simulation request failed (${res.status})`);
       }
 
-      setShowResponseJson(false);
       setSimulationResult(data);
     } catch (error) {
       setSimulationError(error.message);
@@ -189,12 +208,6 @@ function App() {
             <CardTitle className="text-xl font-semibold">School Simulations</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-6">
-          <SimulationScopePanel
-            selectedCount={selectedCount}
-            selectedSchoolId={selectedSchoolId}
-            schoolLabel={lockedSchool?.label || selectedSchoolId}
-          />
-
           {schoolsLoading && (
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Spinner className="size-4" />
@@ -279,11 +292,7 @@ function App() {
           </CardContent>
         </Card>
 
-        <SimulationResponse
-          simulationResult={simulationResult}
-          showResponseJson={showResponseJson}
-          onToggleResponseJson={() => setShowResponseJson((prev) => !prev)}
-        />
+        <SimulationResponse simulationResult={simulationResult} />
 
         <SimulationCharts
           heatingDieselChart={heatingDieselChart}

@@ -21,7 +21,7 @@ export default function SimulationCharts({
           title="Daily Heating Diesel by Room"
           data={heatingDieselChart.data}
           series={heatingDieselChart.series}
-          unit="kWh"
+          unit="L"
           decimals={2}
         />
       )}

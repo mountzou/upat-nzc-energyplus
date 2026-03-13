@@ -10,8 +10,32 @@ const resultEnergyLabels = {
   fans_electricity: "Fans",
 };
 
+const DIESEL_GJ_PER_LITER = 0.0386;
+const GJ_TO_KWH = 277.7777777778;
+const DIESEL_KWH_PER_LITER = DIESEL_GJ_PER_LITER * GJ_TO_KWH;
+
 const formatNumber = (value, digits = 1) =>
   typeof value === "number" ? value.toFixed(digits) : "n/a";
+
+const getDieselLiters = (value) => {
+  if (typeof value?.liters === "number" && Number.isFinite(value.liters)) {
+    return value.liters;
+  }
+
+  if (typeof value?.kwh === "number" && Number.isFinite(value.kwh)) {
+    return value.kwh / DIESEL_KWH_PER_LITER;
+  }
+
+  return null;
+};
+
+const formatEnergyValue = (key, value) => {
+  if (key === "heating_diesel") {
+    return `${formatNumber(getDieselLiters(value), 2)} L`;
+  }
+
+  return `${formatNumber(value?.kwh, 2)} kWh`;
+};
 
 const getRoomSummaryRows = (roomRun) => {
   const results = roomRun.results || {};
@@ -25,7 +49,7 @@ const getRoomSummaryRows = (roomRun) => {
     .slice(0, 4)
     .map(([key, value]) => ({
       label: resultEnergyLabels[key] || key,
-      value: `${formatNumber(value?.kwh, 2)} kWh`,
+      value: formatEnergyValue(key, value),
     }));
 
   return {

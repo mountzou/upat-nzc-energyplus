@@ -2,39 +2,36 @@ from typing import Literal
 
 from pydantic import BaseModel, model_validator
 
+# Schema for SchoolMetadata, which defines the metadata for a school in the room catalog.
+class SchoolMetadata(BaseModel):
+    id: str
+    label: str
+
+# Schema for RoomSupports, which defines the supported features of a room in the catalog.
+class RoomSupports(BaseModel):
+    occupancy: bool
+    heating_setpoint: bool
+    cooling_setpoint: bool
+
+# Schema for RoomDefaults, which defines the default simulation parameters for a room in the catalog.
+class RoomDefaults(BaseModel):
+    occupancy: int
+    heating_setpoint: float
+    cooling_setpoint: float | None = None
+    
+# Schema for RoomSimulationInput, which defines the input parameters for simulating a room.
 class RoomSimulationInput(BaseModel):
     room_id: str
     occupancy: int
     heating_setpoint: float
     cooling_setpoint: float | None = None
 
-
+# Schema for SimulationInput, which defines the input parameters for a simulation.
 class SimulationInput(BaseModel):
     school_id: str
     rooms: list[RoomSimulationInput]
 
-
-class SchoolMetadata(BaseModel):
-    id: str
-    label: str
-
-
-class SchoolCatalogEntry(SchoolMetadata):
-    pass
-
-
-class RoomSupports(BaseModel):
-    occupancy: bool
-    heating_setpoint: bool
-    cooling_setpoint: bool
-
-
-class RoomDefaults(BaseModel):
-    occupancy: int
-    heating_setpoint: float
-    cooling_setpoint: float | None = None
-
-
+# Schema for RoomStaticSchedules, which defines the static schedule names for a room in the catalog.
 class RoomStaticSchedules(BaseModel):
     occupancy: str | None = None
     lighting: str | None = None
@@ -49,7 +46,7 @@ class RoomStaticSchedules(BaseModel):
     cooling_setpoint: str | None = None
     outdoor_co2: str | None = None
 
-
+# Schema for RoomCatalogEntry, which defines the metadata and configuration for a room in the catalog.
 class RoomCatalogEntry(BaseModel):
     id: str
     label: str
@@ -87,20 +84,8 @@ class RoomCatalogEntry(BaseModel):
             )
         return self
 
-
-class RoomMetadata(BaseModel):
+# Schema for RoomMetadata, which extends RoomCatalogEntry with additional metadata fields for API responses.
+class RoomMetadata(RoomCatalogEntry):
     school_id: str
-    id: str
-    label: str
-    idf_file: str
     idf_path: str
     idf_exists: bool
-    zone_name: str
-    people_object_name: str
-    occupancy_schedule_name: str
-    thermostat_type: str
-    heating_schedule_name: str
-    cooling_schedule_name: str | None = None
-    supports: RoomSupports
-    defaults: RoomDefaults
-    static_schedules: RoomStaticSchedules

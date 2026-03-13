@@ -32,7 +32,7 @@ export default function MultiLineChart({
 
   return (
     <div className="rounded-xl border bg-card p-4 shadow-sm">
-      <h2 className="mb-2">{title}</h2>
+      <h2 className="mb-6">{title}</h2>
       <ChartContainer config={chartConfig} className="aspect-auto h-[360px] w-full">
         <LineChart data={data}>
           <CartesianGrid vertical={false} />

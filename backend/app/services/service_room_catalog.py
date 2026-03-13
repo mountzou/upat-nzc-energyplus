@@ -5,10 +5,10 @@ from pathlib import Path
 from pydantic import TypeAdapter
 
 from app.config import CATALOG_DIR, IDF_DIR
-from app.schemas import RoomCatalogEntry, SchoolCatalogEntry
+from app.schemas import RoomCatalogEntry, SchoolMetadata
 
 
-_SCHOOL_CATALOG_ADAPTER = TypeAdapter(list[SchoolCatalogEntry])
+_SCHOOL_CATALOG_ADAPTER = TypeAdapter(list[SchoolMetadata])
 _ROOM_CATALOG_ADAPTER = TypeAdapter(list[RoomCatalogEntry])
 
 

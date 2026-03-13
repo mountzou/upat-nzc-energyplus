@@ -5,13 +5,13 @@ from uuid import uuid4
 
 from app.config import SIMULATION_ROOT, WEATHER_DIR
 from app.schemas import SimulationInput
-from app.services.energyplus_service import execute_energyplus
-from app.services.idf_service import (
+from app.services.service_energyplus import execute_energyplus
+from app.services.service_idf import (
     apply_people_object_occupancy_update,
     apply_room_setpoint_updates,
 )
-from app.services.room_catalog_service import get_room_by_id
-from app.services.results_service import extract_results
+from app.services.service_room_catalog import get_room_by_id
+from app.services.service_results import extract_results
 
 def _prepare_weather_file(run_dir):
     weather_files = list(WEATHER_DIR.glob("*.epw"))

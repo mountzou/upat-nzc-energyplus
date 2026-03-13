@@ -3,6 +3,8 @@ from pathlib import Path
 
 
 JOULES_TO_KWH = 1 / 3_600_000
+JOULES_TO_GJ = 1e-9
+DIESEL_GJ_PER_LITER = 0.0386
 
 
 def _fetch_all(sql_path: str, query: str):
@@ -22,6 +24,7 @@ def extract_results(sql_path: str):
     if not sql_path.exists():
         raise FileNotFoundError(f"SQL output not found: {sql_path}")
 
+    # SQL query to retrieve average, minimum and maximum occupancy per zone.
     zone_occupancy_query = """
     SELECT d.KeyValue AS zone_name,
         AVG(v.VariableValue) AS avg_occupant_count,
@@ -421,10 +424,15 @@ def extract_results(sql_path: str):
             .replace(" ", "_")
         )
 
-        energy_summary[key] = {
+        energy_entry = {
             "joules": total_joules,
             "kwh": total_joules * JOULES_TO_KWH,
         }
+
+        if key == "heating_diesel":
+            energy_entry["liters"] = total_joules * JOULES_TO_GJ / DIESEL_GJ_PER_LITER
+
+        energy_summary[key] = energy_entry
 
     thermal_comfort_summary = [
         {

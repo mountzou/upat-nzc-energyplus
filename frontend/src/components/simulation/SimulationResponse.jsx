@@ -1,12 +1,8 @@
 import RoomResultCard from "@/components/simulation/RoomResultCard";
-import { Button } from "@/components/ui/button";
+import SchoolSummaryCard from "@/components/simulation/SchoolSummaryCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export default function SimulationResponse({
-  simulationResult,
-  showResponseJson,
-  onToggleResponseJson,
-}) {
+export default function SimulationResponse({ simulationResult }) {
   if (!simulationResult) {
     return null;
   }
@@ -29,27 +25,16 @@ export default function SimulationResponse({
               {simulationResult.status}
             </span>
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onToggleResponseJson}
-          >
-            {showResponseJson ? "Hide JSON" : "Show JSON"}
-          </Button>
         </CardTitle>
       </CardHeader>
       <CardContent className="grid gap-4">
+        <SchoolSummaryCard simulationResult={simulationResult} />
+
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {simulationResult.room_runs?.map((roomRun) => (
             <RoomResultCard key={roomRun.room_id} roomRun={roomRun} />
           ))}
         </div>
-
-        {showResponseJson && (
-          <pre className="overflow-x-auto rounded-lg bg-slate-950 p-4 text-xs text-slate-100">
-            {JSON.stringify(simulationResult, null, 2)}
-          </pre>
-        )}
       </CardContent>
     </Card>
   );
