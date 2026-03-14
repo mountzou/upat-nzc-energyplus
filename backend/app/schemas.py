@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Literal
 
 from pydantic import BaseModel, model_validator
@@ -89,3 +90,44 @@ class RoomMetadata(RoomCatalogEntry):
     school_id: str
     idf_path: str
     idf_exists: bool
+
+
+class DeviceLatestMetricRow(BaseModel):
+    device_id: str
+    metric: str
+    value: float | int
+    unit: str | None = None
+    event_time: datetime
+
+
+class OverviewReading(BaseModel):
+    value: float | int
+    unit: str | None = None
+
+
+class DeviceLatestOverviewResponse(BaseModel):
+    device_id: str
+    latest_event_time: datetime
+    readings: dict[str, OverviewReading]
+
+
+class DeviceHistoryBucketItem(BaseModel):
+    device_id: str
+    event_time: datetime
+    measurements: dict[str, OverviewReading]
+
+
+class DeviceHistoryResponse(BaseModel):
+    device_id: str
+    count: int
+    items: list[DeviceHistoryBucketItem]
+
+
+class SchoolDeviceMetadata(BaseModel):
+    id: str
+    label: str
+
+
+class SchoolDeviceCatalogEntry(BaseModel):
+    school_id: str
+    devices: list[SchoolDeviceMetadata]

@@ -1,0 +1,72 @@
+[
+  {
+    "school_id": "school_10",
+    "devices": [
+      {
+        "id": "portable-108",
+        "label": "Computer Room"
+      },
+      {
+        "id": "portable-110",
+        "label": "Teachers Room 1"
+      },
+      {
+        "id": "portable-111",
+        "label": "Teachers Room 2"
+      },
+      {
+        "id": "portable-112",
+        "label": "Event Hall"
+      },
+      {
+        "id": "portable-109",
+        "label": "Library Room"
+      }
+    ]
+  },
+  {
+    "school_id": "school_3",
+    "devices": [
+      {
+        "id": "portable-101",
+        "label": "Teachers Room"
+      }
+    ]
+  },
+  {
+    "school_id": "school_7",
+    "devices": [
+      {
+        "id": "portable-106",
+        "label": "Portable 106"
+      }
+    ]
+  },
+  {
+    "school_id": "school_13",
+    "devices": [
+      {
+        "id": "portable-105",
+        "label": "Portable 105"
+      }
+    ]
+  },
+  {
+    "school_id": "school_23",
+    "devices": [
+      {
+        "id": "portable-104",
+        "label": "Portable 104"
+      }
+    ]
+  },
+  {
+    "school_id": "school_22",
+    "devices": [
+      {
+        "id": "portable-103",
+        "label": "Portable 103"
+      }
+    ]
+  }
+]

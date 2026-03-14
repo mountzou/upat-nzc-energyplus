@@ -10,11 +10,9 @@ router = APIRouter()
 def simulate(sim_input: SimulationInput):
     return run_simulation(sim_input)
 
-
 @router.get("/schools", response_model=list[SchoolMetadata])
 def get_schools():
     return list_schools()
-
 
 @router.get("/rooms", response_model=list[RoomMetadata])
 def get_rooms(school_id: str = Query(...)):
