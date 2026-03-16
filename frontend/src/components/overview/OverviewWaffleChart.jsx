@@ -46,17 +46,17 @@ function getCellStatus(grid, dayIndex, hourIndex) {
   return cell?.status === "good" || cell?.status === "elevated" ? cell.status : "insufficient";
 }
 
-function formatCellTooltipValues(cell) {
-  if (!cell) return "Insufficient data";
+function getCellTooltipRows(cell) {
+  if (!cell) return ["No data"];
   const { meanCo2, meanPm25 } = cell;
-  const parts = [];
+  const rows = [];
   if (meanCo2 != null && typeof meanCo2 === "number") {
-    parts.push(`CO2: ${Number(meanCo2).toFixed(1)} ppm`);
+    rows.push(`CO2: ${Number(meanCo2).toFixed(1)} ppm`);
   }
   if (meanPm25 != null && typeof meanPm25 === "number") {
-    parts.push(`PM2.5: ${Number(meanPm25).toFixed(1)} µg/m³`);
+    rows.push(`PM2.5: ${Number(meanPm25).toFixed(1)} µg/m³`);
   }
-  return parts.length > 0 ? parts.join(", ") : "Insufficient data";
+  return rows.length > 0 ? rows : ["No data"];
 }
 
 export default function OverviewWaffleChart({ grid = null }) {
@@ -91,7 +91,7 @@ export default function OverviewWaffleChart({ grid = null }) {
               const cell = getCell(grid, dayIndex, hourIndex);
               const status = getCellStatus(grid, dayIndex, hourIndex);
               const style = CELL_STYLES[status];
-              const tooltipValues = formatCellTooltipValues(cell);
+              const tooltipRows = getCellTooltipRows(cell);
               return (
                 <Tooltip key={`${day}-${hourIndex}`}>
                   <TooltipTrigger asChild>
@@ -101,10 +101,22 @@ export default function OverviewWaffleChart({ grid = null }) {
                     />
                   </TooltipTrigger>
                   <TooltipContent side="top" className="max-w-[16rem]">
-                    <p className="font-medium">
-                      {day} {HOURS[hourIndex]}
-                    </p>
-                    <p className="text-muted-foreground">{tooltipValues}</p>
+                    <div className="space-y-2">
+                      <p className="font-medium">
+                        {day} {HOURS[hourIndex]}
+                      </p>
+                      <div className="space-y-1 text-muted-foreground">
+                        {tooltipRows.map((row, i) => (
+                          <p key={i} className="flex items-center gap-2">
+                            <span
+                              className="h-2 w-1.5 shrink-0 rounded-sm bg-black"
+                              aria-hidden
+                            />
+                            {row}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
                   </TooltipContent>
                 </Tooltip>
               );

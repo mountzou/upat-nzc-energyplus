@@ -24,12 +24,12 @@ import {
 } from "@/components/ui/select";
 import { API_BASE_URL } from "@/lib/api";
 import {
-  Activity,
-  Cloud,
+  Bubbles,
   DoorOpen,
   Droplets,
+  Info,
   Minus,
-  Smartphone,
+  SprayCan,
   Thermometer,
   TrendingDown,
   TrendingUp,
@@ -68,8 +68,8 @@ const METRIC_ICONS = {
   temperature: Thermometer,
   relative_humidity: Droplets,
   co2: Wind,
-  voc: Activity,
-  pm25: Cloud,
+  voc: SprayCan,
+  pm25: Bubbles,
 };
 
 /** Percentage change below this is shown as neutral (no up/down) to avoid flickering. */
@@ -521,9 +521,9 @@ export default function OverviewPage({
         <Card className="mb-6 bg-gray-50 ring-0">
           <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-4">
             <div className="space-y-1">
-              <CardTitle className="text-xl font-semibold">Environmental Overview</CardTitle>
+              <CardTitle className="border-l-4 border-l-black pl-3 text-xl font-semibold">Environmental Overview</CardTitle>
               <p className="text-sm text-muted-foreground">
-                Dummy description text for the environmental overview section.
+                Track metrics and recent trends in indoor environmental conditions.
               </p>
             </div>
             {!devicesLoading && !devicesError && devices.length > 0 && (
@@ -546,24 +546,6 @@ export default function OverviewPage({
                           </span>
                         </SelectItem>
                       ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="grid min-w-0 gap-2 text-sm md:min-w-[10rem]">
-                  <span className="font-medium">Device</span>
-                  <Select value={selectedDeviceId} disabled>
-                    <SelectTrigger
-                      disabled
-                      leftIcon={
-                        <Smartphone className="h-4 w-4 text-muted-foreground" aria-hidden />
-                      }
-                    >
-                      <SelectValue placeholder="—" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {selectedDeviceId ? (
-                        <SelectItem value={selectedDeviceId}>{selectedDeviceId}</SelectItem>
-                      ) : null}
                     </SelectContent>
                   </Select>
                 </div>
@@ -742,54 +724,66 @@ export default function OverviewPage({
                         ))}
                       </div>
                     ) : (
-                      <div className="mt-6 grid grid-cols-4 gap-6">
-                        <div className="flex flex-col items-center gap-1 text-center">
-                          <span className="text-2xl font-bold tabular-nums text-foreground">
-                            {discomfortLoading
-                              ? "…"
-                              : discomfortError
-                                ? "—"
-                                : discomfortIndex != null
-                                  ? `${Number(discomfortIndex.di).toFixed(1)} °C`
-                                  : "—"}
-                          </span>
-                          <span className="text-sm text-muted-foreground">Discomfort index</span>
+                      <div className="mt-6 grid grid-cols-4 gap-x-8 gap-y-4">
+                        <div className="grid grid-cols-2 items-start gap-x-2 border-r border-border pr-6 text-left">
+                          <div className="flex min-w-0 flex-col gap-1">
+                            <span className="text-2xl font-bold tabular-nums text-foreground">
+                              {discomfortLoading
+                                ? "…"
+                                : discomfortError
+                                  ? "—"
+                                  : discomfortIndex != null
+                                    ? `${Number(discomfortIndex.di).toFixed(1)} °C`
+                                    : "—"}
+                            </span>
+                            <span className="text-sm text-muted-foreground">Discomfort index</span>
+                          </div>
+                          <p className="min-w-0 text-xs text-muted-foreground">Combines air temperature and humidity to show how uncomfortable the environment is.</p>
                         </div>
-                        <div className="flex flex-col items-center gap-1 text-center">
-                          <span className="text-2xl font-bold tabular-nums text-foreground">
-                            {heatIndexLoading
-                              ? "…"
-                              : heatIndexError
-                                ? "—"
-                                : heatIndex != null
-                                  ? `${Number(heatIndex).toFixed(1)} °C`
-                                  : "—"}
-                          </span>
-                          <span className="text-sm text-muted-foreground">Heat index</span>
+                        <div className="grid grid-cols-2 items-start gap-x-2 border-r border-border pr-6 text-left">
+                          <div className="flex min-w-0 flex-col gap-1">
+                            <span className="text-2xl font-bold tabular-nums text-foreground">
+                              {heatIndexLoading
+                                ? "…"
+                                : heatIndexError
+                                  ? "—"
+                                  : heatIndex != null
+                                    ? `${Number(heatIndex).toFixed(1)} °C`
+                                    : "—"}
+                            </span>
+                            <span className="text-sm text-muted-foreground">Heat index</span>
+                          </div>
+                          <p className="min-w-0 text-xs text-muted-foreground">Shows how warm the air feels when humidity is taken into account.</p>
                         </div>
-                        <div className="flex flex-col items-center gap-1 text-center">
-                          <span className="text-2xl font-bold tabular-nums text-foreground">
-                            {pmvPpdLoading
-                              ? "…"
-                              : pmvPpdError
-                                ? "—"
-                                : pmvPpd != null
-                                  ? Number(pmvPpd.pmv).toFixed(1)
-                                  : "—"}
-                          </span>
-                          <span className="text-sm text-muted-foreground">PMV</span>
+                        <div className="grid grid-cols-2 items-start gap-x-2 border-r border-border pr-6 text-left">
+                          <div className="flex min-w-0 flex-col gap-1">
+                            <span className="text-2xl font-bold tabular-nums text-foreground">
+                              {pmvPpdLoading
+                                ? "…"
+                                : pmvPpdError
+                                  ? "—"
+                                  : pmvPpd != null
+                                    ? Number(pmvPpd.pmv).toFixed(1)
+                                    : "—"}
+                            </span>
+                            <span className="text-sm text-muted-foreground">PMV</span>
+                          </div>
+                          <p className="min-w-0 text-xs text-muted-foreground">Rates thermal sensation on a scale from cold (-3) to hot (+3), with 0 meaning neutral comfort.</p>
                         </div>
-                        <div className="flex flex-col items-center gap-1 text-center">
-                          <span className="text-2xl font-bold tabular-nums text-foreground">
-                            {pmvPpdLoading
-                              ? "…"
-                              : pmvPpdError
-                                ? "—"
-                                : pmvPpd != null
-                                  ? `${Number(pmvPpd.ppd).toFixed(1)}%`
-                                  : "—"}
-                          </span>
-                          <span className="text-sm text-muted-foreground">PPD</span>
+                        <div className="grid grid-cols-2 items-start gap-x-2 text-left">
+                          <div className="flex min-w-0 flex-col gap-1">
+                            <span className="text-2xl font-bold tabular-nums text-foreground">
+                              {pmvPpdLoading
+                                ? "…"
+                                : pmvPpdError
+                                  ? "—"
+                                  : pmvPpd != null
+                                    ? `${Number(pmvPpd.ppd).toFixed(1)}%`
+                                    : "—"}
+                            </span>
+                            <span className="text-sm text-muted-foreground">PPD</span>
+                          </div>
+                          <p className="min-w-0 text-xs text-muted-foreground">Estimates the percentage of people likely to feel thermally uncomfortable in these conditions.</p>
                         </div>
                       </div>
                     )}
@@ -803,7 +797,12 @@ export default function OverviewPage({
 
         <Card className="mb-6 bg-gray-50 ring-0">
           <CardHeader className="flex flex-row flex-wrap items-start justify-between gap-4">
-            <CardTitle className="text-xl font-semibold">Overview of IAQ conditions</CardTitle>
+            <div className="space-y-1">
+              <CardTitle className="border-l-4 border-l-black pl-3 text-xl font-semibold">Overview of IAQ conditions</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Track the mean IAQ conditions per day and time.
+              </p>
+            </div>
             {!devicesLoading && !devicesError && devices.length > 0 && (
               <div className="min-w-0 max-w-[14rem]">
                 <Select value={waffleDeviceId} onValueChange={setWaffleDeviceId}>
@@ -853,7 +852,8 @@ export default function OverviewPage({
               <OverviewWaffleChart grid={iaqGrid} />
             )}
             {waffleDeviceId && (
-              <p className="mt-4 text-center text-xs text-muted-foreground">
+              <p className="mt-4 flex items-center justify-center gap-1.5 text-center text-xs text-muted-foreground">
+                <Info className="h-3.5 w-3.5 shrink-0" aria-hidden />
                 Average IAQ conditions during the last 30 days in {devices.find((d) => d.id === waffleDeviceId)?.label ?? waffleDeviceId}.
               </p>
             )}
@@ -862,7 +862,12 @@ export default function OverviewPage({
 
         <Card className="mb-6 bg-gray-50 ring-0">
           <CardHeader className="flex flex-row flex-wrap items-start justify-between gap-4">
-            <CardTitle className="text-xl font-semibold">Overview of thermal comfort (PMV)</CardTitle>
+            <div className="space-y-1">
+              <CardTitle className="border-l-4 border-l-black pl-3 text-xl font-semibold">Overview of thermal comfort</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Track the mean thermal experience per day and time.
+              </p>
+            </div>
             {!devicesLoading && !devicesError && devices.length > 0 && (
               <div className="min-w-0 max-w-[14rem]">
                 <Select value={comfortWaffleDeviceId} onValueChange={setComfortWaffleDeviceId}>
@@ -912,7 +917,8 @@ export default function OverviewPage({
               <OverviewComfortWaffleChart grid={comfortGrid?.grid ?? null} />
             )}
             {comfortWaffleDeviceId && (
-              <p className="mt-4 text-center text-xs text-muted-foreground">
+              <p className="mt-4 flex items-center justify-center gap-1.5 text-center text-xs text-muted-foreground">
+                <Info className="h-3.5 w-3.5 shrink-0" aria-hidden />
                 Average PMV during the last 30 days in {devices.find((d) => d.id === comfortWaffleDeviceId)?.label ?? comfortWaffleDeviceId}.
               </p>
             )}

@@ -52,14 +52,18 @@ function getCellComfortState(grid, dayIndex, hourIndex) {
   return state in CELL_STYLES ? state : "insufficient";
 }
 
-function formatCellTooltip(cell) {
-  if (!cell) return "Insufficient data";
+function getCellTooltipRows(cell) {
+  if (!cell) return { rows: ["No data"] };
   const { pmv, comfort_state } = cell;
-  if (comfort_state === "insufficient") return "Insufficient data";
+  if (comfort_state === "insufficient") return { rows: ["No data"] };
+  const rows = [];
   if (pmv != null && typeof pmv === "number") {
-    return `PMV: ${Number(pmv).toFixed(2)} — ${comfort_state}`;
+    rows.push(`PMV: ${Number(pmv).toFixed(2)}`);
   }
-  return comfort_state;
+  const label =
+    comfort_state.charAt(0).toUpperCase() + comfort_state.slice(1).toLowerCase();
+  rows.push(label);
+  return { rows };
 }
 
 export default function OverviewComfortWaffleChart({ grid = null }) {
@@ -91,7 +95,7 @@ export default function OverviewComfortWaffleChart({ grid = null }) {
                 const cell = getCell(grid, dayIndex, hourIndex);
                 const state = getCellComfortState(grid, dayIndex, hourIndex);
                 const style = CELL_STYLES[state];
-                const tooltipText = formatCellTooltip(cell);
+                const { rows: tooltipRows } = getCellTooltipRows(cell);
                 return (
                   <Tooltip key={`${day}-${hourIndex}`}>
                     <TooltipTrigger asChild>
@@ -101,10 +105,22 @@ export default function OverviewComfortWaffleChart({ grid = null }) {
                       />
                     </TooltipTrigger>
                     <TooltipContent side="top" className="max-w-[16rem]">
-                      <p className="font-medium">
-                        {day} {HOURS[hourIndex]}
-                      </p>
-                      <p className="text-muted-foreground">{tooltipText}</p>
+                      <div className="space-y-2">
+                        <p className="font-medium">
+                          {day} {HOURS[hourIndex]}
+                        </p>
+                        <div className="space-y-1 text-muted-foreground">
+                          {tooltipRows.map((row, i) => (
+                            <p key={i} className="flex items-center gap-2">
+                              <span
+                                className="h-2 w-1.5 shrink-0 rounded-sm bg-black"
+                                aria-hidden
+                              />
+                              {row}
+                            </p>
+                          ))}
+                        </div>
+                      </div>
                     </TooltipContent>
                   </Tooltip>
                 );
