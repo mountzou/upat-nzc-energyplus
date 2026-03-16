@@ -131,3 +131,39 @@ class SchoolDeviceMetadata(BaseModel):
 class SchoolDeviceCatalogEntry(BaseModel):
     school_id: str
     devices: list[SchoolDeviceMetadata]
+
+
+class DiscomfortIndexResponse(BaseModel):
+    """Response for the thermal comfort discomfort index (DI)."""
+
+    di: float
+    discomfort_condition: str
+
+
+class HeatIndexResponse(BaseModel):
+    """Response for the thermal comfort Heat Index (HI), Lu and Romps (2022) model."""
+
+    hi: float
+
+
+class PmvPpdResponse(BaseModel):
+    """Response for PMV/PPD (ASHRAE 55): Predicted Mean Vote and Predicted Percentage Dissatisfied."""
+
+    pmv: float
+    ppd: float
+    compliance: bool
+    comfort_state: str
+
+
+class ComfortGridCell(BaseModel):
+    """One cell of the comfort grid: PMV and comfort state for a (weekday, hour) slot."""
+
+    pmv: float | None = None
+    comfort_state: str  # "comfortable" | "slight discomfort" | "discomfort" | "insufficient"
+
+
+class ComfortGridResponse(BaseModel):
+    """5×12 grid of thermal comfort (PMV) by weekday and hour (06:00–17:00). Row = weekday Mon–Fri."""
+
+    device_id: str
+    grid: list[list[ComfortGridCell]]

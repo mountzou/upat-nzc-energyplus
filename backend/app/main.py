@@ -5,6 +5,7 @@ from app.config import CATALOG_DIR, IDF_DIR, WEATHER_DIR, SIMULATION_ROOT
 from app.routes.health import router as health_router
 from app.routes.overview import router as overview_router
 from app.routes.simulation import router as simulation_router
+from app.routes.thermal_comfort import router as thermal_comfort_router
 
 # Create FastAPI app instance
 app = FastAPI()
@@ -33,3 +34,4 @@ def startup_checks():
 app.include_router(health_router)
 app.include_router(overview_router)
 app.include_router(simulation_router)
+app.include_router(thermal_comfort_router)

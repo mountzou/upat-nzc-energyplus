@@ -1,8 +1,14 @@
 from fastapi import APIRouter, Query
 
-from app.schemas import DeviceHistoryResponse, DeviceLatestOverviewResponse, SchoolDeviceMetadata
+from app.schemas import (
+    ComfortGridResponse,
+    DeviceHistoryResponse,
+    DeviceLatestOverviewResponse,
+    SchoolDeviceMetadata,
+)
 from app.services.service_device_catalog import list_devices_for_school
 from app.services.service_overview import (
+    get_comfort_grid,
     get_device_history,
     get_device_latest_overview,
 )
@@ -35,7 +41,7 @@ def get_overview_device_history(
     aggregate: str = Query("avg"),
     bucket_unit: str = Query("hour"),
     bucket_size: int = Query(1, ge=1, le=1000),
-    limit: int = Query(24, ge=1, le=100),
+    limit: int = Query(24, ge=1, le=1000),
 ):
     return get_device_history(
         device_id,
@@ -44,3 +50,13 @@ def get_overview_device_history(
         bucket_size=bucket_size,
         limit=limit,
     )
+
+
+@router.get(
+    "/overview/devices/{device_id}/comfort-grid",
+    response_model=ComfortGridResponse,
+)
+def get_overview_comfort_grid(device_id: str):
+    """PMV thermal comfort 5×12 grid (weekday × hour 06:00–17:00) from last 30 days."""
+    did, grid = get_comfort_grid(device_id)
+    return ComfortGridResponse(device_id=did, grid=grid)

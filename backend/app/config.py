@@ -18,3 +18,10 @@ ENERGYPLUS_EXE = ENERGYPLUS_ROOT / "energyplus"
 
 DEVICE_API_BASE_URL = os.getenv("DEVICE_API_BASE_URL", "http://65.21.106.41:8000")
 DEVICE_API_TIMEOUT_SECONDS = float(os.getenv("DEVICE_API_TIMEOUT_SECONDS", "5"))
+
+# Hours to add to measurement timestamps (stored without timezone) for display in user's local time.
+_def_tz = os.getenv("MEASUREMENT_TZ_OFFSET_HOURS", "2")
+try:
+    MEASUREMENT_TZ_OFFSET_HOURS = int(_def_tz)
+except (ValueError, TypeError):
+    MEASUREMENT_TZ_OFFSET_HOURS = 2
